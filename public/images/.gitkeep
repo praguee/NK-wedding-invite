@@ -1,0 +1,3 @@
+Photos go here. Name them: photo-1.jpg, photo-2.jpg, etc.
+Recommended size: 1200x800px or larger (JPG or PNG).
+After adding photos, update the gallery array in app/components/Gallery.tsx.
