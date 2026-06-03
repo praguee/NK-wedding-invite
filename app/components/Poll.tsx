@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState, useCallback } from 'react'
+import Image from 'next/image'
 import { supabase } from '@/lib/supabase'
 import SectionOrnament from './SectionOrnament'
 
@@ -8,71 +9,25 @@ type Side = 'bride' | 'groom'
 interface Counts { bride: number; groom: number; total: number }
 const STORAGE_KEY = 'nk_poll_vote_v2'
 
-/* ── Custom Indian-skin avatars ─────────────────────────────── */
-function NidhiAvatar() {
+/* ── Bitmoji photo avatars ─────────────────────────────────── */
+function NidhiAvatar({ size = 56 }: { size?: number }) {
   return (
-    <svg width="52" height="52" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
-      {/* Background circle */}
-      <circle cx="26" cy="26" r="26" fill="#FDDBB4"/>
-      {/* Hair */}
-      <path d="M4 28 C4 10 14 3 26 3 C38 3 48 10 48 28" fill="#1C0A05"/>
-      <path d="M5 26 C3 32 3 42 6 46 L5 50 C8 51 12 50 13 47 C10 44 9 38 9 32Z" fill="#1C0A05"/>
-      <path d="M47 26 C49 32 49 42 46 46 L47 50 C44 51 40 50 39 47 C42 44 43 38 43 32Z" fill="#1C0A05"/>
-      {/* Face/skin */}
-      <ellipse cx="26" cy="32" rx="17" ry="19" fill="#C68642"/>
-      {/* Ears */}
-      <ellipse cx="9" cy="30" rx="3.5" ry="5" fill="#B8773A"/>
-      <ellipse cx="43" cy="30" rx="3.5" ry="5" fill="#B8773A"/>
-      {/* Eyebrows */}
-      <path d="M16 23 Q20 21 23 22" stroke="#1C0A05" strokeWidth="1.5" strokeLinecap="round"/>
-      <path d="M29 22 Q32 21 36 23" stroke="#1C0A05" strokeWidth="1.5" strokeLinecap="round"/>
-      {/* Eyes */}
-      <ellipse cx="20" cy="27" rx="3" ry="3.5" fill="#1C0A05"/>
-      <ellipse cx="32" cy="27" rx="3" ry="3.5" fill="#1C0A05"/>
-      <circle cx="21" cy="26" r="1" fill="white"/>
-      <circle cx="33" cy="26" r="1" fill="white"/>
-      {/* Glasses frames */}
-      <rect x="13.5" y="23" width="11" height="9" rx="2.5" fill="none" stroke="#2C1A0E" strokeWidth="1.8"/>
-      <rect x="27.5" y="23" width="11" height="9" rx="2.5" fill="none" stroke="#2C1A0E" strokeWidth="1.8"/>
-      {/* Glasses bridge */}
-      <line x1="24.5" y1="27.5" x2="27.5" y2="27.5" stroke="#2C1A0E" strokeWidth="1.8"/>
-      {/* Nose */}
-      <path d="M24 30 Q26 32 28 30" stroke="#9B6230" strokeWidth="1.2" strokeLinecap="round" fill="none"/>
-      {/* Smile */}
-      <path d="M20 37 Q26 42 32 37" stroke="#1C0A05" strokeWidth="1.5" strokeLinecap="round" fill="none"/>
-    </svg>
+    <div style={{ width: size, height: size, borderRadius: '50%', overflow: 'hidden', flexShrink: 0, border: '2px solid rgba(251,113,133,0.4)', position: 'relative' }}>
+      <Image src="/images/nidhi-avatar.jpg" alt="Nidhi" fill style={{ objectFit: 'cover', objectPosition: 'center 15%' }} />
+    </div>
   )
 }
 
-function ParagAvatar() {
+function ParagAvatar({ size = 56 }: { size?: number }) {
   return (
-    <svg width="52" height="52" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
-      {/* Background */}
-      <circle cx="26" cy="26" r="26" fill="#F5C98A"/>
-      {/* Hair */}
-      <path d="M6 24 C6 8 14 3 26 3 C38 3 46 8 46 24" fill="#1C0A05"/>
-      {/* Face/skin */}
-      <ellipse cx="26" cy="32" rx="17" ry="19" fill="#A0622A"/>
-      {/* Ears */}
-      <ellipse cx="9" cy="30" rx="3.5" ry="5" fill="#955A25"/>
-      <ellipse cx="43" cy="30" rx="3.5" ry="5" fill="#955A25"/>
-      {/* Eyebrows */}
-      <path d="M16 24 Q20 22 23 23" stroke="#1C0A05" strokeWidth="1.8" strokeLinecap="round"/>
-      <path d="M29 23 Q32 22 36 24" stroke="#1C0A05" strokeWidth="1.8" strokeLinecap="round"/>
-      {/* Eyes */}
-      <ellipse cx="20" cy="28" rx="3" ry="3.5" fill="#1C0A05"/>
-      <ellipse cx="32" cy="28" rx="3" ry="3.5" fill="#1C0A05"/>
-      <circle cx="21" cy="27" r="1" fill="white"/>
-      <circle cx="33" cy="27" r="1" fill="white"/>
-      {/* Stubble hint */}
-      <path d="M19 38 Q26 44 33 38" stroke="#7A4520" strokeWidth="1.2" fill="rgba(124,69,32,0.15)" strokeLinecap="round"/>
-      {/* Nose */}
-      <path d="M24 31 Q26 33 28 31" stroke="#7A4520" strokeWidth="1.3" strokeLinecap="round" fill="none"/>
-      {/* Smile */}
-      <path d="M20 38 Q26 43 32 38" stroke="#1C0A05" strokeWidth="1.5" strokeLinecap="round" fill="none"/>
-    </svg>
+    <div style={{ width: size, height: size, borderRadius: '50%', overflow: 'hidden', flexShrink: 0, border: '2px solid rgba(196,154,40,0.4)', position: 'relative' }}>
+      <Image src="/images/parag-avatar.png" alt="Parag" fill style={{ objectFit: 'cover', objectPosition: 'center 8%' }} />
+    </div>
   )
 }
+
+
+
 
 export default function Poll() {
   const [voted, setVoted]     = useState<Side | null>(null)

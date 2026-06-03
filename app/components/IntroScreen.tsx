@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState, useCallback } from 'react'
+import Image from 'next/image'
 import styles from './IntroScreen.module.css'
 
 interface IntroScreenProps {
@@ -373,21 +374,35 @@ export default function IntroScreen({ onUnlock }: IntroScreenProps) {
       {/* Flight arc */}
       {renderFlightArc()}
 
-      {/* Birmingham marker */}
+      {/* Birmingham marker — Nidhi's Bitmoji */}
       {planePosReady && (
         <div className={styles.cityMarker} style={{ left: birminghamPos.x, top: birminghamPos.y }}>
-          <div className={styles.cityLabel}>{BIRMINGHAM.label}</div>
+          <div className={styles.cityLabel}>Birmingham · Nidhi</div>
           <div className={styles.pulseRing} style={{ color: BIRMINGHAM.color }} />
-          <div className={styles.cityDot} style={{ background: BIRMINGHAM.color, boxShadow: `0 0 12px ${BIRMINGHAM.color}` }} />
+          <div style={{
+            width: 32, height: 32, borderRadius: '50%', overflow: 'hidden', position: 'relative',
+            border: `2px solid ${BIRMINGHAM.color}`,
+            boxShadow: `0 0 10px ${BIRMINGHAM.color}88`,
+            zIndex: 2,
+          }}>
+            <Image src="/images/nidhi-avatar.jpg" alt="Nidhi" fill style={{ objectFit: 'cover', objectPosition: 'center 15%' }} />
+          </div>
         </div>
       )}
 
-      {/* Mumbai marker */}
+      {/* Mumbai marker — Parag's Bitmoji */}
       {planePosReady && (
         <div className={styles.cityMarker} style={{ left: mumbaiPos.x, top: mumbaiPos.y }}>
-          <div className={styles.cityLabel}>{MUMBAI.label}</div>
+          <div className={styles.cityLabel}>Mumbai · Parag</div>
           <div className={styles.pulseRing} style={{ color: MUMBAI.color }} />
-          <div className={styles.cityDot} style={{ background: MUMBAI.color, boxShadow: `0 0 12px ${MUMBAI.color}` }} />
+          <div style={{
+            width: 32, height: 32, borderRadius: '50%', overflow: 'hidden', position: 'relative',
+            border: `2px solid ${MUMBAI.color}`,
+            boxShadow: `0 0 10px ${MUMBAI.color}88`,
+            zIndex: 2,
+          }}>
+            <Image src="/images/parag-avatar.png" alt="Parag" fill style={{ objectFit: 'cover', objectPosition: 'center 8%' }} />
+          </div>
         </div>
       )}
 
@@ -426,7 +441,14 @@ export default function IntroScreen({ onUnlock }: IntroScreenProps) {
 
       {/* Success card */}
       <div className={`${styles.successCard} ${showSuccess ? styles.successCardVisible : ''}`}>
-        <span className={styles.successEmoji}>👫</span>
+        <div style={{ position: 'relative', width: 100, height: 80, margin: '0 auto 12px', borderRadius: 16, overflow: 'hidden' }}>
+          <Image
+            src="/images/couple-avatar.png"
+            alt="Nidhi and Parag"
+            fill
+            style={{ objectFit: 'cover', objectPosition: 'center 15%' }}
+          />
+        </div>
         <div className={styles.successTitle}>You found us!</div>
         <div className={styles.successSub}>Nidhi & Parag · December 4, 2026</div>
       </div>
