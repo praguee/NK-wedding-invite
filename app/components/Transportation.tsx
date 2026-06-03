@@ -33,9 +33,9 @@ export default function Transportation() {
                 <Car className="text-purple-600" size={20} />
               </div>
               <div>
-                <h3 className="font-medium text-slate-900 mb-2">Parking</h3>
+                <h3 className="font-medium text-slate-900 mb-2">Parking & Valet</h3>
                 <p className="text-slate-600 text-sm leading-relaxed">
-                  Ample free parking available at Abhishek Farms. Parking attendants will guide you from the entrance.
+                  Ample free parking available at Abhishek Farms. Valet parking is available at the entrance — attendants will guide you from arrival.
                 </p>
               </div>
             </div>

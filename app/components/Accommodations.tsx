@@ -1,46 +1,61 @@
 import { HOTELS } from '@/lib/constants'
-import { MapPin, ExternalLink } from 'lucide-react'
+import { ExternalLink, MapPin } from 'lucide-react'
+
+function PriceDots({ count }: { count: number }) {
+  return (
+    <div className="flex gap-0.5 items-center">
+      {[1, 2, 3, 4].map((i) => (
+        <span
+          key={i}
+          className={`w-1.5 h-1.5 rounded-full ${i <= count ? 'bg-purple-500' : 'bg-slate-200'}`}
+        />
+      ))}
+    </div>
+  )
+}
 
 export default function Accommodations() {
   return (
-    <section id="accommodations" className="py-24 bg-white">
-      <div className="max-w-4xl mx-auto px-6">
-        <h2 className="text-4xl md:text-5xl font-extralight text-center mb-4 tracking-tight">
+    <section id="accommodations" className="py-20 bg-white">
+      <div className="max-w-2xl mx-auto px-6">
+        <h2 className="text-4xl md:text-5xl font-extralight text-center mb-3 tracking-tight">
           Where to Stay
         </h2>
-        <p className="text-center text-slate-500 mb-16">
+        <p className="text-center text-slate-500 mb-10 text-sm">
           Recommended premium hotels near the venue
         </p>
 
-        <div className="grid md:grid-cols-2 gap-6">
+        <div className="bg-slate-50 rounded-2xl overflow-hidden divide-y divide-slate-100">
           {HOTELS.map((hotel) => (
             <a
               key={hotel.name}
               href={hotel.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="group bg-slate-50 p-7 rounded-2xl hover:shadow-md transition-all duration-300"
+              className="flex items-center justify-between px-5 py-4 hover:bg-slate-100 transition-colors group"
             >
-              <div className="flex justify-between items-start mb-4">
-                <h3 className="text-lg font-medium text-slate-900 group-hover:text-purple-700 transition-colors">
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium text-slate-900 truncate group-hover:text-purple-700 transition-colors">
                   {hotel.name}
-                </h3>
-                <ExternalLink size={16} className="text-slate-400 group-hover:text-purple-600 flex-shrink-0 mt-0.5 transition-colors" />
+                </p>
+                <div className="flex items-center gap-2 mt-0.5">
+                  <MapPin size={11} className="text-slate-400 flex-shrink-0" />
+                  <p className="text-xs text-slate-500 truncate">
+                    {hotel.area} · {hotel.distance} from venue
+                  </p>
+                </div>
               </div>
 
-              <div className="space-y-2 text-sm text-slate-600">
-                <div className="flex gap-2 items-center">
-                  <MapPin size={14} className="text-slate-400 flex-shrink-0" />
-                  <span>{hotel.area} · {hotel.distance} from venue</span>
-                </div>
-                <p className="text-slate-400">{hotel.priceRange}</p>
+              <div className="flex items-center gap-3 ml-4 flex-shrink-0">
+                <PriceDots count={hotel.price} />
+                <ExternalLink size={13} className="text-slate-300 group-hover:text-purple-500 transition-colors" />
               </div>
             </a>
           ))}
         </div>
 
-        <p className="text-center text-sm text-slate-400 mt-10">
-          Have questions about accommodation? Reach out to us — we&apos;re happy to help.
+        <p className="text-center text-xs text-slate-400 mt-5">
+          Need help with bookings? We&apos;re happy to assist.
         </p>
       </div>
     </section>

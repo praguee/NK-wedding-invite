@@ -53,7 +53,7 @@ export const CONTACT = {
   },
   secondary: {
     name: "Raksha Kesarkar (Bride's Sister)",
-    phone: '+91 9137540056',
+    phone: '+91 9819048377',
   },
 }
 
@@ -62,35 +62,35 @@ export const HOTELS = [
     name: 'Vivanta Thane',
     area: 'Thane',
     distance: '7 km',
-    priceRange: '₹₹₹',
+    price: 3,
     url: 'https://www.tajhotels.com/en-in/vivanta/thane/',
   },
   {
     name: 'Hyatt Regency Mumbai',
     area: 'Mumbai',
     distance: '18 km',
-    priceRange: '₹₹₹₹',
+    price: 4,
     url: 'https://www.hyatt.com/hyatt-regency/en-US/bomrm-hyatt-regency-mumbai',
   },
   {
     name: 'JW Marriott Mumbai Juhu',
     area: 'Mumbai',
     distance: '20 km',
-    priceRange: '₹₹₹₹',
+    price: 4,
     url: 'https://www.marriott.com/en-us/hotels/boijw-jw-marriott-mumbai-juhu/overview/',
   },
   {
     name: 'The Fern Residency Thane',
     area: 'Thane',
     distance: '10 km',
-    priceRange: '₹₹₹',
+    price: 3,
     url: 'https://www.fernhotels.com/the-fern-residency-thane.html',
   },
   {
-    name: 'Radisson Blu Mumbai International Airport',
+    name: 'Radisson Blu Mumbai Airport',
     area: 'Mumbai',
     distance: '22 km',
-    priceRange: '₹₹₹',
+    price: 3,
     url: 'https://www.radissonhotels.com/en-us/hotels/radisson-blu-mumbai-international-airport',
   },
 ]
