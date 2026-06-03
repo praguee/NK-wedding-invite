@@ -2,6 +2,10 @@ import { supabaseAdmin as supabase } from '@/lib/supabase-admin'
 import { NextRequest, NextResponse } from 'next/server'
 
 export async function POST(request: NextRequest) {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY
+  console.log('ENV CHECK - URL:', url ? url.slice(0, 30) : 'MISSING', '| KEY:', key ? 'present' : 'MISSING')
+
   try {
     const body = await request.json()
     const { name, plus_ones, message } = body
