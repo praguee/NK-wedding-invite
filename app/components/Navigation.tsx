@@ -8,56 +8,96 @@ export default function Navigation() {
 
   const sections = [
     { label: 'Our Story', href: '#story' },
-    { label: 'Invite', href: '#invite' },
-    { label: 'Gallery', href: '#gallery' },
-    { label: 'Travel', href: '#travel' },
-    { label: 'RSVP', href: '#rsvp' },
-    { label: 'Messages', href: '#messages' },
+    { label: 'Invite',    href: '#invite' },
+    { label: 'Gallery',   href: '#gallery' },
+    { label: 'Travel',    href: '#travel' },
+    { label: 'RSVP',      href: '#rsvp' },
+    { label: 'Messages',  href: '#messages' },
   ]
 
   return (
-    <nav className="fixed top-0 left-0 right-0 bg-white/95 backdrop-blur-sm z-50 border-b border-slate-100">
-      <div className="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
-        <span className="text-2xl font-light tracking-wide">N & P</span>
+    <nav
+      className="fixed top-0 left-0 right-0 z-50"
+      style={{
+        background: 'rgba(255,253,246,0.88)',
+        backdropFilter: 'blur(28px) saturate(160%)',
+        WebkitBackdropFilter: 'blur(28px) saturate(160%)',
+        borderBottom: '1px solid rgba(196,154,40,0.15)',
+        boxShadow: '0 1px 0 rgba(196,154,40,0.08), 0 4px 24px rgba(0,0,0,0.04)',
+      }}
+    >
+      {/* Top gold accent bar */}
+      <div style={{
+        position: 'absolute', top: 0, left: 0, right: 0, height: 2,
+        background: 'linear-gradient(90deg, transparent 0%, #C49A28 30%, #E8C547 50%, #C49A28 70%, transparent 100%)',
+        opacity: 0.7,
+      }} />
 
-        {/* Desktop Menu */}
-        <div className="hidden md:flex gap-8">
-          {sections.map((section) => (
+      <div className="max-w-6xl mx-auto px-5 py-3.5 flex justify-between items-center">
+        {/* Logo */}
+        <a href="#" className="flex items-center gap-2 no-underline">
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+            <path d="M16 2 L30 16 L16 30 L2 16 Z" fill="none" stroke="#C49A28" strokeWidth="0.9" opacity="0.7"/>
+            <path d="M16 7 Q19 11 16 16 Q13 11 16 7Z" fill="#C49A28" opacity="0.6"/>
+            <path d="M16 25 Q19 21 16 16 Q13 21 16 25Z" fill="#C49A28" opacity="0.6"/>
+            <path d="M7 16 Q11 13 16 16 Q11 19 7 16Z" fill="#C49A28" opacity="0.5"/>
+            <path d="M25 16 Q21 13 16 16 Q21 19 25 16Z" fill="#C49A28" opacity="0.5"/>
+            <circle cx="16" cy="16" r="2.5" fill="#C49A28" opacity="0.8"/>
+          </svg>
+          <span
+            className="font-light tracking-[0.12em]"
+            style={{ fontSize: 17, color: '#5C3A1E', letterSpacing: '0.12em' }}
+          >
+            N <span style={{ color: '#C49A28', fontSize: 11 }}>✦</span> P
+          </span>
+        </a>
+
+        {/* Desktop links */}
+        <div className="hidden md:flex gap-7 items-center">
+          {sections.map((s) => (
             <a
-              key={section.label}
-              href={section.href}
-              className="text-sm text-slate-600 hover:text-slate-900 transition-colors"
+              key={s.label}
+              href={s.href}
+              className="text-xs tracking-widest uppercase transition-colors"
+              style={{ color: '#7C5A3A', letterSpacing: '0.09em' }}
+              onMouseEnter={e => (e.currentTarget.style.color = '#C49A28')}
+              onMouseLeave={e => (e.currentTarget.style.color = '#7C5A3A')}
             >
-              {section.label}
+              {s.label}
             </a>
           ))}
         </div>
 
-        {/* Mobile Menu Button */}
+        {/* Mobile menu button */}
         <button
           className="md:hidden p-2"
           onClick={() => setIsOpen(!isOpen)}
           aria-label="Toggle menu"
+          style={{ color: '#7C5A3A' }}
         >
-          {isOpen ? <X size={24} /> : <Menu size={24} />}
+          {isOpen ? <X size={22} /> : <Menu size={22} />}
         </button>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Mobile dropdown */}
       {isOpen && (
-        <div className="md:hidden bg-white border-b border-slate-100">
-          <div className="flex flex-col py-2">
-            {sections.map((section) => (
-              <a
-                key={section.label}
-                href={section.href}
-                className="px-6 py-3 text-sm text-slate-600 hover:text-slate-900 hover:bg-slate-50"
-                onClick={() => setIsOpen(false)}
-              >
-                {section.label}
-              </a>
-            ))}
-          </div>
+        <div
+          style={{
+            borderTop: '1px solid rgba(196,154,40,0.12)',
+            background: 'rgba(255,253,246,0.97)',
+          }}
+        >
+          {sections.map((s) => (
+            <a
+              key={s.label}
+              href={s.href}
+              className="block px-6 py-3.5 text-xs tracking-widest uppercase transition-colors"
+              style={{ color: '#7C5A3A', letterSpacing: '0.09em' }}
+              onClick={() => setIsOpen(false)}
+            >
+              {s.label}
+            </a>
+          ))}
         </div>
       )}
     </nav>
