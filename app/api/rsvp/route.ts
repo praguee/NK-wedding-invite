@@ -4,16 +4,10 @@ import { NextRequest, NextResponse } from 'next/server'
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const { name, email, plus_ones, message } = body
+    const { name, plus_ones, message } = body
 
     if (!name?.trim()) {
       return NextResponse.json({ message: 'Name is required' }, { status: 400 })
-    }
-    if (!email?.trim()) {
-      return NextResponse.json({ message: 'Email is required' }, { status: 400 })
-    }
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      return NextResponse.json({ message: 'Invalid email format' }, { status: 400 })
     }
     const plusOnesNum = Number(plus_ones)
     if (isNaN(plusOnesNum) || plusOnesNum < 0 || plusOnesNum > 5) {
@@ -23,17 +17,16 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ message: 'Message must be 500 characters or less' }, { status: 400 })
     }
 
-    // Duplicate check
+    // Duplicate check by name
     const { data: existing } = await supabase
       .from('rsvps')
       .select('id')
       .eq('name', name.trim())
-      .eq('email', email.trim().toLowerCase())
       .maybeSingle()
 
     if (existing) {
       return NextResponse.json(
-        { message: "You've already RSVP'd with this name and email" },
+        { message: "You've already RSVP'd! Contact us if you need to make changes." },
         { status: 409 }
       )
     }
@@ -42,7 +35,6 @@ export async function POST(request: NextRequest) {
       .from('rsvps')
       .insert([{
         name: name.trim(),
-        email: email.trim().toLowerCase(),
         plus_ones: plusOnesNum,
         message: message?.trim() || null,
       }])

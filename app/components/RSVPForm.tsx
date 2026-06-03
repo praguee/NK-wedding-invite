@@ -6,12 +6,11 @@ import { Send } from 'lucide-react'
 
 interface FormState {
   name: string
-  email: string
   plusOnes: string
   message: string
 }
 
-const INITIAL: FormState = { name: '', email: '', plusOnes: '0', message: '' }
+const INITIAL: FormState = { name: '', plusOnes: '0', message: '' }
 
 export default function RSVPForm() {
   const [form, setForm] = useState<FormState>(INITIAL)
@@ -25,11 +24,6 @@ export default function RSVPForm() {
     e.preventDefault()
 
     if (!form.name.trim()) { toast.error('Please enter your name'); return }
-    if (!form.email.trim()) { toast.error('Please enter your email'); return }
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
-      toast.error('Please enter a valid email address')
-      return
-    }
 
     setLoading(true)
     try {
@@ -38,7 +32,6 @@ export default function RSVPForm() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           name: form.name.trim(),
-          email: form.email.trim(),
           plus_ones: parseInt(form.plusOnes, 10),
           message: form.message.trim(),
         }),
@@ -84,20 +77,6 @@ export default function RSVPForm() {
               onChange={set('name')}
               className={inputClass}
               placeholder="Full name"
-              required
-            />
-          </div>
-
-          <div>
-            <label className="block text-xs uppercase tracking-widest text-slate-500 mb-2">
-              Email Address *
-            </label>
-            <input
-              type="email"
-              value={form.email}
-              onChange={set('email')}
-              className={inputClass}
-              placeholder="your@email.com"
               required
             />
           </div>

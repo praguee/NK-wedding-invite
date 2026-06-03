@@ -60,10 +60,9 @@ export default function AdminPage() {
 
   const exportCSV = () => {
     const rows = [
-      ['Name', 'Email', 'Plus-Ones', 'Message', 'Date'],
+      ['Name', 'Plus-Ones', 'Message', 'Date'],
       ...rsvps.map((r) => [
         r.name,
-        r.email,
         String(r.plus_ones),
         `"${(r.message || '').replace(/"/g, '""')}"`,
         new Date(r.created_at).toLocaleDateString('en-IN'),
@@ -161,7 +160,7 @@ export default function AdminPage() {
             <table className="w-full">
               <thead className="bg-slate-50 border-b border-slate-100">
                 <tr>
-                  {['Name', 'Email', '+Guests', 'Message', 'Date'].map((h) => (
+                  {['Name', '+Guests', 'Message', 'Date'].map((h) => (
                     <th key={h} className="px-6 py-3 text-left text-xs uppercase tracking-widest text-slate-400 font-medium">
                       {h}
                     </th>
@@ -170,14 +169,13 @@ export default function AdminPage() {
               </thead>
               <tbody className="divide-y divide-slate-50">
                 {dataLoading ? (
-                  <tr><td colSpan={5} className="px-6 py-8 text-center text-slate-400">Loading…</td></tr>
+                  <tr><td colSpan={4} className="px-6 py-8 text-center text-slate-400">Loading…</td></tr>
                 ) : rsvps.length === 0 ? (
-                  <tr><td colSpan={5} className="px-6 py-8 text-center text-slate-400">No RSVPs yet</td></tr>
+                  <tr><td colSpan={4} className="px-6 py-8 text-center text-slate-400">No RSVPs yet</td></tr>
                 ) : (
                   rsvps.map((r) => (
                     <tr key={r.id} className="hover:bg-slate-50 transition-colors">
                       <td className="px-6 py-4 text-sm font-medium text-slate-900">{r.name}</td>
-                      <td className="px-6 py-4 text-sm text-slate-600">{r.email}</td>
                       <td className="px-6 py-4 text-sm text-slate-900 text-center">{r.plus_ones}</td>
                       <td className="px-6 py-4 text-sm text-slate-600 max-w-xs">
                         <span className="line-clamp-2">{r.message || '—'}</span>
