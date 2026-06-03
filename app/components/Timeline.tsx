@@ -57,7 +57,8 @@ export default function Timeline() {
             style={{
               height: ITEM_H * 3,
               overflowY: 'scroll',
-              scrollSnapType: 'y mandatory',
+              scrollSnapType: 'y proximity',
+              scrollBehavior: 'smooth',
               scrollbarWidth: 'none',
               WebkitOverflowScrolling: 'touch',
             }}
@@ -82,9 +83,9 @@ export default function Timeline() {
                     padding: '0 28px',
                     gap: 18,
                     opacity,
-                    transform: `scale(${scale}) perspective(400px) rotateX(${distance * 10}deg)`,
+                    transform: `scale(${scale}) perspective(600px) rotateX(${distance * 8}deg)`,
                     filter: blur > 0 ? `blur(${blur}px)` : undefined,
-                    transition: 'opacity 0.2s ease, transform 0.2s ease, filter 0.2s ease',
+                    transition: 'opacity 0.35s ease, transform 0.35s ease, filter 0.35s ease',
                     cursor: 'pointer',
                   }}
                   onClick={() => {

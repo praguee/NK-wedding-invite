@@ -2,16 +2,22 @@
 
 import { useState } from 'react'
 import toast from 'react-hot-toast'
-import { Send } from 'lucide-react'
+import { Heart } from 'lucide-react'
 import SectionOrnament from './SectionOrnament'
 
-interface FormState {
-  name: string
-  plusOnes: string
-  message: string
-}
-
+interface FormState { name: string; plusOnes: string; message: string }
 const INITIAL: FormState = { name: '', plusOnes: '0', message: '' }
+
+const countWords = (text: string) =>
+  text.trim() === '' ? 0 : text.trim().split(/\s+/).length
+
+const inputClass =
+  'w-full px-4 py-3 border rounded-xl text-sm focus:outline-none focus:ring-2 transition'
+const inputStyle = {
+  borderColor: 'rgba(196,154,40,0.2)',
+  background: 'rgba(255,253,246,0.7)',
+  '--tw-ring-color': 'rgba(196,154,40,0.4)',
+} as React.CSSProperties
 
 export default function RSVPForm() {
   const [form, setForm] = useState<FormState>(INITIAL)
@@ -19,13 +25,14 @@ export default function RSVPForm() {
 
   const set = (field: keyof FormState) =>
     (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
-      setForm((prev) => ({ ...prev, [field]: e.target.value }))
+      setForm(prev => ({ ...prev, [field]: e.target.value }))
+
+  const words = countWords(form.message)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-
-    if (!form.name.trim()) { toast.error('Please enter your name'); return }
-
+    if (!form.name.trim()) { toast.error('Tell us your name! 😊'); return }
+    if (words > 100) { toast.error('Keep your message to 100 words 💕'); return }
     setLoading(true)
     try {
       const res = await fetch('/api/rsvp', {
@@ -37,94 +44,97 @@ export default function RSVPForm() {
           message: form.message.trim(),
         }),
       })
-
       const data = await res.json()
-
-      if (!res.ok) {
-        toast.error(data.message || 'Something went wrong. Please try again.')
-        return
-      }
-
+      if (!res.ok) { toast.error(data.message || 'Something went wrong, try again!'); return }
       toast.success("You're on the list! See you December 4th 🎉")
       setForm(INITIAL)
     } catch {
-      toast.error('Network error. Please try again.')
+      toast.error('Network issue, please try again.')
     } finally {
       setLoading(false)
     }
   }
 
-  const inputClass =
-    'w-full px-4 py-3 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent transition bg-white'
-
   return (
     <section id="rsvp" className="py-24 bg-slate-50">
       <div className="max-w-xl mx-auto px-6">
         <SectionOrnament />
-        <h2 className="text-4xl md:text-5xl font-extralight text-center mb-4 tracking-tight">
-          RSVP
+        <h2 className="text-4xl md:text-5xl font-extralight text-center mb-3 tracking-tight">
+          Will you be there?
         </h2>
-        <p className="text-center text-slate-500 mb-12">
-          Let us know you&apos;re coming — we can&apos;t wait to celebrate with you
+        <p className="text-center mb-10" style={{ color: '#9C7A5A', fontSize: 15 }}>
+          We&apos;d love to celebrate with you — let us know you&apos;re coming 🎊
         </p>
 
-        <form onSubmit={handleSubmit} className="glass-gold rounded-2xl p-8 space-y-5">
+        <form onSubmit={handleSubmit} className="glass-gold rounded-2xl p-8 space-y-6">
+
+          {/* Name */}
           <div>
-            <label className="block text-xs uppercase tracking-widest text-slate-500 mb-2">
-              Your Name *
+            <label className="block mb-2 text-xs tracking-widest uppercase" style={{ color: '#9C7A5A' }}>
+              What do we call you?
             </label>
             <input
               type="text"
               value={form.name}
               onChange={set('name')}
               className={inputClass}
-              placeholder="Full name"
+              style={inputStyle}
+              placeholder="Your name 😊"
               required
             />
           </div>
 
+          {/* Plus ones */}
           <div>
-            <label className="block text-xs uppercase tracking-widest text-slate-500 mb-2">
-              Guests Attending (including you)
+            <label className="block mb-2 text-xs tracking-widest uppercase" style={{ color: '#9C7A5A' }}>
+              Who&apos;s coming with you?
             </label>
-            <select value={form.plusOnes} onChange={set('plusOnes')} className={inputClass}>
-              <option value="0">Just me</option>
-              <option value="1">Me + 1</option>
-              <option value="2">Me + 2</option>
-              <option value="3">Me + 3</option>
-              <option value="4">Me + 4</option>
-              <option value="5">Me + 5</option>
+            <select value={form.plusOnes} onChange={set('plusOnes')} className={inputClass} style={inputStyle}>
+              <option value="0">Just me, flying solo ✈️</option>
+              <option value="1">Me + 1 guest</option>
+              <option value="2">Me + 2 guests</option>
+              <option value="3">Me + 3 guests</option>
+              <option value="4">Me + 4 guests</option>
+              <option value="5">Me + 5 guests</option>
             </select>
           </div>
 
+          {/* Message */}
           <div>
-            <label className="block text-xs uppercase tracking-widest text-slate-500 mb-2">
-              Message (optional)
+            <label className="block mb-2 text-xs tracking-widest uppercase" style={{ color: '#9C7A5A' }}>
+              A little note for the couple 💌
             </label>
             <textarea
               value={form.message}
               onChange={set('message')}
               className={`${inputClass} resize-none`}
-              placeholder="Share a wish or note for the couple..."
+              style={inputStyle}
+              placeholder="Share a wish, a memory, or just say hi — they'd love to hear from you…"
               rows={4}
-              maxLength={500}
             />
-            <p className="text-xs text-slate-400 mt-1 text-right">{form.message.length}/500</p>
+            <div className="flex justify-between mt-1.5">
+              <span className="text-xs" style={{ color: words > 100 ? '#e11d48' : 'transparent' }}>
+                Keep it to 100 words 💕
+              </span>
+              <span className="text-xs" style={{ color: words > 90 ? '#C49A28' : '#C4B09A' }}>
+                {words} / 100 words
+              </span>
+            </div>
           </div>
 
+          {/* Submit */}
           <button
             type="submit"
-            disabled={loading}
-            className="w-full disabled:opacity-50 py-3.5 rounded-xl font-semibold text-sm tracking-widest transition-all flex items-center justify-center gap-2"
+            disabled={loading || words > 100}
+            className="w-full disabled:opacity-50 py-3.5 rounded-xl font-bold text-sm tracking-widest flex items-center justify-center gap-2 transition-all"
             style={{
-              background: loading ? '#d4aa38' : 'linear-gradient(135deg, #C49A28, #E8C547, #C49A28)',
-              backgroundSize: '200% auto',
-              color: '#3B1F00',
-              boxShadow: '0 4px 18px rgba(196,154,40,0.35)',
+              background: 'linear-gradient(135deg, #B8850A, #E8C547, #C49A28)',
+              color: '#2A1200',
+              boxShadow: loading ? 'none' : '0 4px 18px rgba(196,154,40,0.38)',
             }}
           >
-            <Send size={15} />
-            {loading ? 'Sending…' : 'Send RSVP'}
+            <Heart size={15} fill="currentColor" />
+            {loading ? 'Sending…' : 'Count me in!'}
           </button>
         </form>
       </div>
