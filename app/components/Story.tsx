@@ -9,17 +9,20 @@ export default function Story() {
           Our Story
         </h2>
         <p className="text-center mb-14 text-sm" style={{ color: '#9C7A5A' }}>
-          A love story written in water 💧
+          The Way of Water
         </p>
 
         <div className="grid md:grid-cols-2 gap-12 items-start">
           {/* Story text */}
           <div className="space-y-5 order-2 md:order-1">
             <p className="leading-relaxed" style={{ color: '#5C3A2E', fontSize: 16 }}>
-              Nidhi has always had a deep, unshakeable love for water. Whether it&apos;s a long bath after a long day or the sound of rain on a window — water is where she finds peace. Parag noticed this early on, and when the moment came to ask if she&apos;d be his girlfriend, he didn&apos;t go for a candlelit dinner or a rooftop view.
+              Nidhi has always had a deep, unshakeable love for water. Whether it&apos;s a three-hour bath, a glass of water every five minutes, or drinking water until she physically cannot drink more water — Nidhi and hydration have an exclusive, committed relationship.
             </p>
             <p className="leading-relaxed" style={{ color: '#5C3A2E', fontSize: 16 }}>
-              He asked her in the shower. Yes, really. 🚿
+              Parag noticed this early on, and when the moment came to ask if she&apos;d be his girlfriend, he didn&apos;t go for a candlelit dinner or a rooftop view.
+            </p>
+            <p className="leading-relaxed" style={{ color: '#5C3A2E', fontSize: 16 }}>
+              He asked her in the shower. Yes, really.
             </p>
             <p className="leading-relaxed" style={{ color: '#5C3A2E', fontSize: 16 }}>
               She said yes — and honestly, we think she had no choice. It was too original to refuse.

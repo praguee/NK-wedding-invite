@@ -79,7 +79,7 @@ export default function RSVPForm() {
               onChange={set('name')}
               className={inputClass}
               style={inputStyle}
-              placeholder="Your name 😊"
+              placeholder="Your name"
               required
             />
           </div>
@@ -90,12 +90,12 @@ export default function RSVPForm() {
               Who&apos;s coming with you?
             </label>
             <select value={form.plusOnes} onChange={set('plusOnes')} className={inputClass} style={inputStyle}>
-              <option value="0">Just me, flying solo ✈️</option>
-              <option value="1">Me + 1 guest</option>
-              <option value="2">Me + 2 guests</option>
-              <option value="3">Me + 3 guests</option>
-              <option value="4">Me + 4 guests</option>
-              <option value="5">Me + 5 guests</option>
+              <option value="0">Single, tho looking for someone</option>
+              <option value="1">Me + my person</option>
+              <option value="2">Me + 2, we travel in a pack</option>
+              <option value="3">Me + 3, the whole gang</option>
+              <option value="4">Me + 4, honestly a wedding within a wedding</option>
+              <option value="5">Me + 5, we need our own table</option>
             </select>
           </div>
 

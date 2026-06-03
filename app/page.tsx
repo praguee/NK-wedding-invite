@@ -13,6 +13,7 @@ import Transportation from './components/Transportation'
 import Timeline from './components/Timeline'
 import RSVPForm from './components/RSVPForm'
 import GuestBook from './components/GuestBook'
+import Poll from './components/Poll'
 import ContactFAQ from './components/ContactFAQ'
 
 const IntroScreen = dynamic(() => import('./components/IntroScreen'), { ssr: false })
@@ -42,6 +43,7 @@ export default function Home() {
         <Timeline />
         <RSVPForm />
         <GuestBook />
+        <Poll />
         <ContactFAQ />
       </main>
       <footer
@@ -60,7 +62,7 @@ export default function Home() {
             Birmingham ✈ Mumbai · 04 · 12 · 2026
           </p>
           <p className="text-xs tracking-widest uppercase mt-4" style={{ color: 'rgba(255,255,255,0.2)' }}>
-            A love story that crossed oceans
+            Started in a shower. Ends at a pool.
           </p>
         </div>
       </footer>

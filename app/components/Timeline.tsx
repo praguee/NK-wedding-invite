@@ -1,201 +1,113 @@
-'use client'
-
-import { useRef, useState, useEffect, useCallback } from 'react'
+import SectionOrnament from './SectionOrnament'
 
 const EVENTS = [
-  { time: '5:00 PM', title: 'Guests Arrive',          desc: 'Welcome and seating begins',                  accent: '#a78bfa' },
-  { time: '5:30 PM', title: 'Wedding Ceremony',        desc: 'The sacred Hindu Maharashtrian ceremony',     accent: '#c084fc' },
-  { time: '7:30 PM', title: 'Evening Refreshments',    desc: 'Light snacks and beverages',                  accent: '#818cf8' },
-  { time: '8:00 PM', title: 'Reception',               desc: 'Dinner, music, and celebrations',             accent: '#34d399' },
+  {
+    time: '5:00 PM',
+    title: 'Guests Arrive',
+    desc: 'Welcome and seating begins — find your spot and settle in',
+    accent: '#a78bfa',
+    dot: '#a78bfa',
+  },
+  {
+    time: '5:30 PM',
+    title: 'Wedding Ceremony',
+    desc: 'The sacred Hindu Maharashtrian ceremony — on a floating mandap, in the middle of a pool',
+    accent: '#c084fc',
+    dot: '#c084fc',
+  },
+  {
+    time: '7:30 PM',
+    title: 'Evening Refreshments',
+    desc: 'Light snacks, beverages, and good company while we transition',
+    accent: '#818cf8',
+    dot: '#818cf8',
+  },
+  {
+    time: '8:00 PM',
+    title: 'Reception',
+    desc: 'Dinner, music, dancing, and celebrations till the night gives up',
+    accent: '#34d399',
+    dot: '#34d399',
+  },
 ]
 
-const ITEM_H = 96 // px per item
-
 export default function Timeline() {
-  const scrollRef  = useRef<HTMLDivElement>(null)
-  const [active, setActive] = useState(1) // default to Wedding Ceremony
-
-  const onScroll = useCallback(() => {
-    const el = scrollRef.current
-    if (!el) return
-    const idx = Math.round(el.scrollTop / ITEM_H)
-    setActive(Math.max(0, Math.min(idx, EVENTS.length - 1)))
-  }, [])
-
-  // Scroll to default active item on mount
-  useEffect(() => {
-    const el = scrollRef.current
-    if (!el) return
-    el.scrollTop = active * ITEM_H
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
-
   return (
     <section id="timeline" className="py-20 bg-white">
-      <div className="max-w-md mx-auto px-6">
+      <div className="max-w-lg mx-auto px-6">
+        <SectionOrnament />
         <h2 className="text-4xl md:text-5xl font-extralight text-center mb-3 tracking-tight">
           Schedule
         </h2>
-        <p className="text-center text-slate-500 mb-10 text-sm">
+        <p className="text-center mb-12 text-sm" style={{ color: '#9C7A5A' }}>
           Friday, December 4, 2026
         </p>
 
-        {/* iOS-style scroll wheel */}
-        <div
-          style={{
-            position: 'relative',
-            height: ITEM_H * 3,
-            borderRadius: 24,
-            overflow: 'hidden',
-            background: '#f8fafc',
-            boxShadow: '0 2px 24px rgba(0,0,0,0.07), 0 1px 4px rgba(0,0,0,0.04)',
-          }}
-        >
-          {/* Scrollable list */}
+        <div className="relative">
+          {/* Vertical connecting line */}
           <div
-            ref={scrollRef}
-            onScroll={onScroll}
             style={{
-              height: ITEM_H * 3,
-              overflowY: 'scroll',
-              scrollSnapType: 'y proximity',
-              scrollBehavior: 'smooth',
-              scrollbarWidth: 'none',
-              WebkitOverflowScrolling: 'touch',
+              position: 'absolute',
+              left: 19,
+              top: 20,
+              bottom: 20,
+              width: 1,
+              background: 'linear-gradient(to bottom, #a78bfa, #c084fc, #818cf8, #34d399)',
+              opacity: 0.25,
             }}
-          >
-            {/* Top padding so first item can center */}
-            <div style={{ height: ITEM_H, flexShrink: 0 }} />
+          />
 
-            {EVENTS.map((event, i) => {
-              const distance = Math.abs(i - active)
-              const opacity  = distance === 0 ? 1 : distance === 1 ? 0.38 : 0.15
-              const scale    = distance === 0 ? 1 : distance === 1 ? 0.93 : 0.86
-              const blur     = distance === 0 ? 0 : distance === 1 ? 1 : 2
-
-              return (
-                <div
-                  key={i}
-                  style={{
-                    height: ITEM_H,
-                    scrollSnapAlign: 'center',
-                    display: 'flex',
-                    alignItems: 'center',
-                    padding: '0 28px',
-                    gap: 18,
-                    opacity,
-                    transform: `scale(${scale}) perspective(600px) rotateX(${distance * 8}deg)`,
-                    filter: blur > 0 ? `blur(${blur}px)` : undefined,
-                    transition: 'opacity 0.35s ease, transform 0.35s ease, filter 0.35s ease',
-                    cursor: 'pointer',
-                  }}
-                  onClick={() => {
-                    const el = scrollRef.current
-                    if (el) el.scrollTo({ top: i * ITEM_H, behavior: 'smooth' })
-                  }}
-                >
-                  {/* Time pill */}
-                  <div
-                    style={{
-                      flexShrink: 0,
-                      background: distance === 0 ? event.accent : 'transparent',
-                      border: `1.5px solid ${distance === 0 ? event.accent : '#e2e8f0'}`,
-                      borderRadius: 100,
-                      padding: '5px 14px',
-                      fontSize: 13,
-                      fontWeight: distance === 0 ? 600 : 400,
-                      color: distance === 0 ? '#fff' : '#94a3b8',
-                      minWidth: 80,
-                      textAlign: 'center',
-                      letterSpacing: '0.02em',
-                      transition: 'all 0.2s ease',
-                      boxShadow: distance === 0 ? `0 4px 12px ${event.accent}55` : 'none',
-                    }}
-                  >
-                    {event.time}
-                  </div>
-
-                  {/* Text */}
-                  <div style={{ minWidth: 0 }}>
-                    <p
-                      style={{
-                        fontSize: distance === 0 ? 15 : 14,
-                        fontWeight: distance === 0 ? 600 : 400,
-                        color: distance === 0 ? '#0f172a' : '#64748b',
-                        marginBottom: 2,
-                        transition: 'all 0.2s ease',
-                        whiteSpace: 'nowrap',
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis',
-                      }}
-                    >
-                      {event.title}
-                    </p>
-                    <p
-                      style={{
-                        fontSize: 12,
-                        color: distance === 0 ? '#64748b' : '#cbd5e1',
-                        transition: 'color 0.2s ease',
-                        whiteSpace: 'nowrap',
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis',
-                      }}
-                    >
-                      {event.desc}
-                    </p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+            {EVENTS.map((event, i) => (
+              <div key={i} style={{ display: 'flex', gap: 20, alignItems: 'flex-start', padding: '16px 0' }}>
+                {/* Dot */}
+                <div style={{ flexShrink: 0, paddingTop: 3 }}>
+                  <div style={{
+                    width: 38, height: 38,
+                    borderRadius: '50%',
+                    background: `${event.dot}18`,
+                    border: `1.5px solid ${event.dot}55`,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    boxShadow: `0 0 12px ${event.dot}22`,
+                  }}>
+                    <div style={{
+                      width: 10, height: 10, borderRadius: '50%',
+                      background: event.dot, opacity: 0.8,
+                    }} />
                   </div>
                 </div>
-              )
-            })}
 
-            {/* Bottom padding so last item can center */}
-            <div style={{ height: ITEM_H, flexShrink: 0 }} />
+                {/* Content */}
+                <div style={{ flex: 1 }}>
+                  {/* Time badge */}
+                  <span style={{
+                    display: 'inline-block',
+                    fontSize: 11, fontWeight: 600,
+                    letterSpacing: '0.08em', textTransform: 'uppercase',
+                    color: event.accent,
+                    background: `${event.accent}14`,
+                    border: `1px solid ${event.accent}30`,
+                    borderRadius: 100,
+                    padding: '3px 10px',
+                    marginBottom: 6,
+                  }}>
+                    {event.time}
+                  </span>
+                  <h3 style={{
+                    fontSize: 16, fontWeight: 600,
+                    color: '#1C0F0A', marginBottom: 4,
+                    lineHeight: 1.3,
+                  }}>
+                    {event.title}
+                  </h3>
+                  <p style={{ fontSize: 13, color: '#7C5A3A', lineHeight: 1.6 }}>
+                    {event.desc}
+                  </p>
+                </div>
+              </div>
+            ))}
           </div>
-
-          {/* Selection highlight bar (like iOS) */}
-          <div
-            style={{
-              position: 'absolute',
-              top: '50%',
-              left: 0,
-              right: 0,
-              height: ITEM_H,
-              transform: 'translateY(-50%)',
-              pointerEvents: 'none',
-              borderTop:    '1px solid rgba(148,163,184,0.25)',
-              borderBottom: '1px solid rgba(148,163,184,0.25)',
-            }}
-          />
-
-          {/* Top fade */}
-          <div
-            style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              right: 0,
-              height: ITEM_H * 1.2,
-              background: 'linear-gradient(to bottom, #f8fafc 30%, transparent)',
-              pointerEvents: 'none',
-            }}
-          />
-
-          {/* Bottom fade */}
-          <div
-            style={{
-              position: 'absolute',
-              bottom: 0,
-              left: 0,
-              right: 0,
-              height: ITEM_H * 1.2,
-              background: 'linear-gradient(to top, #f8fafc 30%, transparent)',
-              pointerEvents: 'none',
-            }}
-          />
         </div>
-
-        <p className="text-center text-xs text-slate-400 mt-5">
-          Scroll to explore the day&apos;s events
-        </p>
       </div>
     </section>
   )
