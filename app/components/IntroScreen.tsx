@@ -7,73 +7,50 @@ interface IntroScreenProps {
   onUnlock: () => void
 }
 
-interface CityZone {
-  name: string
-  lat: number
-  lng: number
-  color: string
-  label: string
-  radius: number
-  message?: string
-}
+const BIRMINGHAM = { lat: 52.4862, lng: -1.8904, color: '#fb7185', label: 'Birmingham · Nidhi 👧', radius: 90 }
+const MUMBAI     = { lat: 19.076,  lng: 72.877,  color: '#fbbf24', label: 'Mumbai · Parag 👦',    radius: 110 }
 
-const BIRMINGHAM: CityZone = {
-  name: 'Birmingham',
-  lat: 52.4862,
-  lng: -1.8904,
-  color: '#fb7185',
-  label: 'Birmingham · Nidhi 💙',
-  radius: 80,
-  message: "Nidhi lives here! You need to drag the plane all the way to Mumbai! →",
-}
-
-const MUMBAI: CityZone = {
-  name: 'Mumbai',
-  lat: 19.076,
-  lng: 72.877,
-  color: '#fbbf24',
-  label: 'Mumbai · Parag ✨',
-  radius: 100,
-}
-
-// Ordered: specific cities first (small radius), then regions/countries (large radius)
-// This ensures specific cities get their own message before a regional fallback catches them
-const SARCASTIC_ZONES: CityZone[] = [
-  // ── Specific cities ──
-  { name: 'London',      lat: 51.5074,   lng: -0.1278,   color: '#fff', label: '', radius: 70,  message: "That's London! But Nidhi is from Birmingham, not London 😄 Look a bit further west!" },
-  { name: 'Paris',       lat: 48.8566,   lng:  2.3522,   color: '#fff', label: '', radius: 70,  message: "Paris?! Très romantique — save that for the honeymoon 💕 The wedding is in Mumbai!" },
-  { name: 'Madrid',      lat: 40.4168,   lng: -3.7038,   color: '#fff', label: '', radius: 70,  message: "Olé! But this is Madrid, not Mumbai. Head east, way east! 🇪🇸" },
-  { name: 'Rome',        lat: 41.9028,   lng: 12.4964,   color: '#fff', label: '', radius: 70,  message: "When in Rome... but the wedding isn't here! Keep flying east 🍕" },
-  { name: 'Istanbul',    lat: 41.0082,   lng: 28.9784,   color: '#fff', label: '', radius: 80,  message: "Istanbul? Halfway there! But the mandap is in Mumbai. Keep going east! 🕌" },
-  { name: 'Dubai',       lat: 25.2048,   lng: 55.2708,   color: '#fff', label: '', radius: 80,  message: "Ooh, Dubai! Tempting… but the mandap is in Mumbai. Just a little further east! ✈️" },
-  { name: 'Delhi',       lat: 28.6139,   lng: 77.2090,   color: '#fff', label: '', radius: 90,  message: "So close!! That's Delhi. Mumbai is just 1,400 km south. Almost there! 🎯" },
-  { name: 'Karachi',     lat: 24.8607,   lng: 67.0011,   color: '#fff', label: '', radius: 80,  message: "Hmm, that's Karachi 👀 Mumbai is just across the border to the right →" },
-  { name: 'Colombo',     lat:  6.9271,   lng: 79.8612,   color: '#fff', label: '', radius: 70,  message: "That's Sri Lanka! Beautiful island, but Mumbai is north of here ↑" },
-  { name: 'Tokyo',       lat: 35.6762,   lng: 139.6503,  color: '#fff', label: '', radius: 90,  message: "Tokyo! Great sushi, wrong wedding venue 🍣 Mumbai is way west!" },
-  { name: 'Beijing',     lat: 39.9042,   lng: 116.4074,  color: '#fff', label: '', radius: 90,  message: "That's Beijing! The Great Wall is impressive but the wedding isn't here 🐉" },
-  { name: 'Bangkok',     lat: 13.7563,   lng: 100.5018,  color: '#fff', label: '', radius: 80,  message: "Bangkok? Lovely food, wrong destination! Mumbai is west of here ←" },
-  { name: 'Singapore',   lat:  1.3521,   lng: 103.8198,  color: '#fff', label: '', radius: 80,  message: "Singapore! Clean streets, wrong country. Head way west to Mumbai! 🦁" },
-  { name: 'Sydney',      lat: -33.8688,  lng: 151.2093,  color: '#fff', label: '', radius: 100, message: "You've overshot Mumbai by about 9,000 km 🦘 Come back! Way back!" },
-  { name: 'Cairo',       lat: 30.0444,   lng: 31.2357,   color: '#fff', label: '', radius: 80,  message: "Cairo! The pyramids are magnificent but the wedding is in Mumbai, not Egypt 🐪" },
-  { name: 'Nairobi',     lat: -1.2921,   lng: 36.8219,   color: '#fff', label: '', radius: 80,  message: "Nairobi? That's Kenya! Mumbai is across the ocean to the north-east 🦁" },
-  { name: 'Moscow',      lat: 55.7558,   lng: 37.6173,   color: '#fff', label: '', radius: 90,  message: "Moscow! It's freezing there. Head south to Mumbai for a warmer welcome! 🥶" },
-  { name: 'New York',    lat: 40.7128,   lng: -74.0060,  color: '#fff', label: '', radius: 100, message: "NEW YORK?! 😂 You've flown the completely wrong way. The wedding is in India, not America!" },
-  { name: 'Los Angeles', lat: 34.0522,   lng: -118.2437, color: '#fff', label: '', radius: 100, message: "Los Angeles?! Hollywood isn't invited 🎬 Turn that plane around and head to Mumbai!" },
-  { name: 'Mexico City', lat: 19.4326,   lng: -99.1332,  color: '#fff', label: '', radius: 90,  message: "México! Same latitude as Mumbai but 15,000 km in the wrong direction 🌮" },
-  { name: 'Bogota',      lat:  4.7110,   lng: -74.0721,  color: '#fff', label: '', radius: 90,  message: "Colombia! Beautiful coffee, wrong destination. Mumbai is east, very east ☕" },
-  { name: 'Buenos Aires',lat: -34.6037,  lng: -58.3816,  color: '#fff', label: '', radius: 100, message: "Buenos Aires?! You've gone to the bottom of South America 🥩 Mumbai is on the other side of the planet!" },
-  { name: 'Sao Paulo',   lat: -23.5505,  lng: -46.6333,  color: '#fff', label: '', radius: 100, message: "Brazil! 🌴 Wrong hemisphere entirely. The wedding is in Mumbai, not South America!" },
-  { name: 'Reykjavik',   lat: 64.1466,   lng: -21.9426,  color: '#fff', label: '', radius: 80,  message: "Iceland?! 🌋 It's beautiful but quite far from Mumbai. Head south-east — a lot south-east!" },
-
-  // ── Countries / large regions (checked after cities) ──
-  { name: 'Russia',      lat: 61.5240,   lng: 105.3188,  color: '#fff', label: '', radius: 500, message: "That's Russia! Massive country but Mumbai is to the south. Way south. 🐻" },
-  { name: 'Canada',      lat: 56.1304,   lng: -106.3468, color: '#fff', label: '', radius: 400, message: "Canada! Lovely maple syrup, wrong side of the planet 🍁 Mumbai is east, very east!" },
-  { name: 'USA',         lat: 37.0902,   lng: -95.7129,  color: '#fff', label: '', radius: 380, message: "United States! Great country but the wedding is in India, not America 🦅" },
-  { name: 'China',       lat: 35.8617,   lng: 104.1954,  color: '#fff', label: '', radius: 280, message: "China! Interesting choice but Mumbai is to the south-west 🐼 Keep looking!" },
-  { name: 'Australia',   lat: -25.2744,  lng: 133.7751,  color: '#fff', label: '', radius: 350, message: "Australia! Land of kangaroos and 9,000 km from Mumbai 🦘 Wrong direction!" },
-  { name: 'Brazil',      lat: -14.2350,  lng: -51.9253,  color: '#fff', label: '', radius: 320, message: "Brazil! 🎉 The carnival is fun but the wedding celebration is in Mumbai!" },
-  { name: 'Africa',      lat:  8.7832,   lng: 34.5085,   color: '#fff', label: '', radius: 350, message: "That's Africa! Mumbai is across the Indian Ocean to the north-east 🌍" },
-  { name: 'Greenland',   lat: 71.7069,   lng: -42.6043,  color: '#fff', label: '', radius: 250, message: "Greenland! It's actually mostly ice 🧊 And nowhere near Mumbai. Try heading east and south!" },
+// Geographic zones: [minLat, maxLat, minLng, maxLng, message]
+// Checked in order — first match wins. Put specific cities before large regions.
+const GEO_ZONES: [number, number, number, number, string][] = [
+  // ── UK & Ireland (not Birmingham itself — that's handled separately) ──
+  [49, 60,  -10, 3,    "That's the UK! But Birmingham is where Nidhi starts — not where she's headed 😄 Drag east to Mumbai!"],
+  // ── Western Europe ──
+  [36, 72,  -10, 25,   "That's Europe! The wedding is in Mumbai, India 🇮🇳 Head east — way east!"],
+  // ── Iceland & Greenland ──
+  [60, 85, -80, -10,   "Iceland or Greenland?! Beautiful ice but nowhere near Mumbai 🧊 Turn the plane around!"],
+  // ── Russia & Central Asia ──
+  [45, 82,  25, 180,   "That's Russia or Central Asia! Mumbai is way south of here ↓ Keep searching!"],
+  // ── Middle East (before South Asia so Dubai/Karachi get caught first) ──
+  [12, 42,  35, 65,    "That's the Middle East! Getting warmer… Mumbai is further east and south ✈️"],
+  // ── Pakistan / Karachi area ──
+  [20, 36,  60, 74,    "That's Pakistan! Mumbai is just across the border to the east → almost there!"],
+  // ── Delhi / North India ──
+  [26, 34,  74, 82,    "So close!! That's North India — Delhi area. Mumbai is just 1,400 km south ↓ Almost!"],
+  // ── South India / Sri Lanka (not Mumbai) ──
+  [ 5, 20,  73, 82,    "You're in India but too far south! Mumbai is north of here ↑"],
+  // ── China & East Asia ──
+  [18, 55,  73, 145,   "That's East Asia! Great Wall, sushi — wrong continent for the wedding 🐉 Mumbai is west of here!"],
+  // ── South East Asia ──
+  [-10, 28, 90, 145,   "That's South East Asia! Lovely beaches but Mumbai is west of here ← Keep looking!"],
+  // ── Japan ──
+  [30, 46, 128, 148,   "Tokyo! Great sushi, wrong wedding venue 🍣 Mumbai is way west of Japan!"],
+  // ── Australia & NZ ──
+  [-50, -10, 110, 180, "Australia!! You've overshot Mumbai by about 9,000 km 🦘 Come back — way back!"],
+  // ── North Africa & Egypt ──
+  [18, 38,  -5, 40,    "That's North Africa or Egypt! The pyramids are magnificent but the wedding is in Mumbai 🐪"],
+  // ── Sub-Saharan Africa ──
+  [-35, 18, -20, 55,   "That's Africa! Mumbai is across the Indian Ocean to the north-east 🌍"],
+  // ── North America (covers USA + Canada + Mexico) ──
+  [10, 85, -170, -50,  "WRONG CONTINENT 😂 That's North America! The wedding is in India, not America. Turn around!"],
+  // ── South America ──
+  [-60, 15, -85, -30,  "South America! 🌴 Completely wrong side of the planet. Mumbai is way east across the Atlantic!"],
+  // ── Pacific Ocean ──
+  [-60, 60, -180, -100,"You're in the middle of the Pacific Ocean 🌊 There's nothing here! Head west to India!"],
+  // ── Indian Ocean fallback ──
+  [-40, 25, 40, 100,   "You're over the Indian Ocean! You're close — Mumbai is to the north-east ↗️"],
+  // ── Atlantic Ocean fallback ──
+  [-60, 70, -60, -5,   "You're over the Atlantic Ocean 🌊 Mumbai is to the east — keep flying!"],
 ]
 
 function dist(a: { x: number; y: number }, b: { x: number; y: number }) {
@@ -87,44 +64,37 @@ export default function IntroScreen({ onUnlock }: IntroScreenProps) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const leafletRef = useRef<any>(null)
 
-  const [planePos, setPlanePos] = useState({ x: 0, y: 0 })
+  const [planePos, setPlanePos]         = useState({ x: 0, y: 0 })
   const [planePosReady, setPlanePosReady] = useState(false)
-  const [isDragging, setIsDragging] = useState(false)
-  const [planeAngle, setPlaneAngle] = useState(45)
-  const [isSnapping, setIsSnapping] = useState(false)
+  const [isDragging, setIsDragging]     = useState(false)
+  const [planeAngle, setPlaneAngle]     = useState(45)
+  const [isSnapping, setIsSnapping]     = useState(false)
 
   const [birminghamPos, setBirminghamPos] = useState({ x: 0, y: 0 })
-  const [mumbaiPos, setMumbaiPos] = useState({ x: 0, y: 0 })
+  const [mumbaiPos, setMumbaiPos]         = useState({ x: 0, y: 0 })
 
-  const [message, setMessage] = useState('')
+  const [message, setMessage]       = useState('')
   const [showMessage, setShowMessage] = useState(false)
   const [showInstruction, setShowInstruction] = useState(true)
   const [showSuccess, setShowSuccess] = useState(false)
-  const [burstPos, setBurstPos] = useState<{ x: number; y: number } | null>(null)
+  const [burstPos, setBurstPos]       = useState<{ x: number; y: number } | null>(null)
   const [isUnlocking, setIsUnlocking] = useState(false)
 
-  const messageTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
-  const lastPosRef = useRef({ x: 0, y: 0 })
-  const birminghamPosRef = useRef({ x: 0, y: 0 })
-  const mumbaiPosRef = useRef({ x: 0, y: 0 })
-  const sarcasticPositionsRef = useRef<{ x: number; y: number }[]>([])
+  const messageTimerRef    = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const lastPosRef         = useRef({ x: 0, y: 0 })
+  const birminghamPosRef   = useRef({ x: 0, y: 0 })
+  const mumbaiPosRef       = useRef({ x: 0, y: 0 })
 
   const updateCityPositions = useCallback(() => {
     if (!mapRef.current || !leafletRef.current) return
-    const L = leafletRef.current
+    const L   = leafletRef.current
     const map = mapRef.current
     const bPt = map.latLngToContainerPoint(L.latLng(BIRMINGHAM.lat, BIRMINGHAM.lng))
     const mPt = map.latLngToContainerPoint(L.latLng(MUMBAI.lat, MUMBAI.lng))
-    const bPos = { x: bPt.x, y: bPt.y }
-    const mPos = { x: mPt.x, y: mPt.y }
-    birminghamPosRef.current = bPos
-    mumbaiPosRef.current = mPos
-    setBirminghamPos(bPos)
-    setMumbaiPos(mPos)
-    sarcasticPositionsRef.current = SARCASTIC_ZONES.map(z => {
-      const p = map.latLngToContainerPoint(L.latLng(z.lat, z.lng))
-      return { x: p.x, y: p.y }
-    })
+    birminghamPosRef.current = { x: bPt.x, y: bPt.y }
+    mumbaiPosRef.current     = { x: mPt.x, y: mPt.y }
+    setBirminghamPos({ x: bPt.x, y: bPt.y })
+    setMumbaiPos    ({ x: mPt.x, y: mPt.y })
   }, [])
 
   useEffect(() => {
@@ -137,10 +107,10 @@ export default function IntroScreen({ onUnlock }: IntroScreenProps) {
       L.Icon.Default.mergeOptions({ iconRetinaUrl: '', iconUrl: '', shadowUrl: '' })
       leafletRef.current = L
 
-      const isMobile = window.innerWidth < 768
       const map = L.map(mapContainerRef.current!, {
-        center: isMobile ? [30, 40] : [35, 35],
-        zoom: isMobile ? 1 : 2,
+        center: [32, 38],
+        zoom: 2,
+        minZoom: 2,
         zoomControl: false,
         dragging: false,
         scrollWheelZoom: false,
@@ -148,11 +118,13 @@ export default function IntroScreen({ onUnlock }: IntroScreenProps) {
         touchZoom: false,
         keyboard: false,
         attributionControl: false,
+        worldCopyJump: false,
       })
 
       L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
         subdomains: 'abcd',
         maxZoom: 19,
+        noWrap: true,
       }).addTo(map)
 
       mapRef.current = map
@@ -160,9 +132,7 @@ export default function IntroScreen({ onUnlock }: IntroScreenProps) {
       map.whenReady(() => {
         updateCityPositions()
         const bPt = map.latLngToContainerPoint(L.latLng(BIRMINGHAM.lat, BIRMINGHAM.lng))
-        const startPos = { x: bPt.x, y: bPt.y }
-        birminghamPosRef.current = startPos
-        setPlanePos(startPos)
+        setPlanePos({ x: bPt.x, y: bPt.y })
         setPlanePosReady(true)
       })
 
@@ -175,9 +145,8 @@ export default function IntroScreen({ onUnlock }: IntroScreenProps) {
   }, [updateCityPositions])
 
   useEffect(() => {
-    const onResize = () => updateCityPositions()
-    window.addEventListener('resize', onResize)
-    return () => window.removeEventListener('resize', onResize)
+    window.addEventListener('resize', updateCityPositions)
+    return () => window.removeEventListener('resize', updateCityPositions)
   }, [updateCityPositions])
 
   const showSarcasticMessage = useCallback((msg: string) => {
@@ -187,9 +156,10 @@ export default function IntroScreen({ onUnlock }: IntroScreenProps) {
     messageTimerRef.current = setTimeout(() => setShowMessage(false), 4000)
   }, [])
 
-  const snapToCity = useCallback((pos: { x: number; y: number }, msg?: string) => {
+  const snapToBirmingham = useCallback((msg?: string) => {
+    const bp = birminghamPosRef.current
     setIsSnapping(true)
-    setPlanePos(pos)
+    setPlanePos(bp)
     setTimeout(() => setIsSnapping(false), 350)
     if (msg) showSarcasticMessage(msg)
     setShowInstruction(true)
@@ -242,7 +212,6 @@ export default function IntroScreen({ onUnlock }: IntroScreenProps) {
     setPlanePos(current => {
       const mp = mumbaiPosRef.current
       const bp = birminghamPosRef.current
-      const sp = sarcasticPositionsRef.current
 
       // Mumbai — unlock!
       if (dist(current, mp) < MUMBAI.radius) {
@@ -252,32 +221,34 @@ export default function IntroScreen({ onUnlock }: IntroScreenProps) {
 
       // Birmingham — snap back with hint
       if (dist(current, bp) < BIRMINGHAM.radius) {
-        setTimeout(() => snapToCity(bp, BIRMINGHAM.message), 0)
+        setTimeout(() => snapToBirmingham("That's where Nidhi is! Drag the plane east toward Mumbai! →"), 0)
         return current
       }
 
-      // "Parag → Birmingham" — dragged westward past Mumbai toward UK
-      const isDraggingTowardBirmingham =
-        current.x < mp.x - 100 && Math.abs(current.y - mp.y) < 150
-      if (isDraggingTowardBirmingham) {
-        setTimeout(() => snapToCity(bp, "Parag going to Birmingham?! He doesn't have a flight ticket yet 😂 The wedding is in Mumbai, not Birmingham!"), 0)
-        return current
-      }
-
-      // Check sarcastic zones (specific cities first, then large regions)
-      for (let i = 0; i < SARCASTIC_ZONES.length; i++) {
-        const zp = sp[i]
-        if (zp && dist(current, zp) < SARCASTIC_ZONES[i].radius) {
-          setTimeout(() => snapToCity(bp, SARCASTIC_ZONES[i].message), 0)
-          return current
+      // Convert plane screen position to lat/lng for geographic zone detection
+      if (mapRef.current && leafletRef.current) {
+        const L = leafletRef.current
+        const map = mapRef.current
+        try {
+          const ll = map.containerPointToLatLng(L.point(current.x, current.y))
+          const lat = ll.lat
+          const lng = ll.lng
+          for (const [minLat, maxLat, minLng, maxLng, msg] of GEO_ZONES) {
+            if (lat >= minLat && lat <= maxLat && lng >= minLng && lng <= maxLng) {
+              setTimeout(() => snapToBirmingham(msg), 0)
+              return current
+            }
+          }
+        } catch {
+          // fall through to default snap
         }
       }
 
-      // Nowhere special — snap back
-      setTimeout(() => snapToCity(bp), 0)
+      // Default — snap back silently
+      setTimeout(() => snapToBirmingham(), 0)
       return current
     })
-  }, [isDragging, snapToCity, triggerUnlock])
+  }, [isDragging, snapToBirmingham, triggerUnlock])
 
   const renderFlightArc = () => {
     if (!planePosReady) return null
@@ -362,7 +333,7 @@ export default function IntroScreen({ onUnlock }: IntroScreenProps) {
 
       {/* Success card */}
       <div className={`${styles.successCard} ${showSuccess ? styles.successCardVisible : ''}`}>
-        <span className={styles.successEmoji}>✨</span>
+        <span className={styles.successEmoji}>👫</span>
         <div className={styles.successTitle}>You found us!</div>
         <div className={styles.successSub}>Nidhi & Parag · December 4, 2026</div>
       </div>

@@ -1,11 +1,17 @@
 /* ─── Overlay ─── */
 .overlay {
   position: fixed;
-  inset: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
   z-index: 9999;
   overflow: hidden;
   touch-action: none;
   -webkit-tap-highlight-color: transparent;
+  background: #0a0a14; /* dark fallback so no gray shows through */
 }
 
 .overlayFadingOut {
@@ -20,8 +26,14 @@
 /* ─── Map ─── */
 .mapContainer {
   position: absolute;
-  inset: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
   z-index: 0;
+  background: #0a0a14;
 }
 
 /* Hide Leaflet attribution and zoom controls */
