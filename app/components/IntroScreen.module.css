@@ -4,6 +4,8 @@
   inset: 0;
   z-index: 9999;
   overflow: hidden;
+  touch-action: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .overlayFadingOut {
@@ -78,7 +80,7 @@
 .cityLabel {
   margin-bottom: 16px;
   margin-top: -52px;
-  background: rgba(255, 255, 255, 0.06);
+  background: rgba(20, 20, 35, 0.8);
   backdrop-filter: blur(48px) saturate(160%) brightness(1.1);
   -webkit-backdrop-filter: blur(48px) saturate(160%) brightness(1.1);
   border: 1px solid rgba(255, 255, 255, 0.14);
@@ -109,13 +111,21 @@
 .airplane {
   position: absolute;
   z-index: 20;
-  width: 36px;
-  height: 36px;
+  width: 44px;
+  height: 44px;
   cursor: grab;
   touch-action: none;
   transform: translate(-50%, -50%) rotate(45deg);
   transition: filter 0.15s ease;
   user-select: none;
+  -webkit-user-select: none;
+}
+
+@media (max-width: 768px) {
+  .airplane {
+    width: 52px;
+    height: 52px;
+  }
 }
 
 .airplaneDragging {
@@ -136,7 +146,7 @@
   left: 50%;
   transform: translateX(-50%);
   z-index: 30;
-  background: rgba(255, 255, 255, 0.06);
+  background: rgba(20, 20, 30, 0.75);
   backdrop-filter: blur(48px) saturate(160%);
   -webkit-backdrop-filter: blur(48px) saturate(160%);
   border: 1px solid rgba(255, 255, 255, 0.12);
@@ -150,6 +160,19 @@
   white-space: nowrap;
   transition: opacity 0.4s ease, transform 0.4s ease;
   pointer-events: none;
+  max-width: calc(100vw - 40px);
+  text-align: center;
+}
+
+@media (max-width: 480px) {
+  .instructionBar {
+    font-size: 12px;
+    padding: 9px 16px;
+    bottom: 24px;
+    white-space: normal;
+    width: calc(100vw - 48px);
+    border-radius: 16px;
+  }
 }
 
 .instructionBarHidden {
@@ -166,7 +189,7 @@
   z-index: 40;
   max-width: 380px;
   width: calc(100% - 48px);
-  background: rgba(10, 10, 20, 0.55);
+  background: rgba(10, 10, 20, 0.85);
   backdrop-filter: blur(60px) saturate(180%);
   -webkit-backdrop-filter: blur(60px) saturate(180%);
   border-radius: 20px;
@@ -175,6 +198,14 @@
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+@media (max-width: 480px) {
+  .messageCard {
+    bottom: 80px;
+    max-width: calc(100vw - 32px);
+    width: calc(100vw - 32px);
+  }
 }
 
 .messageCardVisible {
