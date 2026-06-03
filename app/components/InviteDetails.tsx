@@ -1,16 +1,18 @@
 import { VENUE, EVENT } from '@/lib/constants'
 import { MapPin, Clock } from 'lucide-react'
+import SectionOrnament from './SectionOrnament'
 
 export default function InviteDetails() {
   return (
     <section id="invite" className="py-24 bg-slate-50">
       <div className="max-w-3xl mx-auto px-6">
+        <SectionOrnament />
         <h2 className="text-4xl md:text-5xl font-extralight text-center mb-16 tracking-tight">
           You&apos;re Invited
         </h2>
 
         <div className="space-y-6">
-          <div className="bg-white p-8 rounded-2xl shadow-sm">
+          <div className="glass-gold p-8 rounded-2xl">
             <div className="flex gap-5 items-start">
               <div className="p-3 bg-purple-50 rounded-xl">
                 <Clock className="text-purple-600" size={22} />
@@ -23,7 +25,7 @@ export default function InviteDetails() {
             </div>
           </div>
 
-          <div className="bg-white p-8 rounded-2xl shadow-sm">
+          <div className="glass-gold p-8 rounded-2xl">
             <div className="flex gap-5 items-start">
               <div className="p-3 bg-blue-50 rounded-xl">
                 <Clock className="text-blue-600" size={22} />
@@ -36,7 +38,7 @@ export default function InviteDetails() {
             </div>
           </div>
 
-          <div className="bg-white p-8 rounded-2xl shadow-sm">
+          <div className="glass-gold p-8 rounded-2xl">
             <div className="flex gap-5 items-start">
               <div className="p-3 bg-green-50 rounded-xl">
                 <MapPin className="text-green-600" size={22} />

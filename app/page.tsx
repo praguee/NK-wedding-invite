@@ -44,10 +44,25 @@ export default function Home() {
         <GuestBook />
         <ContactFAQ />
       </main>
-      <footer className="bg-slate-900 text-white py-12 text-center">
-        <p className="text-2xl font-extralight tracking-widest mb-3">N &amp; P</p>
-        <p className="text-slate-400 text-sm tracking-wider">Birmingham ✈ Mumbai · 04 · 12 · 2026</p>
-        <p className="text-slate-600 text-xs mt-3 tracking-widest uppercase">A love story that crossed oceans</p>
+      <footer
+        className="text-white py-16 text-center relative overflow-hidden"
+        style={{ background: 'linear-gradient(160deg, #3B1942 0%, #1A0A2E 60%, #0D0618 100%)' }}
+      >
+        {/* Subtle mandala watermark in footer */}
+        <div style={{
+          position: 'absolute', inset: 0, opacity: 0.05, pointerEvents: 'none',
+          backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 200 200'%3E%3Ccircle cx='100' cy='100' r='90' fill='none' stroke='%23C49A28' stroke-width='1'/%3E%3Ccircle cx='100' cy='100' r='70' fill='none' stroke='%23C49A28' stroke-width='0.8'/%3E%3Ccircle cx='100' cy='100' r='50' fill='none' stroke='%23C49A28' stroke-width='0.7'/%3E%3Ccircle cx='100' cy='100' r='30' fill='none' stroke='%23C49A28' stroke-width='0.6'/%3E%3C/svg%3E")`,
+          backgroundSize: '200px 200px',
+        }} />
+        <div className="relative z-10">
+          <p className="text-gold-shimmer text-3xl font-extralight tracking-[0.2em] mb-2">N ✦ P</p>
+          <p className="text-sm tracking-[0.15em] mb-1" style={{ color: 'rgba(196,154,40,0.7)' }}>
+            Birmingham ✈ Mumbai · 04 · 12 · 2026
+          </p>
+          <p className="text-xs tracking-widest uppercase mt-4" style={{ color: 'rgba(255,255,255,0.2)' }}>
+            A love story that crossed oceans
+          </p>
+        </div>
       </footer>
     </>
   )

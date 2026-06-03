@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import toast from 'react-hot-toast'
 import { Send } from 'lucide-react'
+import SectionOrnament from './SectionOrnament'
 
 interface FormState {
   name: string
@@ -59,6 +60,7 @@ export default function RSVPForm() {
   return (
     <section id="rsvp" className="py-24 bg-slate-50">
       <div className="max-w-xl mx-auto px-6">
+        <SectionOrnament />
         <h2 className="text-4xl md:text-5xl font-extralight text-center mb-4 tracking-tight">
           RSVP
         </h2>
@@ -66,7 +68,7 @@ export default function RSVPForm() {
           Let us know you&apos;re coming — we can&apos;t wait to celebrate with you
         </p>
 
-        <form onSubmit={handleSubmit} className="bg-white rounded-2xl p-8 shadow-sm space-y-5">
+        <form onSubmit={handleSubmit} className="glass-gold rounded-2xl p-8 space-y-5">
           <div>
             <label className="block text-xs uppercase tracking-widest text-slate-500 mb-2">
               Your Name *
@@ -113,9 +115,15 @@ export default function RSVPForm() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-purple-600 hover:bg-purple-700 disabled:bg-slate-300 text-white py-3.5 rounded-xl font-medium text-sm tracking-wide transition-colors flex items-center justify-center gap-2"
+            className="w-full disabled:opacity-50 py-3.5 rounded-xl font-semibold text-sm tracking-widest transition-all flex items-center justify-center gap-2"
+            style={{
+              background: loading ? '#d4aa38' : 'linear-gradient(135deg, #C49A28, #E8C547, #C49A28)',
+              backgroundSize: '200% auto',
+              color: '#3B1F00',
+              boxShadow: '0 4px 18px rgba(196,154,40,0.35)',
+            }}
           >
-            <Send size={16} />
+            <Send size={15} />
             {loading ? 'Sending…' : 'Send RSVP'}
           </button>
         </form>

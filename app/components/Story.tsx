@@ -1,7 +1,10 @@
+import SectionOrnament from './SectionOrnament'
+
 export default function Story() {
   return (
     <section id="story" className="py-24 bg-white">
       <div className="max-w-5xl mx-auto px-6">
+        <SectionOrnament />
         <h2 className="text-4xl md:text-5xl font-extralight text-center mb-16 tracking-tight">
           Our Story
         </h2>
