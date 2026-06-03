@@ -158,6 +158,18 @@ export default function IntroScreen({ onUnlock }: IntroScreenProps) {
           const bPt = map.latLngToContainerPoint(L.latLng(BIRMINGHAM.lat, BIRMINGHAM.lng))
           setPlanePos({ x: bPt.x, y: bPt.y })
           setPlanePosReady(true)
+
+          // Gentle breathing zoom — very slow, barely perceptible, adds life
+          let direction = 1
+          const breathe = () => {
+            if (!mapRef.current) return
+            const base = mapRef.current.getBoundsZoom(bounds, false, [getPadding()[1], getPadding()[0]])
+            const target = base + direction * 0.15
+            mapRef.current.setZoom(target, { animate: true, duration: 8 })
+            direction *= -1
+            setTimeout(breathe, 9000)
+          }
+          setTimeout(breathe, 2000)
         }, 250)
       })
 
@@ -285,15 +297,67 @@ export default function IntroScreen({ onUnlock }: IntroScreenProps) {
     const { x: mx, y: my } = mumbaiPos
     const cpx = (bx + mx) / 2
     const cpy = Math.min(by, my) - Math.abs(mx - bx) * 0.22
+    const pathD = `M ${bx} ${by} Q ${cpx} ${cpy} ${mx} ${my}`
+
     return (
       <svg className={styles.flightPath}>
+        <defs>
+          <filter id="glow">
+            <feGaussianBlur stdDeviation="2.5" result="blur" />
+            <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
+          </filter>
+        </defs>
+
+        {/* Static dashed arc */}
         <path
-          d={`M ${bx} ${by} Q ${cpx} ${cpy} ${mx} ${my}`}
-          stroke="rgba(255,255,255,0.08)"
+          d={pathD}
+          stroke="rgba(255,255,255,0.10)"
           strokeWidth="1"
-          strokeDasharray="4 6"
+          strokeDasharray="4 7"
           fill="none"
         />
+
+        {/* Animated glowing arc that draws itself */}
+        <path
+          d={pathD}
+          stroke="rgba(255,255,255,0.22)"
+          strokeWidth="1.5"
+          fill="none"
+          strokeDasharray="60 9999"
+          filter="url(#glow)"
+        >
+          <animate
+            attributeName="stroke-dashoffset"
+            from="60"
+            to="-9999"
+            dur="6s"
+            repeatCount="indefinite"
+            calcMode="linear"
+          />
+        </path>
+
+        {/* Ghost plane flying the route */}
+        <g filter="url(#glow)" opacity="0.55">
+          <animateMotion
+            dur="6s"
+            repeatCount="indefinite"
+            calcMode="spline"
+            keyTimes="0;1"
+            keySplines="0.4 0 0.6 1"
+            rotate="auto"
+          >
+            <mpath href="#arc-path" />
+          </animateMotion>
+          {/* Plane icon */}
+          <path
+            d="M0,-7 L3,3 L0,1 L-3,3 Z"
+            fill="white"
+            transform="scale(1.4)"
+          />
+        </g>
+
+        {/* Named path for animateMotion reference */}
+        <path id="arc-path" d={pathD} fill="none" stroke="none" />
       </svg>
     )
   }

@@ -45,7 +45,9 @@ export default function Home() {
         <ContactFAQ />
       </main>
       <footer className="bg-slate-900 text-white py-12 text-center">
-        <p className="text-slate-400 text-sm">© 2026 Nidhi & Parag · Made with love</p>
+        <p className="text-2xl font-extralight tracking-widest mb-3">N &amp; P</p>
+        <p className="text-slate-400 text-sm tracking-wider">Birmingham ✈ Mumbai · 04 · 12 · 2026</p>
+        <p className="text-slate-600 text-xs mt-3 tracking-widest uppercase">A love story that crossed oceans</p>
       </footer>
     </>
   )
