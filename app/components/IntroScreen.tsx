@@ -110,7 +110,6 @@ export default function IntroScreen({ onUnlock }: IntroScreenProps) {
       const map = L.map(mapContainerRef.current!, {
         center: [32, 38],
         zoom: 2,
-        minZoom: 2,
         zoomControl: false,
         dragging: false,
         scrollWheelZoom: false,
@@ -118,25 +117,37 @@ export default function IntroScreen({ onUnlock }: IntroScreenProps) {
         touchZoom: false,
         keyboard: false,
         attributionControl: false,
-        worldCopyJump: false,
       })
 
       L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
         subdomains: 'abcd',
         maxZoom: 19,
-        noWrap: true,
       }).addTo(map)
 
       mapRef.current = map
 
+      // fitBounds to show Birmingham→Mumbai with padding, works on any screen size
+      const bounds = L.latLngBounds(
+        [MUMBAI.lat - 12, BIRMINGHAM.lng - 25],
+        [BIRMINGHAM.lat + 8,  MUMBAI.lng  + 20]
+      )
+
       map.whenReady(() => {
-        updateCityPositions()
-        const bPt = map.latLngToContainerPoint(L.latLng(BIRMINGHAM.lat, BIRMINGHAM.lng))
-        setPlanePos({ x: bPt.x, y: bPt.y })
-        setPlanePosReady(true)
+        map.invalidateSize()
+        map.fitBounds(bounds, { padding: [60, 60], animate: false })
+        // Wait a tick for fitBounds to settle before reading positions
+        setTimeout(() => {
+          updateCityPositions()
+          const bPt = map.latLngToContainerPoint(L.latLng(BIRMINGHAM.lat, BIRMINGHAM.lng))
+          setPlanePos({ x: bPt.x, y: bPt.y })
+          setPlanePosReady(true)
+        }, 100)
       })
 
-      map.on('resize', updateCityPositions)
+      map.on('resize', () => {
+        map.fitBounds(bounds, { padding: [60, 60], animate: false })
+        setTimeout(updateCityPositions, 50)
+      })
     })
 
     return () => {
