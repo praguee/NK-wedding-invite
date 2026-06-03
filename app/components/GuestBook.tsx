@@ -110,7 +110,7 @@ export default function GuestBook() {
                 return (
                   <div
                     key={m.id}
-                    className="group relative bg-white rounded-2xl px-5 py-4 border border-slate-100 transition-all duration-300"
+                    className="group relative glass-gold rounded-2xl px-5 py-4 transition-all duration-300"
                     style={{
                       boxShadow: '0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04)',
                     }}

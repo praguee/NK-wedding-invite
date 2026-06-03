@@ -25,7 +25,7 @@ export default function Accommodations() {
           Recommended premium hotels near the venue
         </p>
 
-        <div className="bg-slate-50 rounded-2xl overflow-hidden divide-y divide-slate-100">
+        <div className="glass-gold rounded-2xl overflow-hidden divide-y" style={{ borderColor: 'rgba(196,154,40,0.1)' }}>
           {HOTELS.map((hotel) => (
             <a
               key={hotel.name}

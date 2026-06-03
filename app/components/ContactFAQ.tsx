@@ -14,7 +14,7 @@ export default function ContactFAQ() {
 
         <div className="space-y-4">
           {[CONTACT.primary, CONTACT.secondary].map((contact) => (
-            <div key={contact.name} className="bg-slate-50 p-6 rounded-2xl">
+            <div key={contact.name} className="glass-gold p-6 rounded-2xl">
               <div className="flex gap-4 items-center">
                 <div className="p-2.5 bg-purple-50 rounded-xl">
                   <Phone className="text-purple-600" size={18} />

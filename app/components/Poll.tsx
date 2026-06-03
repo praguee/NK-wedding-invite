@@ -12,8 +12,8 @@ const STORAGE_KEY = 'nk_poll_vote_v2'
 /* ── Bitmoji photo avatars ─────────────────────────────────── */
 function NidhiAvatar({ size = 56 }: { size?: number }) {
   return (
-    <div style={{ width: size, height: size, borderRadius: '50%', overflow: 'hidden', flexShrink: 0, border: '2px solid rgba(251,113,133,0.4)', position: 'relative', background: '#fff' }}>
-      <Image src="/images/nidhi-crop.png" alt="Nidhi" fill style={{ objectFit: 'cover', objectPosition: 'center center' }} />
+    <div style={{ width: size, height: size, borderRadius: '50%', overflow: 'hidden', flexShrink: 0, border: '2px solid rgba(251,113,133,0.4)', position: 'relative', background: '#f0f8e8' }}>
+      <Image src="/images/nidhi-stand.png" alt="Nidhi" fill style={{ objectFit: 'cover', objectPosition: '50% 8%' }} />
     </div>
   )
 }

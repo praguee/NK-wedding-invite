@@ -16,7 +16,7 @@ export default function Addresses() {
         </p>
 
         <div className="grid md:grid-cols-2 gap-8">
-          <div className="bg-slate-50 p-8 rounded-2xl">
+          <div className="glass-gold p-8 rounded-2xl">
             <div className="flex gap-3 items-center mb-6">
               <MapPin className="text-purple-600" size={20} />
               <span className="text-xs uppercase tracking-widest text-slate-500">Bride&apos;s Home</span>
@@ -37,7 +37,7 @@ export default function Addresses() {
             </a>
           </div>
 
-          <div className="bg-slate-50 p-8 rounded-2xl">
+          <div className="glass-gold p-8 rounded-2xl">
             <div className="flex gap-3 items-center mb-6">
               <MapPin className="text-blue-600" size={20} />
               <span className="text-xs uppercase tracking-widest text-slate-500">Groom&apos;s Home</span>

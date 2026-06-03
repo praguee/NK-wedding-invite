@@ -68,7 +68,7 @@ export default function JabWeMet() {
             {/* Live counter */}
             <div>
               <p className="text-xs text-center mb-3 tracking-widest uppercase" style={{ color: '#9C7A5A' }}>
-                Together for
+                Known each other for
               </p>
               <div className="flex gap-3">
                 <StatCard value={t.years}  label="years"  />
@@ -76,7 +76,7 @@ export default function JabWeMet() {
                 <StatCard value={t.days}   label="days"   />
               </div>
               <p className="text-xs text-center mt-3" style={{ color: '#C4B09A' }}>
-                Since 23 Dec 2022 · updates every minute
+                Counting every day since the universe decided to be helpful
               </p>
             </div>
           </div>
