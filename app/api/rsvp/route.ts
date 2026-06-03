@@ -42,8 +42,8 @@ export async function POST(request: NextRequest) {
       .single()
 
     if (error) {
-      console.error('DB error:', error)
-      return NextResponse.json({ message: 'Failed to save RSVP. Please try again.' }, { status: 500 })
+      console.error('DB error code:', error.code, 'message:', error.message, 'details:', error.details)
+      return NextResponse.json({ message: `DB error: ${error.message}` }, { status: 500 })
     }
 
     return NextResponse.json({ message: 'RSVP submitted successfully', data }, { status: 201 })
