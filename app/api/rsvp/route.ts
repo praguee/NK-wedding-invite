@@ -1,12 +1,12 @@
-import { supabaseAdmin as supabase } from '@/lib/supabase-admin'
 import { NextRequest, NextResponse } from 'next/server'
 
 export async function POST(request: NextRequest) {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL
-  const key = process.env.SUPABASE_SERVICE_ROLE_KEY
-  if (!url || !key) {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+
+  if (!supabaseUrl || !serviceKey) {
     return NextResponse.json({
-      message: `Missing env vars — URL: ${url ? 'OK' : 'MISSING'}, KEY: ${key ? 'OK' : 'MISSING'}`
+      message: `Env missing — URL: ${supabaseUrl ? 'OK' : 'MISSING'}, KEY: ${serviceKey ? 'OK' : 'MISSING'}`
     }, { status: 500 })
   }
 
@@ -21,43 +21,56 @@ export async function POST(request: NextRequest) {
     if (isNaN(plusOnesNum) || plusOnesNum < 0 || plusOnesNum > 5) {
       return NextResponse.json({ message: 'Plus-ones must be between 0 and 5' }, { status: 400 })
     }
-    if (message && message.length > 500) {
-      return NextResponse.json({ message: 'Message must be 500 characters or less' }, { status: 400 })
+
+    // Duplicate check via direct REST API
+    const checkRes = await fetch(
+      `${supabaseUrl}/rest/v1/rsvps?name=eq.${encodeURIComponent(name.trim())}&select=id`,
+      {
+        headers: {
+          apikey: serviceKey,
+          Authorization: `Bearer ${serviceKey}`,
+        },
+      }
+    )
+
+    if (!checkRes.ok) {
+      const errText = await checkRes.text()
+      return NextResponse.json({ message: `Check failed: ${checkRes.status} ${errText}` }, { status: 500 })
     }
 
-    // Duplicate check by name
-    const { data: existing } = await supabase
-      .from('rsvps')
-      .select('id')
-      .eq('name', name.trim())
-      .maybeSingle()
-
-    if (existing) {
+    const existing = await checkRes.json()
+    if (existing.length > 0) {
       return NextResponse.json(
         { message: "You've already RSVP'd! Contact us if you need to make changes." },
         { status: 409 }
       )
     }
 
-    const { data, error } = await supabase
-      .from('rsvps')
-      .insert([{
+    // Insert via direct REST API
+    const insertRes = await fetch(`${supabaseUrl}/rest/v1/rsvps`, {
+      method: 'POST',
+      headers: {
+        apikey: serviceKey,
+        Authorization: `Bearer ${serviceKey}`,
+        'Content-Type': 'application/json',
+        Prefer: 'return=representation',
+      },
+      body: JSON.stringify({
         name: name.trim(),
         plus_ones: plusOnesNum,
         message: message?.trim() || null,
-      }])
-      .select()
-      .single()
+      }),
+    })
 
-    if (error) {
-      console.error('DB error code:', error.code, 'message:', error.message, 'details:', error.details)
-      return NextResponse.json({ message: `DB error: ${error.message}` }, { status: 500 })
+    if (!insertRes.ok) {
+      const errText = await insertRes.text()
+      return NextResponse.json({ message: `Insert failed: ${insertRes.status} ${errText}` }, { status: 500 })
     }
 
-    return NextResponse.json({ message: 'RSVP submitted successfully', data }, { status: 201 })
+    return NextResponse.json({ message: 'RSVP submitted successfully' }, { status: 201 })
   } catch (err) {
-    console.error('RSVP error:', err)
-    return NextResponse.json({ message: 'Internal server error' }, { status: 500 })
+    const msg = err instanceof Error ? err.message : String(err)
+    return NextResponse.json({ message: `Error: ${msg}` }, { status: 500 })
   }
 }
 
