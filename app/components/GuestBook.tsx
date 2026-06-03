@@ -1,21 +1,36 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import type { RSVP } from '@/lib/types'
-import { Heart } from 'lucide-react'
+
+// Deterministic gradient per guest name so each avatar looks distinct
+const GRADIENTS = [
+  ['#c084fc', '#818cf8'], // violet→indigo
+  ['#f472b6', '#fb7185'], // pink→rose
+  ['#34d399', '#059669'], // emerald→green
+  ['#60a5fa', '#3b82f6'], // sky→blue
+  ['#fbbf24', '#f97316'], // amber→orange
+  ['#a78bfa', '#7c3aed'], // purple→violet
+]
+
+function nameGradient(name: string): [string, string] {
+  let h = 0
+  for (let i = 0; i < name.length; i++) h = ((h * 31) + name.charCodeAt(i)) & 0xffff
+  const g = GRADIENTS[Math.abs(h) % GRADIENTS.length]
+  return [g[0], g[1]]
+}
 
 function formatDate(iso: string) {
   return new Date(iso).toLocaleDateString('en-IN', {
-    day: 'numeric',
-    month: 'short',
-    year: 'numeric',
+    day: 'numeric', month: 'short', year: 'numeric',
   })
 }
 
 export default function GuestBook() {
   const [messages, setMessages] = useState<RSVP[]>([])
   const [loading, setLoading] = useState(true)
+  const scrollRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     supabase
@@ -31,14 +46,10 @@ export default function GuestBook() {
 
     const channel = supabase
       .channel('guest-book')
-      .on(
-        'postgres_changes',
-        { event: 'INSERT', schema: 'public', table: 'rsvps' },
-        (payload) => {
-          const rsvp = payload.new as RSVP
-          if (rsvp.message) setMessages((prev) => [rsvp, ...prev])
-        }
-      )
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'rsvps' }, (payload) => {
+        const rsvp = payload.new as RSVP
+        if (rsvp.message) setMessages((prev) => [rsvp, ...prev])
+      })
       .subscribe()
 
     return () => { supabase.removeChannel(channel) }
@@ -47,76 +58,100 @@ export default function GuestBook() {
   return (
     <section id="messages" className="py-20 bg-slate-50">
       <div className="max-w-2xl mx-auto px-6">
-        <div className="flex items-center justify-between mb-3">
-          <h2 className="text-4xl md:text-5xl font-extralight tracking-tight">
-            Guest Book
-          </h2>
+
+        {/* Header */}
+        <div className="flex items-end justify-between mb-8">
+          <div>
+            <h2 className="text-4xl md:text-5xl font-extralight tracking-tight text-slate-900">
+              Guest Book
+            </h2>
+            <p className="text-slate-400 text-sm mt-1">Wishes from our family and friends</p>
+          </div>
           {messages.length > 0 && (
-            <span className="text-xs text-slate-400 font-medium bg-white border border-slate-100 px-3 py-1 rounded-full">
+            <span className="text-xs font-medium text-slate-400 bg-white border border-slate-100 shadow-sm px-3 py-1.5 rounded-full mb-1">
               {messages.length} {messages.length === 1 ? 'message' : 'messages'}
             </span>
           )}
         </div>
-        <p className="text-slate-500 mb-8 text-sm">
-          Wishes from our family and friends
-        </p>
 
         {loading ? (
           <div className="h-64 flex items-center justify-center">
-            <p className="text-slate-400 text-sm">Loading messages…</p>
+            <div className="flex gap-1.5">
+              {[0,1,2].map(i => (
+                <div key={i} className="w-1.5 h-1.5 rounded-full bg-slate-300 animate-bounce" style={{ animationDelay: `${i * 0.15}s` }} />
+              ))}
+            </div>
           </div>
         ) : messages.length === 0 ? (
-          <div className="h-48 flex flex-col items-center justify-center bg-white rounded-2xl gap-3">
-            <Heart className="text-slate-200" size={36} />
+          <div className="h-52 flex flex-col items-center justify-center bg-white rounded-3xl shadow-sm gap-3 border border-slate-100">
+            <span className="text-4xl">💌</span>
             <p className="text-slate-400 text-sm">Be the first to leave a message!</p>
           </div>
         ) : (
-          <div style={{ position: 'relative' }}>
-            {/* Top fade shadow */}
-            <div style={{
-              position: 'absolute', top: 0, left: 0, right: 0, height: 40,
-              background: 'linear-gradient(to bottom, #f1f5f9, transparent)',
-              pointerEvents: 'none', zIndex: 1, borderRadius: '16px 16px 0 0',
-            }} />
-            {/* Bottom fade shadow */}
-            <div style={{
-              position: 'absolute', bottom: 0, left: 0, right: 0, height: 60,
-              background: 'linear-gradient(to top, #f1f5f9 40%, transparent)',
-              pointerEvents: 'none', zIndex: 1, borderRadius: '0 0 16px 16px',
-            }} />
-          <div
-            className="space-y-3 overflow-y-auto pr-1 pb-6 pt-2"
-            style={{
-              maxHeight: '480px',
-              scrollbarWidth: 'thin',
-              scrollbarColor: '#cbd5e1 transparent',
-            }}
-          >
-            {messages.map((m) => (
-              <div
-                key={m.id}
-                className="bg-white px-5 py-4 rounded-2xl shadow-sm hover:shadow-md transition-shadow duration-200"
-              >
-                <div className="flex items-center gap-3 mb-2">
-                  <div className="w-8 h-8 bg-gradient-to-br from-purple-400 to-blue-400 rounded-full flex items-center justify-center flex-shrink-0">
-                    <span className="text-white text-xs font-semibold">
-                      {m.name.charAt(0).toUpperCase()}
-                    </span>
+          /* Scroll container with fade edges */
+          <div className="relative">
+            {/* Top fade */}
+            <div className="absolute top-0 inset-x-0 h-8 bg-gradient-to-b from-slate-50 to-transparent z-10 pointer-events-none rounded-t-3xl" />
+            {/* Bottom fade */}
+            <div className="absolute bottom-0 inset-x-0 h-16 bg-gradient-to-t from-slate-50 to-transparent z-10 pointer-events-none rounded-b-3xl" />
+
+            <div
+              ref={scrollRef}
+              className="space-y-3 overflow-y-auto py-4 pr-1"
+              style={{
+                maxHeight: 480,
+                scrollbarWidth: 'thin',
+                scrollbarColor: '#e2e8f0 transparent',
+              }}
+            >
+              {messages.map((m) => {
+                const [from, to] = nameGradient(m.name)
+                const initial = m.name.trim().charAt(0).toUpperCase()
+                return (
+                  <div
+                    key={m.id}
+                    className="group relative bg-white rounded-2xl px-5 py-4 border border-slate-100 transition-all duration-300"
+                    style={{
+                      boxShadow: '0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04)',
+                    }}
+                    onMouseEnter={e => (e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.08), 0 16px 40px rgba(0,0,0,0.06)')}
+                    onMouseLeave={e => (e.currentTarget.style.boxShadow = '0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04)')}
+                  >
+                    <div className="flex items-start gap-3">
+                      {/* Avatar */}
+                      <div
+                        className="w-9 h-9 rounded-full flex-shrink-0 flex items-center justify-center text-white text-sm font-semibold shadow-sm"
+                        style={{ background: `linear-gradient(135deg, ${from}, ${to})` }}
+                      >
+                        {initial}
+                      </div>
+
+                      {/* Content */}
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center justify-between gap-2 mb-1.5">
+                          <span className="font-medium text-slate-900 text-sm truncate">{m.name}</span>
+                          <div className="flex items-center gap-2 flex-shrink-0">
+                            {m.plus_ones > 0 && (
+                              <span className="text-xs text-slate-400 bg-slate-50 px-2 py-0.5 rounded-full border border-slate-100">
+                                +{m.plus_ones}
+                              </span>
+                            )}
+                            <span className="text-xs text-slate-300">{formatDate(m.created_at)}</span>
+                          </div>
+                        </div>
+                        <p className="text-slate-600 text-sm leading-relaxed">{m.message}</p>
+                      </div>
+                    </div>
+
+                    {/* Subtle coloured left edge on hover */}
+                    <div
+                      className="absolute left-0 top-3 bottom-3 w-0.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                      style={{ background: `linear-gradient(to bottom, ${from}, ${to})` }}
+                    />
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="font-medium text-slate-900 text-sm truncate">{m.name}</p>
-                    <p className="text-xs text-slate-400">{formatDate(m.created_at)}</p>
-                  </div>
-                  {m.plus_ones > 0 && (
-                    <span className="text-xs text-slate-400 flex-shrink-0">
-                      +{m.plus_ones}
-                    </span>
-                  )}
-                </div>
-                <p className="text-slate-600 text-sm leading-relaxed pl-11">{m.message}</p>
-              </div>
-            ))}
-          </div>
+                )
+              })}
+            </div>
           </div>
         )}
       </div>

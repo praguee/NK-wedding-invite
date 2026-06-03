@@ -136,16 +136,22 @@ export default function IntroScreen({ onUnlock }: IntroScreenProps) {
 
       mapRef.current = map
 
-      // fitBounds to show Birmingham→Mumbai with padding, works on any screen size
+      // Tight bounds: Birmingham top-left, Mumbai bottom-right
       const bounds = L.latLngBounds(
-        [MUMBAI.lat - 12, BIRMINGHAM.lng - 25],
-        [BIRMINGHAM.lat + 8,  MUMBAI.lng  + 20]
+        [MUMBAI.lat - 5,    BIRMINGHAM.lng - 18],
+        [BIRMINGHAM.lat + 2, MUMBAI.lng  + 14]
       )
+
+      const getPadding = () => {
+        const portrait = window.innerHeight > window.innerWidth
+        // Portrait: almost no vertical padding so polar tiles don't show
+        // Landscape/desktop: comfortable padding all around
+        return portrait ? [8, 30] as [number, number] : [55, 60] as [number, number]
+      }
 
       map.whenReady(() => {
         map.invalidateSize()
-        map.fitBounds(bounds, { padding: [60, 60], animate: false })
-        // Delay to let fitBounds settle (especially important on mobile)
+        map.fitBounds(bounds, { padding: getPadding(), animate: false, maxZoom: 4 })
         setTimeout(() => {
           map.invalidateSize()
           updateCityPositions()
@@ -156,7 +162,7 @@ export default function IntroScreen({ onUnlock }: IntroScreenProps) {
       })
 
       map.on('resize', () => {
-        map.fitBounds(bounds, { padding: [60, 60], animate: false })
+        map.fitBounds(bounds, { padding: getPadding(), animate: false, maxZoom: 4 })
         setTimeout(updateCityPositions, 50)
       })
     })
