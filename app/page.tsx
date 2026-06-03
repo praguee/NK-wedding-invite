@@ -38,12 +38,12 @@ export default function Home() {
         <InviteDetails />
         <Addresses />
         <Gallery />
+        <Poll />
         <Accommodations />
         <Transportation />
         <Timeline />
         <RSVPForm />
         <GuestBook />
-        <Poll />
         <ContactFAQ />
       </main>
       <footer
