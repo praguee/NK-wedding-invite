@@ -9,7 +9,7 @@ export default function Story() {
           Our Story
         </h2>
         <p className="text-center mb-14 text-sm" style={{ color: '#9C7A5A' }}>
-          The Way of Water
+          The Way of Water <span style={{ opacity: 0.5 }}>— not directed by James Cameron</span>
         </p>
 
         <div className="grid md:grid-cols-2 gap-12 items-start">
@@ -26,6 +26,9 @@ export default function Story() {
             </p>
             <p className="leading-relaxed" style={{ color: '#5C3A2E', fontSize: 16 }}>
               She said yes — and honestly, we think she had no choice. It was too original to refuse.
+            </p>
+            <p className="leading-relaxed" style={{ color: '#5C3A2E', fontSize: 16 }}>
+              Parag made it official on <strong style={{ color: '#C49A28' }}>8th July 2023</strong> — an actual proposal this time, no plumbing involved. She said yes to that one too.
             </p>
             <p className="leading-relaxed" style={{ color: '#5C3A2E', fontSize: 16 }}>
               So when it came to the wedding, there was really only one way to do it properly. They&apos;re exchanging vows on a <strong style={{ color: '#C49A28' }}>floating mandap, right in the middle of a pool</strong> — surrounded by flowers, family, and the element that started it all.

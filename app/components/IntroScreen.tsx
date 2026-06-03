@@ -397,8 +397,8 @@ export default function IntroScreen({ onUnlock }: IntroScreenProps) {
             border: `2.5px solid ${BIRMINGHAM.color}`,
             boxShadow: `0 0 16px ${BIRMINGHAM.color}99, 0 4px 12px rgba(0,0,0,0.4)`,
           }}>
-            <Image src="/images/nidhi-full.png" alt="Nidhi" fill
-              style={{ objectFit: 'cover', objectPosition: '50% 12%' }} />
+            <Image src="/images/nidhi-crop.png" alt="Nidhi" fill
+              style={{ objectFit: 'cover', objectPosition: 'center center' }} />
           </div>
           {/* Label pill */}
           <div className={styles.cityLabel} style={{ marginTop: 0 }}>Birmingham · Nidhi 👧</div>
