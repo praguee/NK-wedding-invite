@@ -5,15 +5,16 @@ import dynamic from 'next/dynamic'
 import Navigation from './components/Navigation'
 import Hero from './components/Hero'
 import Story from './components/Story'
+import JabWeMet from './components/JabWeMet'
 import InviteDetails from './components/InviteDetails'
-import Addresses from './components/Addresses'
 import Gallery from './components/Gallery'
-import Accommodations from './components/Accommodations'
-import Transportation from './components/Transportation'
+import Poll from './components/Poll'
 import Timeline from './components/Timeline'
 import RSVPForm from './components/RSVPForm'
 import GuestBook from './components/GuestBook'
-import Poll from './components/Poll'
+import Transportation from './components/Transportation'
+import Addresses from './components/Addresses'
+import Accommodations from './components/Accommodations'
 import ContactFAQ from './components/ContactFAQ'
 
 const IntroScreen = dynamic(() => import('./components/IntroScreen'), { ssr: false })
@@ -35,15 +36,16 @@ export default function Home() {
       <main>
         <Hero />
         <Story />
+        <JabWeMet />
         <InviteDetails />
-        <Addresses />
         <Gallery />
         <Poll />
-        <Accommodations />
-        <Transportation />
         <Timeline />
         <RSVPForm />
         <GuestBook />
+        <Transportation />
+        <Addresses />
+        <Accommodations />
         <ContactFAQ />
       </main>
       <footer

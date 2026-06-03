@@ -93,9 +93,9 @@ export default function Transportation() {
                 <Navigation style={{ color: '#C49A28' }} size={20} />
               </div>
               <div>
-                <h3 className="font-medium mb-1.5" style={{ color: '#3B1F00' }}>Ride Share &amp; Taxis</h3>
+                <h3 className="font-medium mb-1.5" style={{ color: '#3B1F00' }}>Uber, Ola & the OG Auto</h3>
                 <p className="text-sm leading-relaxed" style={{ color: '#7C5A3A' }}>
-                  Uber and Ola are available throughout Thane. Auto-rickshaws are also easily available near local hotels.
+                  Uber and Ola work fine, but honestly — you&apos;re in Thane. The auto-rickshaw is king here. Cheaper, faster, and you&apos;ll have a story to tell. Just say &quot;Abhishek Farms, Yeoor&quot; and hold on.
                 </p>
               </div>
             </div>
@@ -107,7 +107,7 @@ export default function Transportation() {
                 <Info style={{ color: '#C49A28' }} size={20} />
               </div>
               <div>
-                <h3 className="font-medium mb-1.5" style={{ color: '#3B1F00' }}>Full Address</h3>
+                <h3 className="font-medium mb-1.5" style={{ color: '#3B1F00' }}>Address</h3>
                 <p className="text-sm leading-relaxed mb-3" style={{ color: '#7C5A3A' }}>
                   {VENUE.fullAddress}
                 </p>

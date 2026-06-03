@@ -374,35 +374,80 @@ export default function IntroScreen({ onUnlock }: IntroScreenProps) {
       {/* Flight arc */}
       {renderFlightArc()}
 
-      {/* Birmingham marker — Nidhi's Bitmoji */}
+      {/* Birmingham marker — Nidhi's Bitmoji floats ABOVE the map point */}
       {planePosReady && (
-        <div className={styles.cityMarker} style={{ left: birminghamPos.x, top: birminghamPos.y }}>
-          <div className={styles.cityLabel}>Birmingham · Nidhi</div>
-          <div className={styles.pulseRing} style={{ color: BIRMINGHAM.color }} />
+        <div
+          style={{
+            position: 'absolute',
+            left: birminghamPos.x,
+            top: birminghamPos.y,
+            transform: 'translate(-50%, -100%)',   // floats entirely above the point
+            zIndex: 25,                             // above airplane (z-index 20)
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: 4,
+            pointerEvents: 'none',
+            marginTop: -8,
+          }}
+        >
+          {/* Avatar */}
           <div style={{
-            width: 32, height: 32, borderRadius: '50%', overflow: 'hidden', position: 'relative',
-            border: `2px solid ${BIRMINGHAM.color}`,
-            boxShadow: `0 0 10px ${BIRMINGHAM.color}88`,
-            zIndex: 2,
+            width: 52, height: 52, borderRadius: '50%', overflow: 'hidden', position: 'relative',
+            border: `2.5px solid ${BIRMINGHAM.color}`,
+            boxShadow: `0 0 16px ${BIRMINGHAM.color}99, 0 4px 12px rgba(0,0,0,0.4)`,
           }}>
-            <Image src="/images/nidhi-avatar.jpg" alt="Nidhi" fill style={{ objectFit: 'cover', objectPosition: 'center 15%' }} />
+            <Image src="/images/nidhi-full.png" alt="Nidhi" fill
+              style={{ objectFit: 'cover', objectPosition: '50% 12%' }} />
           </div>
+          {/* Label pill */}
+          <div className={styles.cityLabel} style={{ marginTop: 0 }}>Birmingham · Nidhi 👧</div>
+          {/* Connecting line to map point */}
+          <div style={{ width: 1, height: 8, background: `${BIRMINGHAM.color}80` }} />
+        </div>
+      )}
+      {/* Birmingham dot at actual map point */}
+      {planePosReady && (
+        <div style={{ position: 'absolute', left: birminghamPos.x, top: birminghamPos.y, transform: 'translate(-50%,-50%)', zIndex: 8, pointerEvents: 'none' }}>
+          <div className={styles.pulseRing} style={{ color: BIRMINGHAM.color }} />
+          <div style={{ width: 8, height: 8, borderRadius: '50%', background: BIRMINGHAM.color, boxShadow: `0 0 8px ${BIRMINGHAM.color}`, position: 'relative', zIndex: 2 }} />
         </div>
       )}
 
-      {/* Mumbai marker — Parag's Bitmoji */}
+      {/* Mumbai marker — Parag's Bitmoji floats ABOVE the map point */}
       {planePosReady && (
-        <div className={styles.cityMarker} style={{ left: mumbaiPos.x, top: mumbaiPos.y }}>
-          <div className={styles.cityLabel}>Mumbai · Parag</div>
-          <div className={styles.pulseRing} style={{ color: MUMBAI.color }} />
+        <div
+          style={{
+            position: 'absolute',
+            left: mumbaiPos.x,
+            top: mumbaiPos.y,
+            transform: 'translate(-50%, -100%)',
+            zIndex: 25,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: 4,
+            pointerEvents: 'none',
+            marginTop: -8,
+          }}
+        >
           <div style={{
-            width: 32, height: 32, borderRadius: '50%', overflow: 'hidden', position: 'relative',
-            border: `2px solid ${MUMBAI.color}`,
-            boxShadow: `0 0 10px ${MUMBAI.color}88`,
-            zIndex: 2,
+            width: 52, height: 52, borderRadius: '50%', overflow: 'hidden', position: 'relative',
+            border: `2.5px solid ${MUMBAI.color}`,
+            boxShadow: `0 0 16px ${MUMBAI.color}99, 0 4px 12px rgba(0,0,0,0.4)`,
           }}>
-            <Image src="/images/parag-avatar.png" alt="Parag" fill style={{ objectFit: 'cover', objectPosition: 'center 8%' }} />
+            <Image src="/images/parag-avatar.png" alt="Parag" fill
+              style={{ objectFit: 'cover', objectPosition: '50% 8%' }} />
           </div>
+          <div className={styles.cityLabel} style={{ marginTop: 0 }}>Mumbai · Parag 👦</div>
+          <div style={{ width: 1, height: 8, background: `${MUMBAI.color}80` }} />
+        </div>
+      )}
+      {/* Mumbai dot */}
+      {planePosReady && (
+        <div style={{ position: 'absolute', left: mumbaiPos.x, top: mumbaiPos.y, transform: 'translate(-50%,-50%)', zIndex: 8, pointerEvents: 'none' }}>
+          <div className={styles.pulseRing} style={{ color: MUMBAI.color }} />
+          <div style={{ width: 8, height: 8, borderRadius: '50%', background: MUMBAI.color, boxShadow: `0 0 8px ${MUMBAI.color}`, position: 'relative', zIndex: 2 }} />
         </div>
       )}
 
