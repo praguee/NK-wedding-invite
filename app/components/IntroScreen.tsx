@@ -53,7 +53,9 @@ function dist(a: { x: number; y: number }, b: { x: number; y: number }) {
 
 export default function IntroScreen({ onUnlock }: IntroScreenProps) {
   const mapContainerRef = useRef<HTMLDivElement>(null)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const mapRef = useRef<any>(null)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const leafletRef = useRef<any>(null)
 
   const [planePos, setPlanePos] = useState({ x: 0, y: 0 })
@@ -96,6 +98,7 @@ export default function IntroScreen({ onUnlock }: IntroScreenProps) {
     if (!mapContainerRef.current || mapRef.current) return
 
     import('leaflet').then((mod) => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const L = (mod.default ?? mod) as any
       delete L.Icon.Default.prototype._getIconUrl
       L.Icon.Default.mergeOptions({ iconRetinaUrl: '', iconUrl: '', shadowUrl: '' })
