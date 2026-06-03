@@ -75,5 +75,27 @@ export async function POST(request: NextRequest) {
 }
 
 export async function GET() {
-  return NextResponse.json({ message: 'Method not allowed' }, { status: 405 })
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const results: Record<string, string> = {
+    url_env: supabaseUrl ? supabaseUrl.slice(0, 40) : 'MISSING',
+    key_env: process.env.SUPABASE_SERVICE_ROLE_KEY ? 'present' : 'MISSING',
+  }
+
+  // Test 1: can we reach Supabase at all?
+  try {
+    const r = await fetch(`${supabaseUrl}/rest/v1/`, { method: 'GET' })
+    results.supabase_ping = `${r.status}`
+  } catch (e) {
+    results.supabase_ping = `FAIL: ${e instanceof Error ? e.message : String(e)}`
+  }
+
+  // Test 2: can we reach a public URL at all?
+  try {
+    const r = await fetch('https://httpbin.org/get')
+    results.internet = `${r.status}`
+  } catch (e) {
+    results.internet = `FAIL: ${e instanceof Error ? e.message : String(e)}`
+  }
+
+  return NextResponse.json(results)
 }
