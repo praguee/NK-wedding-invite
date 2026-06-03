@@ -3,9 +3,10 @@
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
+  width: 100%;
+  height: 100%;
+  /* Cascade of height fixes for all browsers/devices */
   height: 100vh;
-  /* Use dvh when supported (accounts for mobile browser bars) */
   height: 100dvh;
   z-index: 9999;
   overflow: hidden;

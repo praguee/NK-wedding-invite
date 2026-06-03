@@ -49,11 +49,11 @@ export const VENUE = {
 export const CONTACT = {
   primary: {
     name: 'Parag Khalde',
-    phone: '+91 9137540056',
+    phone: '+91 9819048377',
   },
   secondary: {
     name: "Raksha Kesarkar (Bride's Sister)",
-    phone: '+91 9819048377',
+    phone: '+91 9137540056',
   },
 }
 

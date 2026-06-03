@@ -100,6 +100,16 @@ export default function IntroScreen({ onUnlock }: IntroScreenProps) {
   useEffect(() => {
     if (!mapContainerRef.current || mapRef.current) return
 
+    // iOS Safari fix: explicitly size the container using window dimensions
+    const setSize = () => {
+      if (mapContainerRef.current) {
+        mapContainerRef.current.style.width  = `${window.innerWidth}px`
+        mapContainerRef.current.style.height = `${window.innerHeight}px`
+      }
+    }
+    setSize()
+    window.addEventListener('resize', setSize)
+
     import('leaflet').then((mod) => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const L = (mod.default ?? mod) as any
@@ -135,13 +145,14 @@ export default function IntroScreen({ onUnlock }: IntroScreenProps) {
       map.whenReady(() => {
         map.invalidateSize()
         map.fitBounds(bounds, { padding: [60, 60], animate: false })
-        // Wait a tick for fitBounds to settle before reading positions
+        // Delay to let fitBounds settle (especially important on mobile)
         setTimeout(() => {
+          map.invalidateSize()
           updateCityPositions()
           const bPt = map.latLngToContainerPoint(L.latLng(BIRMINGHAM.lat, BIRMINGHAM.lng))
           setPlanePos({ x: bPt.x, y: bPt.y })
           setPlanePosReady(true)
-        }, 100)
+        }, 250)
       })
 
       map.on('resize', () => {
@@ -151,6 +162,7 @@ export default function IntroScreen({ onUnlock }: IntroScreenProps) {
     })
 
     return () => {
+      window.removeEventListener('resize', setSize)
       if (mapRef.current) { mapRef.current.remove(); mapRef.current = null }
     }
   }, [updateCityPositions])

@@ -71,12 +71,25 @@ export default function GuestBook() {
             <p className="text-slate-400 text-sm">Be the first to leave a message!</p>
           </div>
         ) : (
+          <div style={{ position: 'relative' }}>
+            {/* Top fade shadow */}
+            <div style={{
+              position: 'absolute', top: 0, left: 0, right: 0, height: 40,
+              background: 'linear-gradient(to bottom, #f1f5f9, transparent)',
+              pointerEvents: 'none', zIndex: 1, borderRadius: '16px 16px 0 0',
+            }} />
+            {/* Bottom fade shadow */}
+            <div style={{
+              position: 'absolute', bottom: 0, left: 0, right: 0, height: 60,
+              background: 'linear-gradient(to top, #f1f5f9 40%, transparent)',
+              pointerEvents: 'none', zIndex: 1, borderRadius: '0 0 16px 16px',
+            }} />
           <div
-            className="space-y-3 overflow-y-auto pr-1"
+            className="space-y-3 overflow-y-auto pr-1 pb-6 pt-2"
             style={{
               maxHeight: '480px',
               scrollbarWidth: 'thin',
-              scrollbarColor: '#e2e8f0 transparent',
+              scrollbarColor: '#cbd5e1 transparent',
             }}
           >
             {messages.map((m) => (
@@ -103,6 +116,7 @@ export default function GuestBook() {
                 <p className="text-slate-600 text-sm leading-relaxed pl-11">{m.message}</p>
               </div>
             ))}
+          </div>
           </div>
         )}
       </div>
