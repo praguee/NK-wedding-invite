@@ -59,7 +59,7 @@ function PhotoCard({
   return (
     <div
       className="relative overflow-hidden cursor-pointer group"
-      style={{ borderRadius: 20 }}
+      style={{ borderRadius: 20, width: '100%', height: '100%' }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       onClick={onOpen}
@@ -170,23 +170,27 @@ export default function Gallery() {
         <div className="grid grid-cols-1 md:grid-cols-12 gap-3" style={{ gridAutoRows: 'auto' }}>
 
           {/* Photo 1 — tall left column */}
-          <div className="md:col-span-5" style={{ aspectRatio: '4/5', position: 'relative' }}>
-            <PhotoCard photo={PHOTOS[0]} onOpen={() => setLightbox(PHOTOS[0].id)} />
+          <div className="md:col-span-5" style={{ minHeight: 320 }}>
+            <div style={{ height: '100%', minHeight: 320, position: 'relative' }}>
+              <PhotoCard photo={PHOTOS[0]} onOpen={() => setLightbox(PHOTOS[0].id)} />
+            </div>
           </div>
 
           {/* Center column — 2 stacked */}
           <div className="md:col-span-4 flex flex-col gap-3">
-            <div style={{ flex: 1, aspectRatio: '1/1', position: 'relative' }}>
+            <div style={{ flex: 1, minHeight: 200, position: 'relative' }}>
               <PhotoCard photo={PHOTOS[1]} onOpen={() => setLightbox(PHOTOS[1].id)} />
             </div>
-            <div style={{ flex: 1, aspectRatio: '1/1', position: 'relative' }}>
+            <div style={{ flex: 1, minHeight: 200, position: 'relative' }}>
               <PhotoCard photo={PHOTOS[2]} onOpen={() => setLightbox(PHOTOS[2].id)} />
             </div>
           </div>
 
           {/* Photo 4 — tall right column */}
-          <div className="md:col-span-3" style={{ aspectRatio: '3/5', position: 'relative' }}>
-            <PhotoCard photo={PHOTOS[3]} onOpen={() => setLightbox(PHOTOS[3].id)} />
+          <div className="md:col-span-3" style={{ minHeight: 320 }}>
+            <div style={{ height: '100%', minHeight: 320, position: 'relative' }}>
+              <PhotoCard photo={PHOTOS[3]} onOpen={() => setLightbox(PHOTOS[3].id)} />
+            </div>
           </div>
 
         </div>

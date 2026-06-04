@@ -8,16 +8,19 @@ import { supabase } from '@/lib/supabase'
 // ── POLL ────────────────────────────────────────────────────────
 type Side = 'bride' | 'groom'
 interface PollCounts { bride: number; groom: number; total: number }
-const POLL_KEY = 'nk_poll_vote_v2'
+const POLL_KEY = 'nk_poll_vote_v3'   // bump key so old votes don't block
 
 function Poll() {
   const [voted, setVoted]     = useState<Side | null>(null)
   const [counts, setCounts]   = useState<PollCounts>({ bride: 0, groom: 0, total: 0 })
   const [loading, setLoading] = useState(false)
+  const [error, setError]     = useState('')
 
   const fetchCounts = useCallback(async () => {
-    const r = await fetch('/api/poll')
-    if (r.ok) setCounts(await r.json())
+    try {
+      const r = await fetch('/api/poll')
+      if (r.ok) setCounts(await r.json())
+    } catch { /* silent */ }
   }, [])
 
   useEffect(() => {
@@ -32,12 +35,22 @@ function Poll() {
   const vote = async (side: Side) => {
     if (voted || loading) return
     setLoading(true)
+    setError('')
     try {
       const r = await fetch('/api/poll', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ side }),
       })
-      if (r.ok) { localStorage.setItem(POLL_KEY, side); setVoted(side); await fetchCounts() }
+      if (r.ok) {
+        localStorage.setItem(POLL_KEY, side)
+        setVoted(side)
+        await fetchCounts()
+      } else {
+        const d = await r.json()
+        setError(d.message || 'Vote failed')
+      }
+    } catch {
+      setError('Network error — try again')
     } finally { setLoading(false) }
   }
 
@@ -52,7 +65,7 @@ function Poll() {
       </p>
 
       {!voted ? (
-        <div className="grid grid-cols-2 gap-4">
+        <><div className="grid grid-cols-2 gap-4">
           {([
             { side: 'bride' as Side, label: 'Team Nidhi', sub: 'Obviously the better choice', img: '/images/nidhi-stand.png', accent: '#fb7185' },
             { side: 'groom' as Side, label: 'Team Parag',  sub: 'Bold, brave, delusional',      img: '/images/parag-avatar.png', accent: '#C49A28' },
@@ -78,7 +91,8 @@ function Poll() {
             </button>
           ))}
         </div>
-      ) : (
+        {error && <p className="text-xs text-center mt-3" style={{ color: '#fb7185' }}>{error}</p>}
+        </>) : (
         <div className="rounded-2xl overflow-hidden" style={{
           background: 'rgba(255,255,255,0.06)',
           backdropFilter: 'blur(40px)',
@@ -167,32 +181,28 @@ function Quiz() {
   const [score, setScore]       = useState(0)
 
   const current = QUESTIONS[qIdx]
-  const isLast  = qIdx === QUESTIONS.length - 1
 
   const choose = (i: number) => {
     if (revealed) return
     setSelected(i)
-  }
-
-  const confirm = () => {
-    if (selected === null) return
+    // Auto-advance: record answer, show feedback briefly, then move on
     const newAnswers = [...answers]
-    newAnswers[qIdx] = selected
+    newAnswers[qIdx] = i
     setAnswers(newAnswers)
     setRevealed(true)
+    setTimeout(() => {
+      if (qIdx === QUESTIONS.length - 1) {
+        const s = newAnswers.filter((a, qi) => a === QUESTIONS[qi].answer).length
+        setScore(s)
+        setState('result')
+      } else {
+        setQIdx(qIdx + 1)
+        setSelected(null)
+        setRevealed(false)
+      }
+    }, 1000) // 1 second to show correct/wrong, then auto-advance
   }
 
-  const advance = () => {
-    if (isLast) {
-      const s = answers.filter((a, i) => a === QUESTIONS[i].answer).length + (selected === current.answer ? 1 : 0)
-      setScore(s)
-      setState('result')
-    } else {
-      setQIdx(qIdx + 1)
-      setSelected(null)
-      setRevealed(false)
-    }
-  }
 
   const reset = () => {
     setState('idle'); setQIdx(0); setSelected(null)
@@ -293,31 +303,16 @@ function Quiz() {
           </div>
         </div>
 
-        {/* Action button */}
-        {!revealed ? (
-          <button
-            onClick={confirm}
-            disabled={selected === null}
-            className="w-full py-3.5 rounded-xl font-semibold text-sm tracking-widest disabled:opacity-40 transition-opacity"
-            style={{
-              background: 'linear-gradient(135deg, #B8850A, #E8C547, #C49A28)',
-              color: '#2A1200',
-            }}
-          >
-            Confirm Answer
-          </button>
-        ) : (
-          <button
-            onClick={advance}
-            className="w-full py-3.5 rounded-xl font-semibold text-sm tracking-widest"
-            style={{
-              background: 'rgba(255,255,255,0.1)',
-              color: 'white',
-              border: '1px solid rgba(255,255,255,0.2)',
-            }}
-          >
-            {isLast ? 'See Results →' : 'Next Question →'}
-          </button>
+        {/* Auto-advancing — just show a subtle hint */}
+        {revealed && (
+          <p className="text-center text-xs animate-pulse" style={{ color: 'rgba(255,255,255,0.3)' }}>
+            {qIdx === QUESTIONS.length - 1 ? 'Calculating results…' : 'Next question coming…'}
+          </p>
+        )}
+        {!revealed && selected === null && (
+          <p className="text-center text-xs" style={{ color: 'rgba(255,255,255,0.2)' }}>
+            Tap an answer to continue
+          </p>
         )}
       </div>
     )
