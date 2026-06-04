@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Link from 'next/link'
 import { Menu, X } from 'lucide-react'
 
 export default function Navigation() {
@@ -54,6 +55,11 @@ export default function Navigation() {
 
         {/* Desktop links */}
         <div className="hidden md:flex gap-7 items-center">
+          <Link href="/games"
+            className="text-xs tracking-widest uppercase px-3 py-1.5 rounded-full transition-all font-medium"
+            style={{ color: '#C49A28', background: 'rgba(196,154,40,0.1)', border: '1px solid rgba(196,154,40,0.25)' }}>
+            🐱 Games
+          </Link>
           {sections.map((s) => (
             <a
               key={s.label}
