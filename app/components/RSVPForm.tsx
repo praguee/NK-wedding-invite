@@ -2,7 +2,10 @@
 
 'use client'
 
+'use client'
+
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import toast from 'react-hot-toast'
 import { Heart } from 'lucide-react'
@@ -12,29 +15,34 @@ interface FormState { name: string; plusOnes: string; message: string }
 const INITIAL: FormState = { name: '', plusOnes: '0', message: '' }
 const INITIAL_SUBMITTED = false
 
-function GamesPrompt() {
+function GamesPrompt({ redirecting }: { redirecting: boolean }) {
   return (
     <div className="mt-4 rounded-2xl overflow-hidden"
       style={{ background: 'linear-gradient(135deg, #1A0830 0%, #0D0520 100%)', border: '1px solid rgba(196,154,40,0.25)' }}>
       <div className="p-5">
         <p className="text-xs tracking-widest uppercase mb-2" style={{ color: 'rgba(196,154,40,0.8)' }}>
-          While you&apos;re here 🐱
+          One more thing 🐱
         </p>
         <p className="text-sm font-light text-white mb-1">
-          Think you know us?
+          Think you know us? Take the quiz →
         </p>
         <p className="text-xs mb-4" style={{ color: 'rgba(255,255,255,0.45)' }}>
-          Take the quiz — score 60%+ and win a live caricature at the reception.
+          Score 60%+ and get a live caricature drawn at the reception.
         </p>
-        <Link href="/games"
-          className="inline-flex items-center gap-2 text-xs font-semibold tracking-widest uppercase px-5 py-2.5 rounded-full transition-all"
-          style={{
-            background: 'linear-gradient(135deg, #B8850A, #E8C547, #C49A28)',
-            color: '#2A1200',
-            boxShadow: '0 4px 16px rgba(196,154,40,0.35)',
-          }}>
-          Play Now →
-        </Link>
+        {redirecting ? (
+          <p className="text-xs animate-pulse" style={{ color: '#C49A28' }}>
+            Taking you there now…
+          </p>
+        ) : (
+          <Link href="/games"
+            className="inline-flex items-center gap-2 text-xs font-semibold tracking-widest uppercase px-5 py-2.5 rounded-full"
+            style={{
+              background: 'linear-gradient(135deg, #B8850A, #E8C547, #C49A28)',
+              color: '#2A1200',
+            }}>
+            Go Now →
+          </Link>
+        )}
       </div>
     </div>
   )
@@ -52,9 +60,11 @@ const inputStyle = {
 } as React.CSSProperties
 
 export default function RSVPForm() {
+  const router = useRouter()
   const [form, setForm]       = useState<FormState>(INITIAL)
   const [loading, setLoading] = useState(false)
   const [submitted, setSubmitted] = useState(INITIAL_SUBMITTED)
+  const [redirecting, setRedirecting] = useState(false)
 
   const set = (field: keyof FormState) =>
     (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
@@ -82,6 +92,8 @@ export default function RSVPForm() {
       toast.success("You're on the list! See you December 4th 🎉")
       setForm(INITIAL)
       setSubmitted(true)
+      setRedirecting(true)
+      setTimeout(() => router.push('/games'), 2500)
     } catch {
       toast.error('Network issue, please try again.')
     } finally {
@@ -171,7 +183,7 @@ export default function RSVPForm() {
             {loading ? 'Sending…' : 'Count me in!'}
           </button>
         </form>
-        {submitted && <GamesPrompt />}
+        {submitted && <GamesPrompt redirecting={redirecting} />}
       </div>
     </section>
   )

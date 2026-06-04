@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { supabase } from '@/lib/supabase'
@@ -10,11 +10,12 @@ type Side = 'bride' | 'groom'
 interface PollCounts { bride: number; groom: number; total: number }
 const POLL_KEY = 'nk_poll_vote_v3'   // bump key so old votes don't block
 
-function Poll() {
+function Poll({ onDone }: { onDone: () => void }) {
   const [voted, setVoted]     = useState<Side | null>(null)
   const [counts, setCounts]   = useState<PollCounts>({ bride: 0, groom: 0, total: 0 })
   const [loading, setLoading] = useState(false)
   const [error, setError]     = useState('')
+  const [countdown, setCountdown] = useState<number | null>(null)
 
   const fetchCounts = useCallback(async () => {
     try {
@@ -45,6 +46,14 @@ function Poll() {
         localStorage.setItem(POLL_KEY, side)
         setVoted(side)
         await fetchCounts()
+        // Auto-advance to quiz after 3s countdown
+        let c = 3
+        setCountdown(c)
+        const t = setInterval(() => {
+          c -= 1
+          setCountdown(c)
+          if (c <= 0) { clearInterval(t); onDone() }
+        }, 1000)
       } else {
         const d = await r.json()
         setError(d.message || 'Vote failed')
@@ -123,7 +132,7 @@ function Poll() {
               <span className="text-sm font-light w-10 text-right" style={{ color: '#C49A28' }}>{gp}%</span>
             </div>
 
-            <div className="flex justify-between items-center">
+            <div className="flex justify-between items-center mb-4">
               <p className="text-xs" style={{ color: 'rgba(255,255,255,0.3)' }}>
                 {bp > gp ? "Nidhi winning. Parag is fine. He's fine." : bp === gp ? "It's a tie. Diplomatic." : "Parag winning. Nidhi is planning revenge."}
               </p>
@@ -132,6 +141,13 @@ function Poll() {
                 <span className="text-xs" style={{ color: 'rgba(255,255,255,0.4)' }}>{counts.total} votes · live</span>
               </div>
             </div>
+            {countdown !== null && countdown > 0 && (
+              <div className="text-center py-2 rounded-xl" style={{ background: 'rgba(196,154,40,0.1)' }}>
+                <p className="text-xs" style={{ color: '#C49A28' }}>
+                  Quiz starting in {countdown}…
+                </p>
+              </div>
+            )}
           </div>
         </div>
       )}
@@ -179,28 +195,33 @@ function Quiz() {
   const [answers, setAnswers]   = useState<(number | null)[]>(Array(QUESTIONS.length).fill(null))
   const [revealed, setRevealed] = useState(false)
   const [score, setScore]       = useState(0)
+  const choosingRef             = useRef(false)  // prevents double-tap
 
   const current = QUESTIONS[qIdx]
 
   const choose = (i: number) => {
-    if (revealed) return
+    // QA guard: prevent double-click / tap race condition
+    if (revealed || choosingRef.current) return
+    choosingRef.current = true
+
     setSelected(i)
-    // Auto-advance: record answer, show feedback briefly, then move on
     const newAnswers = [...answers]
     newAnswers[qIdx] = i
     setAnswers(newAnswers)
     setRevealed(true)
+
     setTimeout(() => {
       if (qIdx === QUESTIONS.length - 1) {
         const s = newAnswers.filter((a, qi) => a === QUESTIONS[qi].answer).length
         setScore(s)
         setState('result')
       } else {
-        setQIdx(qIdx + 1)
+        setQIdx(q => q + 1)
         setSelected(null)
         setRevealed(false)
+        choosingRef.current = false   // re-arm for next question
       }
-    }, 1000) // 1 second to show correct/wrong, then auto-advance
+    }, 900)
   }
 
 
@@ -218,9 +239,9 @@ function Quiz() {
         <p className="text-sm mb-6" style={{ color: 'rgba(255,255,255,0.5)' }}>
           {QUESTIONS.length} questions · Hosted by Ginny 🐱
         </p>
-        <div className="mb-8 relative w-48 h-48 mx-auto rounded-full overflow-hidden"
+        <div className="mb-8 relative w-48 h-48 mx-auto rounded-2xl overflow-hidden"
           style={{ border: '2px solid rgba(196,154,40,0.3)', boxShadow: '0 0 40px rgba(196,154,40,0.15)' }}>
-          <Image src="/images/ginny-win.jpg" alt="Ginny" fill style={{ objectFit: 'cover', objectPosition: 'center 20%' }} />
+          <Image src="/images/ginny-idle.jpg" alt="Ginny" fill style={{ objectFit: 'cover', objectPosition: 'center 30%' }} />
         </div>
         <p className="text-sm mb-8 leading-relaxed" style={{ color: 'rgba(255,255,255,0.6)' }}>
           Score 60% or more and show a screenshot at the reception — Abhishek will draw your caricature live! 🎨
@@ -383,8 +404,10 @@ function Quiz() {
 }
 
 // ── GAMES PAGE ──────────────────────────────────────────────────
+type PageStep = 'poll' | 'quiz'
+
 export default function GamesPage() {
-  const [tab, setTab] = useState<'poll' | 'quiz'>('poll')
+  const [step, setStep] = useState<PageStep>('poll')
 
   return (
     <div
@@ -408,7 +431,7 @@ export default function GamesPage() {
         borderBottom: '1px solid rgba(255,255,255,0.06)',
       }}>
         <div className="max-w-lg mx-auto px-6 py-4 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2 text-xs tracking-widest uppercase transition-colors"
+          <Link href="/" className="flex items-center gap-2 text-xs tracking-widest uppercase"
             style={{ color: 'rgba(255,255,255,0.5)' }}>
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
               <path d="M10 3L5 8L10 13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
@@ -416,18 +439,22 @@ export default function GamesPage() {
             Back to Invitation
           </Link>
 
-          {/* Tab toggle */}
-          <div className="flex gap-1 rounded-xl p-1" style={{ background: 'rgba(255,255,255,0.06)' }}>
-            {([['poll','Poll'],['quiz','Quiz']] as const).map(([key,label]) => (
-              <button key={key} onClick={() => setTab(key)}
-                className="px-4 py-1.5 rounded-lg text-xs font-medium tracking-wide transition-all duration-200"
-                style={{
-                  background: tab === key ? 'rgba(196,154,40,0.2)' : 'transparent',
-                  color: tab === key ? '#C49A28' : 'rgba(255,255,255,0.4)',
-                  border: tab === key ? '1px solid rgba(196,154,40,0.3)' : '1px solid transparent',
-                }}>
-                {label}
-              </button>
+          {/* Step indicator */}
+          <div className="flex items-center gap-2">
+            {(['poll','quiz'] as const).map((s, i) => (
+              <div key={s} className="flex items-center gap-2">
+                <div className="flex items-center gap-1.5">
+                  <div style={{
+                    width: 6, height: 6, borderRadius: '50%',
+                    background: step === s ? '#C49A28' : s < step || (step === 'quiz' && s === 'poll') ? 'rgba(196,154,40,0.4)' : 'rgba(255,255,255,0.15)',
+                    transition: 'background 0.3s',
+                  }} />
+                  <span className="text-xs" style={{ color: step === s ? '#C49A28' : 'rgba(255,255,255,0.25)', fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+                    {s === 'poll' ? 'Poll' : 'Quiz'}
+                  </span>
+                </div>
+                {i === 0 && <div style={{ width: 16, height: 1, background: 'rgba(255,255,255,0.15)' }} />}
+              </div>
             ))}
           </div>
         </div>
@@ -435,18 +462,20 @@ export default function GamesPage() {
 
       {/* Content */}
       <div className="max-w-lg mx-auto px-6 py-12">
-        {/* Header */}
         <div className="text-center mb-12">
           <p className="text-xs tracking-[0.3em] uppercase mb-3" style={{ color: 'rgba(196,154,40,0.6)' }}>
-            Nidhi & Parag · December 4, 2026
+            Nidhi &amp; Parag · December 4, 2026
           </p>
           <h1 className="text-4xl md:text-5xl font-extralight tracking-tight mb-3 text-white">
-            {tab === 'poll' ? 'Pick a Side' : 'Know the Couple?'}
+            {step === 'poll' ? 'Pick a Side' : 'Know the Couple?'}
           </h1>
           <div className="w-12 h-px mx-auto" style={{ background: 'rgba(196,154,40,0.4)' }} />
         </div>
 
-        {tab === 'poll' ? <Poll /> : <Quiz />}
+        {step === 'poll'
+          ? <Poll onDone={() => setStep('quiz')} />
+          : <Quiz />
+        }
       </div>
     </div>
   )
