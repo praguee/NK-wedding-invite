@@ -85,8 +85,8 @@ export default function Hero() {
         sizes="100vw"
         style={{
           objectFit: 'cover',
-          objectPosition: 'center 30%',
-          filter: 'contrast(1.05) saturate(1.1) brightness(0.95)',
+          objectPosition: 'center 20%',  /* show upper couple area on all screen sizes */
+          filter: 'contrast(1.08) saturate(1.15) brightness(0.92)',
           zIndex: 0,
         }}
       />
