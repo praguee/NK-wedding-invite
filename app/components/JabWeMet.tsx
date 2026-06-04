@@ -53,15 +53,33 @@ export default function JabWeMet() {
         <div className="grid md:grid-cols-2 gap-12 items-start">
           {/* Story placeholder */}
           <div className="space-y-5">
-            <div className="glass-gold rounded-2xl p-8">
-              <p className="text-xs uppercase tracking-widest mb-4" style={{ color: '#C49A28' }}>
-                Coming soon
+            <div className="space-y-5">
+              <p className="leading-relaxed" style={{ color: '#5C3A2E', fontSize: 16 }}>
+                It was at <strong style={{ color: '#C49A28' }}>Runwal Greens, Mulund</strong>. Nidhi showed up straight from office — laptop bag on shoulder, mask on face, because pandemic habits don&apos;t die, they just relocate to social situations.
               </p>
               <p className="leading-relaxed" style={{ color: '#5C3A2E', fontSize: 16 }}>
-                Every great love story has a beginning. Theirs is one worth telling — and they&apos;ll tell it here, in their own words, soon enough.
+                Parag thought: alright, seems nice.
               </p>
-              <p className="leading-relaxed mt-4" style={{ color: '#5C3A2E', fontSize: 16 }}>
-                First met: <strong style={{ color: '#C49A28' }}>23 December 2022.</strong> The rest, as they say, is history.
+              <p className="leading-relaxed" style={{ color: '#5C3A2E', fontSize: 16 }}>
+                Then she took off the mask.
+              </p>
+              <p className="leading-relaxed" style={{ color: '#5C3A2E', fontSize: 16 }}>
+                That was the moment. He didn&apos;t say it out loud. He just quietly knew.
+              </p>
+              <p className="leading-relaxed" style={{ color: '#5C3A2E', fontSize: 16 }}>
+                They had a few drinks, danced — the kind of dancing that happens when you&apos;re both pretending you&apos;re not trying to impress each other. Parag dropped her home like a complete gentleman.
+              </p>
+              <p className="leading-relaxed" style={{ color: '#5C3A2E', fontSize: 16 }}>
+                He drove back. Went to bed. Woke up the next morning.
+              </p>
+              <p className="leading-relaxed" style={{ color: '#5C3A2E', fontSize: 16 }}>
+                And only <em>two days later</em>, mid-reach for his wallet — gone. Left at her place.
+              </p>
+              <p className="leading-relaxed" style={{ color: '#5C3A2E', fontSize: 16 }}>
+                Here&apos;s the thing: he didn&apos;t call to ask for it back. Not because he forgot. Because it gave him an excuse to meet her again.
+              </p>
+              <p className="text-sm italic mt-2" style={{ color: '#9C7A5A' }}>
+                She says she didn&apos;t steal it. We&apos;re letting you decide. 🕵️
               </p>
             </div>
 
