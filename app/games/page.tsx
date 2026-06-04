@@ -148,6 +148,15 @@ function Poll({ onDone }: { onDone: () => void }) {
                 </p>
               </div>
             )}
+            {countdown === null && (
+              <button
+                onClick={() => { localStorage.removeItem(POLL_KEY); setVoted(null) }}
+                className="text-xs w-full text-center mt-2 py-1"
+                style={{ color: 'rgba(255,255,255,0.2)' }}
+              >
+                Change vote
+              </button>
+            )}
           </div>
         </div>
       )}
