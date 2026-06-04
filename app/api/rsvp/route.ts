@@ -101,23 +101,5 @@ export async function POST(request: NextRequest) {
 }
 
 export async function GET() {
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim()
-  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY?.trim()
-
-  const result: Record<string, string> = {
-    url_env: supabaseUrl ? supabaseUrl.slice(0, 40) : 'MISSING',
-    key_env: serviceKey ? 'present' : 'MISSING',
-  }
-
-  try {
-    const r = await httpsGet(`${supabaseUrl}/rest/v1/`, {
-      apikey: serviceKey!,
-      Authorization: `Bearer ${serviceKey}`,
-    })
-    result.supabase_ping = `${r.status}`
-  } catch (e) {
-    result.supabase_ping = `FAIL: ${e instanceof Error ? e.message : String(e)}`
-  }
-
-  return NextResponse.json(result)
+  return NextResponse.json({ message: 'Method not allowed' }, { status: 405 })
 }
