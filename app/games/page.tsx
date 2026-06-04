@@ -244,7 +244,8 @@ function Quiz() {
           <Image src="/images/ginny-idle.jpg" alt="Ginny" fill style={{ objectFit: 'cover', objectPosition: 'center 30%' }} />
         </div>
         <p className="text-sm mb-8 leading-relaxed" style={{ color: 'rgba(255,255,255,0.6)' }}>
-          Score 60% or more and show a screenshot at the reception — Abhishek will draw your caricature live! 🎨
+          Think you know them? 5 questions.<br/>
+          Ginny is judging your answers personally.
         </p>
         <button
           onClick={() => setState('playing')}
@@ -257,9 +258,6 @@ function Quiz() {
         >
           Start Quiz
         </button>
-        <p className="text-xs mt-4" style={{ color: 'rgba(255,255,255,0.25)' }}>
-          (You get a caricature either way 😉)
-        </p>
       </div>
     )
   }
@@ -362,13 +360,13 @@ function Quiz() {
       </p>
 
       <h3 className="text-3xl font-extralight text-white mb-3 tracking-tight">
-        {win ? "Not bad at all! 🎉" : "Ginny is judging you."}
+        {win ? "Okay fine, you know us." : "Genuinely shocking."}
       </h3>
 
       <p className="text-sm leading-relaxed mb-8" style={{ color: 'rgba(255,255,255,0.6)' }}>
         {win
-          ? "You clearly know us. Screenshot this and show it at the reception — Abhishek will draw your caricature live. Don't lose this screenshot."
-          : "Honestly? You're getting a caricature anyway. Abhishek will be there regardless. Consider this a humbling experience."}
+          ? "Okay fine, you actually know us. Screenshot this. Abhishek will be at the reception drawing live caricatures — show him this and he'll immortalise your face. You've earned it."
+          : "Genuinely shocking. You were there at the same wedding invite page as everyone else. Abhishek will still draw your caricature at the reception — consider it a participation trophy."}
       </p>
 
       {/* Caricature CTA */}
