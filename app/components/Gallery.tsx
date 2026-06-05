@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import Image from 'next/image'
 import SectionOrnament from './SectionOrnament'
+import { StaggerContainer, StaggerItem } from './ScrollReveal'
 
 const PHOTOS = [
   {
@@ -167,33 +168,33 @@ export default function Gallery() {
         </div>
 
         {/* Editorial asymmetric layout */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-3" style={{ gridAutoRows: 'auto' }}>
+        <StaggerContainer className="grid grid-cols-1 md:grid-cols-12 gap-3" style={{ gridAutoRows: 'auto' }}>
 
           {/* Photo 1 — tall left column */}
-          <div className="md:col-span-5" style={{ minHeight: 320 }}>
+          <StaggerItem className="md:col-span-5" style={{ minHeight: 320 }}>
             <div style={{ height: '100%', minHeight: 320, position: 'relative' }}>
               <PhotoCard photo={PHOTOS[0]} onOpen={() => setLightbox(PHOTOS[0].id)} />
             </div>
-          </div>
+          </StaggerItem>
 
           {/* Center column — 2 stacked */}
-          <div className="md:col-span-4 flex flex-col gap-3">
+          <StaggerItem className="md:col-span-4 flex flex-col gap-3">
             <div style={{ flex: 1, minHeight: 200, position: 'relative' }}>
               <PhotoCard photo={PHOTOS[1]} onOpen={() => setLightbox(PHOTOS[1].id)} />
             </div>
             <div style={{ flex: 1, minHeight: 200, position: 'relative' }}>
               <PhotoCard photo={PHOTOS[2]} onOpen={() => setLightbox(PHOTOS[2].id)} />
             </div>
-          </div>
+          </StaggerItem>
 
           {/* Photo 4 — tall right column */}
-          <div className="md:col-span-3" style={{ minHeight: 320 }}>
+          <StaggerItem className="md:col-span-3" style={{ minHeight: 320 }}>
             <div style={{ height: '100%', minHeight: 320, position: 'relative' }}>
               <PhotoCard photo={PHOTOS[3]} onOpen={() => setLightbox(PHOTOS[3].id)} />
             </div>
-          </div>
+          </StaggerItem>
 
-        </div>
+        </StaggerContainer>
       </div>
 
       {/* Lightbox */}

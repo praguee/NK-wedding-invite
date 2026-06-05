@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { motion } from 'framer-motion'
 import { supabase } from '@/lib/supabase'
 
 // ── CORNER MANDALA DECORATION ────────────────────────────────────
@@ -115,8 +116,10 @@ function Poll({ onDone }: { onDone: () => void }) {
               { side: 'bride' as Side, label: 'Team Nidhi', sub: 'Obviously the better choice', img: '/images/nidhi-stand.png', accent: '#C43C5E' },
               { side: 'groom' as Side, label: 'Team Parag',  sub: 'Bold, brave, delusional',    img: '/images/parag-avatar.png', accent: '#C49A28' },
             ]).map(opt => (
-              <button key={opt.side} onClick={() => vote(opt.side)} disabled={loading}
-                className="glass-gold relative overflow-hidden rounded-2xl p-6 text-center transition-all duration-300 disabled:opacity-60"
+              <motion.button key={opt.side} onClick={() => vote(opt.side)} disabled={loading}
+                whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
+                transition={{ type: 'spring', stiffness: 400, damping: 18 }}
+                className="glass-gold relative overflow-hidden rounded-2xl p-6 text-center disabled:opacity-60"
                 style={{ boxShadow: '0 4px 20px rgba(92,58,30,0.06)' }}
               >
                 <div className="relative w-16 h-16 rounded-full overflow-hidden mx-auto mb-3"
@@ -126,7 +129,7 @@ function Poll({ onDone }: { onDone: () => void }) {
                 </div>
                 <p className="font-semibold text-sm mb-1" style={{ color: opt.accent }}>{opt.label}</p>
                 <p className="text-xs" style={{ color: '#9C7A5A' }}>{opt.sub}</p>
-              </button>
+              </motion.button>
             ))}
           </div>
           {error && <p className="text-xs text-center mt-3" style={{ color: '#C43C5E' }}>{error}</p>}

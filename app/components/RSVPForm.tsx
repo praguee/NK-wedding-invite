@@ -8,6 +8,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import toast from 'react-hot-toast'
+import { motion } from 'framer-motion'
 import { Heart } from 'lucide-react'
 import SectionOrnament from './SectionOrnament'
 
@@ -169,10 +170,13 @@ export default function RSVPForm() {
           </div>
 
           {/* Submit */}
-          <button
+          <motion.button
             type="submit"
             disabled={loading || words > 100}
-            className="w-full disabled:opacity-50 py-3.5 rounded-xl font-bold text-sm tracking-widest flex items-center justify-center gap-2 transition-all"
+            whileTap={{ scale: loading ? 1 : 0.97 }}
+            whileHover={{ scale: loading ? 1 : 1.02 }}
+            transition={{ type: 'spring', stiffness: 400, damping: 18 }}
+            className="w-full disabled:opacity-50 py-3.5 rounded-xl font-bold text-sm tracking-widest flex items-center justify-center gap-2"
             style={{
               background: 'linear-gradient(135deg, #B8850A, #E8C547, #C49A28)',
               color: '#2A1200',
@@ -181,7 +185,7 @@ export default function RSVPForm() {
           >
             <Heart size={15} fill="currentColor" />
             {loading ? 'Sending…' : 'Count me in!'}
-          </button>
+          </motion.button>
         </form>
         {submitted && <GamesPrompt redirecting={redirecting} />}
       </div>

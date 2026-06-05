@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import Image from 'next/image'
+import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion'
 import { COUPLE, EVENT } from '@/lib/constants'
 import SectionOrnament from './SectionOrnament'
 
@@ -20,7 +21,43 @@ function getTimeLeft(): TimeLeft {
   }
 }
 
-/* ── Mandala watermark behind text ── */
+// Flipping digit — slides out up, slides in from below
+function AnimatedDigit({ value }: { value: number }) {
+  return (
+    <div style={{ position: 'relative', overflow: 'hidden', height: '1.1em' }}>
+      <AnimatePresence mode="popLayout" initial={false}>
+        <motion.span
+          key={value}
+          initial={{ y: '-110%' }}
+          animate={{ y: 0 }}
+          exit={{ y: '110%' }}
+          transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
+          style={{ display: 'block', textAlign: 'center' }}
+        >
+          {String(value).padStart(2, '0')}
+        </motion.span>
+      </AnimatePresence>
+    </div>
+  )
+}
+
+// Floating gold diamond particles
+const PARTICLES = [
+  { left: '6%',  delay: '0s',    dur: '8s',  size: 3 },
+  { left: '14%', delay: '1.6s',  dur: '10s', size: 2 },
+  { left: '22%', delay: '0.4s',  dur: '7.5s',size: 4 },
+  { left: '32%', delay: '2.3s',  dur: '9s',  size: 2 },
+  { left: '43%', delay: '0.9s',  dur: '11s', size: 3 },
+  { left: '53%', delay: '3.2s',  dur: '8.5s',size: 2 },
+  { left: '63%', delay: '1.1s',  dur: '9.5s',size: 3 },
+  { left: '73%', delay: '0.3s',  dur: '7s',  size: 2 },
+  { left: '82%', delay: '2.7s',  dur: '8s',  size: 4 },
+  { left: '89%', delay: '1.9s',  dur: '9s',  size: 2 },
+  { left: '95%', delay: '0.7s',  dur: '7.5s',size: 3 },
+  { left: '48%', delay: '4.1s',  dur: '10s', size: 2 },
+]
+
+/* Mandala watermark */
 function Mandala() {
   return (
     <svg
@@ -63,8 +100,30 @@ function Mandala() {
   )
 }
 
+const EASE = [0.25, 0.46, 0.45, 0.94] as const
+
+const heroContainer = {
+  hidden: {},
+  show: {
+    transition: { staggerChildren: 0.16, delayChildren: 0.25 },
+  },
+}
+
+const heroUp = {
+  hidden: { opacity: 0, y: 36 },
+  show:   { opacity: 1, y: 0,  transition: { duration: 0.85, ease: EASE } },
+}
+
+const heroFade = {
+  hidden: { opacity: 0 },
+  show:   { opacity: 1,        transition: { duration: 0.9,  ease: EASE } },
+}
+
 export default function Hero() {
   const [timeLeft, setTimeLeft] = useState<TimeLeft>(getTimeLeft())
+  const { scrollY } = useScroll()
+  // Image moves at ~60% of scroll speed → parallax
+  const imageY = useTransform(scrollY, [0, 700], ['0%', '20%'])
 
   useEffect(() => {
     const interval = setInterval(() => setTimeLeft(getTimeLeft()), 1000)
@@ -76,119 +135,229 @@ export default function Hero() {
   return (
     <section className="min-h-screen relative flex flex-col items-center justify-end pb-16 pt-24 overflow-hidden animate-fade-in">
 
-      {/* ── Cover photo ── */}
-      <Image
-        src="/images/hero-cover.jpg"
-        alt="Nidhi and Parag"
-        fill
-        priority
-        sizes="100vw"
-        style={{
-          objectFit: 'cover',
-          objectPosition: 'center 20%',  /* show upper couple area on all screen sizes */
-          filter: 'contrast(1.08) saturate(1.15) brightness(0.92)',
-          zIndex: 0,
-        }}
-      />
+      {/* ── Parallax hero image ── */}
+      <motion.div
+        className="absolute inset-0"
+        style={{ y: imageY, scale: 1.12 }}
+      >
+        <Image
+          src="/images/hero-cover.jpg"
+          alt="Nidhi and Parag"
+          fill
+          priority
+          sizes="100vw"
+          style={{
+            objectFit: 'cover',
+            objectPosition: 'center 20%',
+            filter: 'contrast(1.08) saturate(1.15) brightness(0.92)',
+          }}
+        />
+      </motion.div>
 
-      {/* ── Layered gradients for cinematic look ── */}
-      {/* Top: very soft vignette */}
+      {/* ── Cinematic gradient layers ── */}
       <div style={{
         position: 'absolute', inset: 0, zIndex: 1, pointerEvents: 'none',
         background: 'linear-gradient(to bottom, rgba(10,4,25,0.55) 0%, rgba(10,4,25,0.05) 35%, transparent 55%)',
       }} />
-      {/* Bottom: strong dark base for text */}
       <div style={{
         position: 'absolute', inset: 0, zIndex: 1, pointerEvents: 'none',
         background: 'linear-gradient(to top, rgba(5,2,15,0.97) 0%, rgba(10,4,25,0.88) 25%, rgba(15,6,35,0.55) 50%, transparent 75%)',
       }} />
-      {/* Gold warmth bleed from photo sunset */}
       <div style={{
         position: 'absolute', inset: 0, zIndex: 1, pointerEvents: 'none',
         background: 'radial-gradient(ellipse 80% 40% at 50% 65%, rgba(196,120,40,0.12) 0%, transparent 70%)',
       }} />
+
+      {/* ── Floating gold particles ── */}
+      <div style={{ position: 'absolute', inset: 0, zIndex: 2, pointerEvents: 'none', overflow: 'hidden' }}>
+        {PARTICLES.map((p, i) => (
+          <div
+            key={i}
+            aria-hidden="true"
+            style={{
+              position: 'absolute',
+              bottom: 0,
+              left: p.left,
+              width: p.size,
+              height: p.size,
+              background: '#C49A28',
+              transform: 'rotate(45deg)',
+              opacity: 0,
+              animation: `floatParticle ${p.dur} ${p.delay} infinite ease-in-out`,
+            }}
+          />
+        ))}
+      </div>
 
       {/* ── Mandala watermark ── */}
       <div style={{ position: 'absolute', inset: 0, zIndex: 2, pointerEvents: 'none', overflow: 'hidden' }}>
         <Mandala />
       </div>
 
-      {/* ── Text content ── */}
-      <div className="relative text-white text-center px-6 max-w-2xl w-full" style={{ zIndex: 3 }}>
-        <SectionOrnament light />
+      {/* ── Hero text — staggered entrance ── */}
+      <motion.div
+        variants={heroContainer}
+        initial="hidden"
+        animate="show"
+        className="relative text-white text-center px-6 max-w-2xl w-full"
+        style={{ zIndex: 3 }}
+      >
+        <motion.div variants={heroFade}>
+          <SectionOrnament light />
+        </motion.div>
 
-        <p className="text-xs uppercase tracking-[0.4em] mb-6 font-light" style={{ color: 'rgba(255,255,255,0.55)' }}>
+        <motion.p
+          variants={heroUp}
+          className="text-xs uppercase tracking-[0.4em] mb-6 font-light"
+          style={{ color: 'rgba(255,255,255,0.55)' }}
+        >
           Together with their families
-        </p>
+        </motion.p>
 
-        {/* Names — fixed line-height to prevent descender clipping */}
+        {/* Names */}
         <div style={{ lineHeight: 1.15, paddingBottom: '0.1em' }}>
-          <h1
+          <motion.h1
+            variants={heroUp}
             className="font-extralight tracking-tight text-gold-shimmer block"
             style={{ fontSize: 'clamp(48px, 11vw, 92px)' }}
           >
             {COUPLE.brideName}
-          </h1>
-          <p className="text-lg font-light my-3 tracking-widest" style={{ color: 'rgba(196,154,40,0.6)' }}>✦ &amp; ✦</p>
-          <h1
+          </motion.h1>
+          <motion.p
+            variants={heroFade}
+            className="text-lg font-light my-3 tracking-widest"
+            style={{ color: 'rgba(196,154,40,0.6)' }}
+          >
+            ✦ &amp; ✦
+          </motion.p>
+          <motion.h1
+            variants={heroUp}
             className="font-extralight tracking-tight text-gold-shimmer block"
             style={{ fontSize: 'clamp(48px, 11vw, 92px)' }}
           >
             {COUPLE.groomName}
-          </h1>
+          </motion.h1>
         </div>
 
-        <p className="text-sm font-light mt-6 mb-10 tracking-wide" style={{ color: 'rgba(255,255,255,0.65)' }}>
+        <motion.p
+          variants={heroUp}
+          className="text-sm font-light mt-6 mb-8 tracking-wide"
+          style={{ color: 'rgba(255,255,255,0.65)' }}
+        >
           Friday, December 4, 2026 · Thane, Maharashtra
-        </p>
+        </motion.p>
 
+        {/* ── Countdown ── */}
         {isWeddingDay ? (
-          <p className="text-2xl font-light animate-pulse mb-10">Today&apos;s the day! 🎉</p>
+          <motion.p variants={heroUp} className="text-2xl font-light animate-pulse mb-10">
+            Today&apos;s the day! 🎉
+          </motion.p>
         ) : (
-          <div className="grid grid-cols-4 gap-2.5 max-w-xs mx-auto mb-10">
-            {[
-              { value: timeLeft.days,    label: 'Days'  },
-              { value: timeLeft.hours,   label: 'Hours' },
-              { value: timeLeft.minutes, label: 'Mins'  },
-              { value: timeLeft.seconds, label: 'Secs'  },
-            ].map(({ value, label }) => (
-              <div
-                key={label}
-                style={{
-                  background: 'rgba(255,255,255,0.07)',
-                  backdropFilter: 'blur(20px)',
-                  WebkitBackdropFilter: 'blur(20px)',
-                  border: '1px solid rgba(196,154,40,0.28)',
-                  borderRadius: 14,
-                  padding: '10px 4px',
-                }}
-              >
-                <div className="text-2xl font-light tabular-nums">{String(value).padStart(2, '0')}</div>
-                <div className="text-xs tracking-wider uppercase mt-1" style={{ color: 'rgba(255,255,255,0.5)' }}>{label}</div>
-              </div>
-            ))}
-          </div>
+          <motion.div variants={heroUp} className="mb-10">
+            <p
+              className="text-xs tracking-[0.3em] uppercase mb-5"
+              style={{ color: 'rgba(196,154,40,0.5)' }}
+            >
+              Counting down to the big day
+            </p>
+
+            {/* Large elegant countdown */}
+            <div className="flex items-center justify-center gap-1 md:gap-2">
+              {[
+                { value: timeLeft.days,    label: 'Days'  },
+                { value: timeLeft.hours,   label: 'Hours' },
+                { value: timeLeft.minutes, label: 'Mins'  },
+                { value: timeLeft.seconds, label: 'Secs'  },
+              ].map(({ value, label }, i) => (
+                <div key={label} className="flex items-center gap-1 md:gap-2">
+                  {/* Countdown card */}
+                  <div
+                    style={{
+                      minWidth: 'clamp(62px, 15vw, 86px)',
+                      background: 'rgba(255,255,255,0.07)',
+                      backdropFilter: 'blur(28px)',
+                      WebkitBackdropFilter: 'blur(28px)',
+                      border: '1px solid rgba(196,154,40,0.28)',
+                      borderRadius: 18,
+                      paddingTop: 'clamp(10px, 2.5vw, 18px)',
+                      paddingBottom: 'clamp(8px, 2vw, 14px)',
+                      paddingLeft: 6,
+                      paddingRight: 6,
+                      textAlign: 'center' as const,
+                    }}
+                  >
+                    {/* Animated number */}
+                    <div
+                      className="font-extralight tabular-nums"
+                      style={{
+                        fontSize: 'clamp(30px, 8vw, 48px)',
+                        color: 'white',
+                        lineHeight: 1,
+                        letterSpacing: '-0.02em',
+                      }}
+                    >
+                      <AnimatedDigit value={value} />
+                    </div>
+                    {/* Label */}
+                    <div
+                      style={{
+                        fontSize: 'clamp(8px, 1.8vw, 10px)',
+                        color: 'rgba(196,154,40,0.65)',
+                        letterSpacing: '0.22em',
+                        textTransform: 'uppercase',
+                        marginTop: 8,
+                      }}
+                    >
+                      {label}
+                    </div>
+                  </div>
+
+                  {/* Separator */}
+                  {i < 3 && (
+                    <span
+                      style={{
+                        fontSize: 'clamp(20px, 5vw, 32px)',
+                        color: 'rgba(196,154,40,0.35)',
+                        fontWeight: 200,
+                        lineHeight: 1,
+                        marginTop: -14,
+                        display: 'block',
+                      }}
+                    >
+                      :
+                    </span>
+                  )}
+                </div>
+              ))}
+            </div>
+          </motion.div>
         )}
 
-        <a
-          href="#rsvp"
-          style={{
-            display: 'inline-block',
-            background: 'linear-gradient(135deg, #B8850A, #E8C547, #C49A28)',
-            color: '#2A1200',
-            padding: '13px 44px',
-            borderRadius: 100,
-            fontWeight: 700,
-            fontSize: 12,
-            letterSpacing: '0.12em',
-            textDecoration: 'none',
-            boxShadow: '0 6px 24px rgba(196,154,40,0.45), 0 1px 0 rgba(255,255,255,0.25) inset',
-            textTransform: 'uppercase',
-          }}
-        >
-          RSVP Now
-        </a>
-      </div>
+        {/* RSVP Button with micro-interaction */}
+        <motion.div variants={heroUp}>
+          <motion.a
+            href="#rsvp"
+            whileHover={{ scale: 1.06 }}
+            whileTap={{ scale: 0.96 }}
+            transition={{ type: 'spring', stiffness: 380, damping: 18 }}
+            style={{
+              display: 'inline-block',
+              background: 'linear-gradient(135deg, #B8850A, #E8C547, #C49A28)',
+              color: '#2A1200',
+              padding: '13px 44px',
+              borderRadius: 100,
+              fontWeight: 700,
+              fontSize: 12,
+              letterSpacing: '0.12em',
+              textDecoration: 'none',
+              boxShadow: '0 6px 24px rgba(196,154,40,0.45), 0 1px 0 rgba(255,255,255,0.25) inset',
+              textTransform: 'uppercase',
+            }}
+          >
+            RSVP Now
+          </motion.a>
+        </motion.div>
+      </motion.div>
     </section>
   )
 }

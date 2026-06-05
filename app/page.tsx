@@ -15,6 +15,7 @@ import Transportation from './components/Transportation'
 import Addresses from './components/Addresses'
 import Accommodations from './components/Accommodations'
 import ContactFAQ from './components/ContactFAQ'
+import { FadeUp } from './components/ScrollReveal'
 
 const IntroScreen = dynamic(() => import('./components/IntroScreen'), { ssr: false })
 
@@ -34,17 +35,17 @@ export default function Home() {
       <Navigation />
       <main>
         <Hero />
-        <Story />
-        <JabWeMet />
-        <InviteDetails />
-        <Gallery />
-        <Timeline />
-        <RSVPForm />
-        <GuestBook />
-        <Transportation />
-        <Addresses />
-        <Accommodations />
-        <ContactFAQ />
+        <FadeUp><Story /></FadeUp>
+        <FadeUp delay={0.05}><JabWeMet /></FadeUp>
+        <FadeUp><InviteDetails /></FadeUp>
+        <FadeUp delay={0.05}><Gallery /></FadeUp>
+        <FadeUp><Timeline /></FadeUp>
+        <FadeUp delay={0.05}><RSVPForm /></FadeUp>
+        <FadeUp><GuestBook /></FadeUp>
+        <FadeUp delay={0.05}><Transportation /></FadeUp>
+        <FadeUp><Addresses /></FadeUp>
+        <FadeUp delay={0.05}><Accommodations /></FadeUp>
+        <FadeUp><ContactFAQ /></FadeUp>
       </main>
       <footer
         className="text-white py-16 text-center relative overflow-hidden"
