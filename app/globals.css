@@ -80,6 +80,20 @@ body {
   animation: shimmerGold 4s linear infinite;
 }
 
+/* ── Warm link utility ────────────────────────────────────────── */
+.link-gold {
+  color: #C49A28;
+  transition: color 0.2s;
+}
+.link-gold:hover {
+  color: #8B2252;
+}
+
+/* ── Hotel row hover ──────────────────────────────────────────── */
+.hotel-row:hover {
+  background: rgba(196, 154, 40, 0.05);
+}
+
 /* ── Apple Liquid Glass — premium frosted variant ─────────────── */
 .glass-gold {
   /* Base: very translucent warm white — content behind shows through */

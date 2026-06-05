@@ -93,6 +93,14 @@ export default function Navigation() {
             background: 'rgba(255,253,246,0.97)',
           }}
         >
+          <Link
+            href="/games"
+            className="flex items-center gap-2 px-6 py-3.5 text-xs tracking-widest uppercase"
+            style={{ color: '#C49A28', background: 'rgba(196,154,40,0.05)', borderBottom: '1px solid rgba(196,154,40,0.1)', letterSpacing: '0.09em' }}
+            onClick={() => setIsOpen(false)}
+          >
+            🐱 Games
+          </Link>
           {sections.map((s) => (
             <a
               key={s.label}

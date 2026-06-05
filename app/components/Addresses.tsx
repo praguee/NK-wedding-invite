@@ -1,5 +1,6 @@
 import { ADDRESSES } from '@/lib/constants'
 import { MapPin } from 'lucide-react'
+import SectionOrnament from './SectionOrnament'
 
 export default function Addresses() {
   const mapUrl = (address: string) =>
@@ -8,21 +9,22 @@ export default function Addresses() {
   return (
     <section className="py-24 bg-white">
       <div className="max-w-4xl mx-auto px-6">
+        <SectionOrnament />
         <h2 className="text-4xl md:text-5xl font-extralight text-center mb-4 tracking-tight">
           Where to Find Us
         </h2>
-        <p className="text-center text-slate-500 mb-16">
+        <p className="text-center mb-16" style={{ color: '#9C7A5A' }}>
           Visit us before the big day
         </p>
 
         <div className="grid md:grid-cols-2 gap-8">
           <div className="glass-gold p-8 rounded-2xl">
             <div className="flex gap-3 items-center mb-6">
-              <MapPin className="text-purple-600" size={20} />
-              <span className="text-xs uppercase tracking-widest text-slate-500">Bride&apos;s Home</span>
+              <MapPin style={{ color: '#8B2252' }} size={20} />
+              <span className="text-xs uppercase tracking-widest" style={{ color: '#9C7A5A' }}>Bride&apos;s Home</span>
             </div>
-            <p className="font-medium text-slate-900 mb-3">{ADDRESSES.bride.name}</p>
-            <address className="not-italic text-slate-600 text-sm leading-relaxed mb-6">
+            <p className="font-medium mb-3" style={{ color: '#2A1200' }}>{ADDRESSES.bride.name}</p>
+            <address className="not-italic text-sm leading-relaxed mb-6" style={{ color: '#7C5A3A' }}>
               {ADDRESSES.bride.street}<br />
               {ADDRESSES.bride.area}<br />
               {ADDRESSES.bride.city}, {ADDRESSES.bride.state} {ADDRESSES.bride.zip}
@@ -31,7 +33,7 @@ export default function Addresses() {
               href={mapUrl(ADDRESSES.bride.fullAddress)}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-purple-600 hover:text-purple-700 text-sm font-medium"
+              className="link-gold text-sm font-medium"
             >
               Get Directions →
             </a>
@@ -39,11 +41,11 @@ export default function Addresses() {
 
           <div className="glass-gold p-8 rounded-2xl">
             <div className="flex gap-3 items-center mb-6">
-              <MapPin className="text-blue-600" size={20} />
-              <span className="text-xs uppercase tracking-widest text-slate-500">Groom&apos;s Home</span>
+              <MapPin style={{ color: '#C49A28' }} size={20} />
+              <span className="text-xs uppercase tracking-widest" style={{ color: '#9C7A5A' }}>Groom&apos;s Home</span>
             </div>
-            <p className="font-medium text-slate-900 mb-3">{ADDRESSES.groom.name}</p>
-            <address className="not-italic text-slate-600 text-sm leading-relaxed mb-6">
+            <p className="font-medium mb-3" style={{ color: '#2A1200' }}>{ADDRESSES.groom.name}</p>
+            <address className="not-italic text-sm leading-relaxed mb-6" style={{ color: '#7C5A3A' }}>
               {ADDRESSES.groom.street}<br />
               {ADDRESSES.groom.area}<br />
               {ADDRESSES.groom.city}, {ADDRESSES.groom.state} {ADDRESSES.groom.zip}
@@ -52,7 +54,7 @@ export default function Addresses() {
               href={mapUrl(ADDRESSES.groom.fullAddress)}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-600 hover:text-blue-700 text-sm font-medium"
+              className="link-gold text-sm font-medium"
             >
               Get Directions →
             </a>

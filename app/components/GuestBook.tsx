@@ -62,13 +62,14 @@ export default function GuestBook() {
         {/* Header */}
         <div className="flex items-end justify-between mb-8">
           <div>
-            <h2 className="text-4xl md:text-5xl font-extralight tracking-tight text-slate-900">
+            <h2 className="text-4xl md:text-5xl font-extralight tracking-tight" style={{ color: '#2A1200' }}>
               Guest Book
             </h2>
-            <p className="text-slate-400 text-sm mt-1">Wishes from our family and friends</p>
+            <p className="text-sm mt-1" style={{ color: '#9C7A5A' }}>Wishes from our family and friends</p>
           </div>
           {messages.length > 0 && (
-            <span className="text-xs font-medium text-slate-400 bg-white border border-slate-100 shadow-sm px-3 py-1.5 rounded-full mb-1">
+            <span className="text-xs font-medium px-3 py-1.5 rounded-full mb-1"
+              style={{ color: '#9C7A5A', background: 'rgba(196,154,40,0.08)', border: '1px solid rgba(196,154,40,0.15)' }}>
               {messages.length} {messages.length === 1 ? 'message' : 'messages'}
             </span>
           )}
@@ -78,22 +79,25 @@ export default function GuestBook() {
           <div className="h-64 flex items-center justify-center">
             <div className="flex gap-1.5">
               {[0,1,2].map(i => (
-                <div key={i} className="w-1.5 h-1.5 rounded-full bg-slate-300 animate-bounce" style={{ animationDelay: `${i * 0.15}s` }} />
+                <div key={i} className="w-1.5 h-1.5 rounded-full animate-bounce"
+                  style={{ background: 'rgba(196,154,40,0.4)', animationDelay: `${i * 0.15}s` }} />
               ))}
             </div>
           </div>
         ) : messages.length === 0 ? (
-          <div className="h-52 flex flex-col items-center justify-center bg-white rounded-3xl shadow-sm gap-3 border border-slate-100">
+          <div className="h-52 flex flex-col items-center justify-center glass-gold rounded-3xl gap-3">
             <span className="text-4xl">💌</span>
-            <p className="text-slate-400 text-sm">Be the first to leave a message!</p>
+            <p className="text-sm" style={{ color: '#9C7A5A' }}>Be the first to leave a message!</p>
           </div>
         ) : (
           /* Scroll container with fade edges */
           <div className="relative">
             {/* Top fade */}
-            <div className="absolute top-0 inset-x-0 h-8 bg-gradient-to-b from-slate-50 to-transparent z-10 pointer-events-none rounded-t-3xl" />
+            <div className="absolute top-0 inset-x-0 h-8 z-10 pointer-events-none rounded-t-3xl"
+              style={{ background: 'linear-gradient(to bottom, #FAF3E0, transparent)' }} />
             {/* Bottom fade */}
-            <div className="absolute bottom-0 inset-x-0 h-16 bg-gradient-to-t from-slate-50 to-transparent z-10 pointer-events-none rounded-b-3xl" />
+            <div className="absolute bottom-0 inset-x-0 h-16 z-10 pointer-events-none rounded-b-3xl"
+              style={{ background: 'linear-gradient(to top, #FAF3E0, transparent)' }} />
 
             <div
               ref={scrollRef}
@@ -101,7 +105,7 @@ export default function GuestBook() {
               style={{
                 maxHeight: 480,
                 scrollbarWidth: 'thin',
-                scrollbarColor: '#e2e8f0 transparent',
+                scrollbarColor: 'rgba(196,154,40,0.25) transparent',
               }}
             >
               {messages.map((m) => {
@@ -129,17 +133,18 @@ export default function GuestBook() {
                       {/* Content */}
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center justify-between gap-2 mb-1.5">
-                          <span className="font-medium text-slate-900 text-sm truncate">{m.name}</span>
+                          <span className="font-medium text-sm truncate" style={{ color: '#2A1200' }}>{m.name}</span>
                           <div className="flex items-center gap-2 flex-shrink-0">
                             {m.plus_ones > 0 && (
-                              <span className="text-xs text-slate-400 bg-slate-50 px-2 py-0.5 rounded-full border border-slate-100">
+                              <span className="text-xs px-2 py-0.5 rounded-full"
+                                style={{ color: '#9C7A5A', background: 'rgba(196,154,40,0.1)', border: '1px solid rgba(196,154,40,0.15)' }}>
                                 +{m.plus_ones}
                               </span>
                             )}
-                            <span className="text-xs text-slate-300">{formatDate(m.created_at)}</span>
+                            <span className="text-xs" style={{ color: '#C4B09A' }}>{formatDate(m.created_at)}</span>
                           </div>
                         </div>
-                        <p className="text-slate-600 text-sm leading-relaxed">{m.message}</p>
+                        <p className="text-sm leading-relaxed" style={{ color: '#7C5A3A' }}>{m.message}</p>
                       </div>
                     </div>
 

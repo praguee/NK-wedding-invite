@@ -1,3 +1,5 @@
+'use client'
+
 import { VENUE, EVENT } from '@/lib/constants'
 import { MapPin, Clock } from 'lucide-react'
 import SectionOrnament from './SectionOrnament'
@@ -14,44 +16,61 @@ export default function InviteDetails() {
         <div className="space-y-6">
           <div className="glass-gold p-8 rounded-2xl">
             <div className="flex gap-5 items-start">
-              <div className="p-3 bg-purple-50 rounded-xl">
-                <Clock className="text-purple-600" size={22} />
+              <div className="p-3 rounded-xl" style={{ background: 'rgba(196,154,40,0.1)' }}>
+                <Clock style={{ color: '#C49A28' }} size={22} />
               </div>
               <div>
-                <p className="text-xs uppercase tracking-widest text-slate-400 mb-1">Wedding Ceremony</p>
-                <h3 className="text-2xl font-light text-slate-900 mb-1">{EVENT.weddingTime}</h3>
-                <p className="text-slate-500">Friday, December 4, 2026</p>
+                <p className="text-xs uppercase tracking-widest mb-1" style={{ color: '#9C7A5A' }}>
+                  Wedding Ceremony
+                </p>
+                <h3 className="text-2xl font-light mb-1" style={{ color: '#2A1200' }}>
+                  {EVENT.weddingTime}
+                </h3>
+                <p style={{ color: '#7C5A3A' }}>Friday, December 4, 2026</p>
               </div>
             </div>
           </div>
 
           <div className="glass-gold p-8 rounded-2xl">
             <div className="flex gap-5 items-start">
-              <div className="p-3 bg-blue-50 rounded-xl">
-                <Clock className="text-blue-600" size={22} />
+              <div className="p-3 rounded-xl" style={{ background: 'rgba(196,154,40,0.1)' }}>
+                <Clock style={{ color: '#C49A28' }} size={22} />
               </div>
               <div>
-                <p className="text-xs uppercase tracking-widest text-slate-400 mb-1">Reception</p>
-                <h3 className="text-2xl font-light text-slate-900 mb-1">{EVENT.receptionTime} onwards</h3>
-                <p className="text-slate-500">Friday, December 4, 2026</p>
+                <p className="text-xs uppercase tracking-widest mb-1" style={{ color: '#9C7A5A' }}>
+                  Reception
+                </p>
+                <h3 className="text-2xl font-light mb-1" style={{ color: '#2A1200' }}>
+                  {EVENT.receptionTime} onwards
+                </h3>
+                <p style={{ color: '#7C5A3A' }}>Friday, December 4, 2026</p>
               </div>
             </div>
           </div>
 
           <div className="glass-gold p-8 rounded-2xl">
             <div className="flex gap-5 items-start">
-              <div className="p-3 bg-green-50 rounded-xl">
-                <MapPin className="text-green-600" size={22} />
+              <div className="p-3 rounded-xl" style={{ background: 'rgba(139,34,82,0.08)' }}>
+                <MapPin style={{ color: '#8B2252' }} size={22} />
               </div>
               <div className="flex-1">
-                <p className="text-xs uppercase tracking-widest text-slate-400 mb-1">Venue</p>
-                <h3 className="text-2xl font-light text-slate-900 mb-2">{VENUE.name}</h3>
-                <p className="text-slate-500 leading-relaxed mb-4">{VENUE.fullAddress}</p>
+                <p className="text-xs uppercase tracking-widest mb-1" style={{ color: '#9C7A5A' }}>
+                  Venue
+                </p>
+                <h3 className="text-2xl font-light mb-2" style={{ color: '#2A1200' }}>
+                  {VENUE.name}
+                </h3>
+                <p className="leading-relaxed mb-4" style={{ color: '#7C5A3A' }}>
+                  {VENUE.fullAddress}
+                </p>
                 <a
                   href={VENUE.mapUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-purple-600 hover:text-purple-700 text-sm font-medium"
+                  className="text-sm font-medium"
+                  style={{ color: '#C49A28', textDecoration: 'none' }}
+                  onMouseEnter={e => (e.currentTarget.style.color = '#8B2252')}
+                  onMouseLeave={e => (e.currentTarget.style.color = '#C49A28')}
                 >
                   Open in Google Maps →
                 </a>
