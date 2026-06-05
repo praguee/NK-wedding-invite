@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { supabase } from '@/lib/supabase'
 
 // ── CORNER MANDALA DECORATION ────────────────────────────────────
@@ -291,7 +291,7 @@ function Quiz() {
           Think you know them? 5 questions.<br/>
           Ginny is judging your answers personally.
         </p>
-        <button
+        <motion.button
           onClick={() => setState('playing')}
           className="px-10 py-3.5 rounded-full font-semibold text-sm tracking-widest"
           style={{
@@ -299,9 +299,12 @@ function Quiz() {
             color: '#2A1200',
             boxShadow: '0 4px 20px rgba(196,154,40,0.35)',
           }}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.96 }}
+          transition={{ type: 'spring', stiffness: 400, damping: 18 }}
         >
           Start Quiz
-        </button>
+        </motion.button>
       </div>
     )
   }
@@ -343,18 +346,21 @@ function Quiz() {
               }
 
               return (
-                <button
+                <motion.button
                   key={i}
                   onClick={() => choose(i)}
-                  className="w-full text-left rounded-xl px-4 py-3.5 transition-all duration-200 flex items-center gap-3"
-                  style={{ background: bg, border: `1px solid ${border}` }}
+                  className="w-full text-left rounded-xl px-4 py-3.5 flex items-center gap-3"
+                  style={{ background: bg, border: `1px solid ${border}`, transition: 'background 0.2s, border-color 0.2s' }}
+                  whileHover={!revealed ? { scale: 1.015 } : {}}
+                  whileTap={!revealed ? { scale: 0.98 } : {}}
+                  transition={{ type: 'spring', stiffness: 400, damping: 20 }}
                 >
                   <span className="w-5 h-5 rounded-full border flex-shrink-0 flex items-center justify-center text-xs font-bold"
                     style={{ borderColor: border, color: textColor }}>
                     {revealed && isCorrect ? '✓' : revealed && isSelected && !isCorrect ? '✗' : ['A','B','C','D'][i]}
                   </span>
                   <span className="text-sm" style={{ color: textColor }}>{opt}</span>
-                </button>
+                </motion.button>
               )
             })}
           </div>
@@ -376,18 +382,22 @@ function Quiz() {
 
   return (
     <div className="max-w-md mx-auto text-center">
-      <div className="relative w-44 h-44 mx-auto rounded-full overflow-hidden mb-6"
+      <motion.div
+        initial={{ scale: 0.75, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ duration: 0.55, type: 'spring', stiffness: 180, damping: 16 }}
+        className="relative w-44 h-44 mx-auto rounded-full overflow-hidden mb-6"
         style={{
           border: win ? '3px solid #C49A28' : '3px solid rgba(92,58,30,0.15)',
           boxShadow: win ? '0 0 50px rgba(196,154,40,0.18)' : '0 4px 20px rgba(92,58,30,0.08)',
         }}>
         <Image
           src={win ? '/images/ginny-win.jpg' : '/images/ginny-lose.jpg'}
-          alt="Ginny"
+          alt={win ? 'Ginny approves — wide eyes' : 'Ginny judges you — side eye'}
           fill
           style={{ objectFit: 'cover', objectPosition: 'center 20%' }}
         />
-      </div>
+      </motion.div>
 
       <p className="text-xs tracking-widest uppercase mb-3" style={{ color: win ? '#C49A28' : '#9C7A5A' }}>
         {score} / {QUESTIONS.length} correct
@@ -511,11 +521,30 @@ export default function GamesPage() {
           <MandalaCorner />
         </div>
 
-        <div className="relative max-w-lg mx-auto px-6 py-12 games-enter" style={{ zIndex: 1 }}>
-          {step === 'poll'
-            ? <Poll onDone={() => setStep('quiz')} />
-            : <Quiz />
-          }
+        <div className="relative max-w-lg mx-auto px-6 py-12" style={{ zIndex: 1 }}>
+          <AnimatePresence mode="wait">
+            {step === 'poll' ? (
+              <motion.div
+                key="poll"
+                initial={{ opacity: 0, y: 24 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -24 }}
+                transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
+              >
+                <Poll onDone={() => setStep('quiz')} />
+              </motion.div>
+            ) : (
+              <motion.div
+                key="quiz"
+                initial={{ opacity: 0, y: 24 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -24 }}
+                transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
+              >
+                <Quiz />
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </div>
     </div>

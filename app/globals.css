@@ -107,6 +107,45 @@ body {
   background: rgba(196, 154, 40, 0.05);
 }
 
+/* ── Keyboard focus states (WCAG AA) ─────────────────────────── */
+:focus-visible {
+  outline: 2px solid #C49A28;
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+*:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* ── Skip to content link ────────────────────────────────────── */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+.skip-link:focus {
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  width: auto;
+  height: auto;
+  padding: 0.5rem 1.25rem;
+  background: var(--ivory);
+  color: #C49A28;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border: 1.5px solid #C49A28;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+  z-index: 9999;
+}
+
 /* ── Apple Liquid Glass — premium frosted variant ─────────────── */
 .glass-gold {
   /* Base: very translucent warm white — content behind shows through */

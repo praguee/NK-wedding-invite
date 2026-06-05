@@ -166,12 +166,26 @@ function PhotoCard({
   )
 }
 
+import { useEffect } from 'react'
+
 export default function Gallery() {
   const [lightbox, setLightbox] = useState<number | null>(null)
   const idx     = PHOTOS.findIndex(p => p.id === lightbox)
   const current = PHOTOS[idx]
   const prev    = () => setLightbox(PHOTOS[(idx - 1 + PHOTOS.length) % PHOTOS.length].id)
   const next    = () => setLightbox(PHOTOS[(idx + 1) % PHOTOS.length].id)
+
+  // Keyboard navigation for lightbox
+  useEffect(() => {
+    if (lightbox === null) return
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setLightbox(null)
+      else if (e.key === 'ArrowLeft')  setLightbox(PHOTOS[(PHOTOS.findIndex(p => p.id === lightbox) - 1 + PHOTOS.length) % PHOTOS.length].id)
+      else if (e.key === 'ArrowRight') setLightbox(PHOTOS[(PHOTOS.findIndex(p => p.id === lightbox) + 1) % PHOTOS.length].id)
+    }
+    window.addEventListener('keydown', handler)
+    return () => window.removeEventListener('keydown', handler)
+  }, [lightbox])
 
   return (
     <section id="gallery" className="py-20 bg-white">
@@ -230,6 +244,9 @@ export default function Gallery() {
             className="fixed inset-0 z-50 flex items-center justify-center p-4"
             style={{ background: 'rgba(3,1,10,0.96)' }}
             onClick={() => setLightbox(null)}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Photo lightbox"
           >
             {/* Close */}
             <motion.button
@@ -241,6 +258,7 @@ export default function Gallery() {
               style={{ color: 'rgba(255,255,255,0.5)' }}
               onClick={() => setLightbox(null)}
               whileHover={{ color: 'rgba(255,255,255,1)', scale: 1.1 }}
+              aria-label="Close gallery"
             >
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                 <path d="M4 4L20 20M20 4L4 20" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
@@ -256,6 +274,7 @@ export default function Gallery() {
               style={{ color: 'rgba(255,255,255,0.4)' }}
               onClick={e => { e.stopPropagation(); prev() }}
               whileHover={{ color: 'white', x: -2 }}
+              aria-label="Previous photo"
             >
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                 <path d="M15 4L7 12L15 20" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
@@ -310,6 +329,7 @@ export default function Gallery() {
               style={{ color: 'rgba(255,255,255,0.4)' }}
               onClick={e => { e.stopPropagation(); next() }}
               whileHover={{ color: 'white', x: 2 }}
+              aria-label="Next photo"
             >
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                 <path d="M9 4L17 12L9 20" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>

@@ -17,8 +17,11 @@ export default function Navigation() {
   ]
 
   return (
+    <>
+    <a href="#main-content" className="skip-link">Skip to content</a>
     <nav
       className="fixed top-0 left-0 right-0 z-50"
+      aria-label="Main navigation"
       style={{
         background: 'rgba(255,253,246,0.88)',
         backdropFilter: 'blur(28px) saturate(160%)',
@@ -79,6 +82,8 @@ export default function Navigation() {
           className="md:hidden p-2"
           onClick={() => setIsOpen(!isOpen)}
           aria-label="Toggle menu"
+          aria-expanded={isOpen}
+          aria-controls="mobile-menu"
           style={{ color: '#7C5A3A' }}
         >
           {isOpen ? <X size={22} /> : <Menu size={22} />}
@@ -88,6 +93,8 @@ export default function Navigation() {
       {/* Mobile dropdown */}
       {isOpen && (
         <div
+          id="mobile-menu"
+          role="menu"
           style={{
             borderTop: '1px solid rgba(196,154,40,0.12)',
             background: 'rgba(255,253,246,0.97)',
@@ -115,5 +122,6 @@ export default function Navigation() {
         </div>
       )}
     </nav>
+    </>
   )
 }

@@ -32,7 +32,7 @@ export default function Home() {
   const mainContent = (
     <>
       <Navigation />
-      <main>
+      <main id="main-content">
         <Hero />
         <FadeUp><Story /></FadeUp>
         <FadeUp delay={0.05}><JabWeMet /></FadeUp>

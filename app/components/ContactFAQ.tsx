@@ -7,7 +7,7 @@ const CONTACTS = [
   { name: 'Charu Kesarkar',    role: "Bride's Mom",        phone: '+91 98692 00282', tel: '+919869200282' },
   { name: 'Sushma Khalde',     role: "Groom's Mom",        phone: '+91 88501 40931', tel: '+918850140931' },
   { name: 'Mukul Khalde',      role: "Groom's Brother",    phone: '+91 79775 80983', tel: '+917977580983' },
-  { name: 'Deepak Khalde',     role: "Groom's Dad",        phone: '+91 81080 99117', tel: '+918108099117' },
+  { name: 'Deepak Kesarkar',   role: "Bride's Dad",        phone: '+91 81080 99117', tel: '+918108099117' },
 ]
 
 export default function ContactFAQ() {
