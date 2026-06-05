@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import { VENUE } from '@/lib/constants'
-import { Car, Navigation, Clock, MapPin } from 'lucide-react'
+import { Car, Navigation, MapPin } from 'lucide-react'
 import SectionOrnament from './SectionOrnament'
 import { StaggerContainer, StaggerItem } from './ScrollReveal'
 import { motion } from 'framer-motion'
@@ -79,58 +79,30 @@ export default function Transportation() {
           </div>
         </div>
 
-        {/* Map + Address row */}
-        <div className="grid md:grid-cols-5 gap-5 mb-8">
-          {/* Google Maps embed */}
-          <div className="md:col-span-3 rounded-2xl overflow-hidden" style={{ minHeight: 240, boxShadow: '0 4px 24px rgba(0,0,0,0.10)', border: '1px solid rgba(196,154,40,0.18)' }}>
-            <iframe
-              title="Abhishek Farms, Yeoor Hills"
-              src="https://maps.google.com/maps?q=Abhishek+Farms,Narlepada,Yeoor+Hills,Thane+West,Maharashtra&output=embed&z=15"
-              width="100%"
-              height="100%"
-              style={{ border: 0, display: 'block', minHeight: 240 }}
-              allowFullScreen
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-            />
-          </div>
-
-          {/* Address + quick info */}
-          <div className="md:col-span-2 glass-gold p-6 rounded-2xl flex flex-col justify-between gap-5">
-            <div>
-              <div className="flex items-center gap-2 mb-3">
-                <div className="p-2 rounded-lg" style={{ background: 'rgba(139,34,82,0.1)' }}>
-                  <MapPin style={{ color: '#8B2252' }} size={18} />
-                </div>
-                <span className="text-xs tracking-widest uppercase font-semibold" style={{ color: '#9C7A5A' }}>Address</span>
+        {/* Address card */}
+        <div className="glass-gold p-6 rounded-2xl mb-8">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div className="flex gap-4 items-start">
+              <div className="p-2.5 rounded-xl flex-shrink-0" style={{ background: 'rgba(139,34,82,0.1)' }}>
+                <MapPin style={{ color: '#8B2252' }} size={18} />
               </div>
-              <p className="text-sm leading-relaxed mb-4" style={{ color: '#3B1F00' }}>
-                {VENUE.fullAddress}
-              </p>
-              <div style={{ height: 1, background: 'rgba(196,154,40,0.15)', marginBottom: 16 }} />
-              <div className="flex items-center gap-2 mb-2">
-                <Clock size={14} style={{ color: '#C49A28', flexShrink: 0 }} />
-                <p className="text-xs" style={{ color: '#7C5A3A' }}>
-                  Arrive by <strong style={{ color: '#3B1F00' }}>5:00 PM</strong> — ceremony at 5:30 PM
-                </p>
-              </div>
-              <div className="flex items-center gap-2">
-                <Car size={14} style={{ color: '#C49A28', flexShrink: 0 }} />
-                <p className="text-xs" style={{ color: '#7C5A3A' }}>Valet parking available at entrance</p>
+              <div>
+                <p className="text-xs tracking-widest uppercase font-semibold mb-1" style={{ color: '#9C7A5A' }}>Address</p>
+                <p className="text-sm leading-relaxed" style={{ color: '#3B1F00' }}>{VENUE.fullAddress}</p>
               </div>
             </div>
             <motion.a
               href={VENUE.mapUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="w-full text-center text-xs font-semibold tracking-widest uppercase py-3 rounded-xl"
+              className="flex-shrink-0 text-xs font-semibold tracking-widest uppercase px-5 py-2.5 rounded-full text-center"
               style={{
                 background: 'linear-gradient(135deg, #B8850A, #E8C547, #C49A28)',
                 color: '#2A1200',
                 textDecoration: 'none',
                 boxShadow: '0 2px 10px rgba(196,154,40,0.3)',
               }}
-              whileHover={{ scale: 1.02 }}
+              whileHover={{ scale: 1.04 }}
               whileTap={{ scale: 0.97 }}
               transition={{ type: 'spring', stiffness: 400, damping: 18 }}
             >
@@ -206,27 +178,9 @@ export default function Transportation() {
                     </span>
                   </div>
                   <p className="text-sm leading-relaxed" style={{ color: '#7C5A3A' }}>
-                    After the reception, getting an auto or Uber/Ola from Yeoor Hills at night can be a bit of a mission — they don&apos;t venture up the hill much. So we&apos;ve sorted it.{' '}
+                    After the reception, getting an auto or Uber/Ola from Yeoor Hills at night can be a bit of a mission — they don&apos;t venture up here much. So we&apos;ve sorted it.{' '}
                     <strong style={{ color: '#3B1F00' }}>Cars with drivers will be stationed at the venue all evening</strong>{' '}
                     to drop guests back down to Thane city, where you can easily pick up a ride home. Just find us before you&apos;re ready to leave and we&apos;ll get you a car.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </StaggerItem>
-
-          {/* Card 4: Arrival Time */}
-          <StaggerItem className="md:col-span-2">
-            <div className="glass-gold p-6 rounded-2xl">
-              <div className="flex gap-4 items-center">
-                <div className="p-2.5 rounded-xl flex-shrink-0" style={{ background: 'rgba(196,154,40,0.12)' }}>
-                  <Clock style={{ color: '#C49A28' }} size={20} />
-                </div>
-                <div className="flex-1">
-                  <h3 className="font-semibold mb-1" style={{ color: '#3B1F00' }}>Arrival Time</h3>
-                  <p className="text-sm leading-relaxed" style={{ color: '#7C5A3A' }}>
-                    Please arrive by <strong style={{ color: '#C49A28' }}>5:00 PM</strong> to get settled before the wedding ceremony begins at{' '}
-                    <strong style={{ color: '#C49A28' }}>5:30 PM</strong> on the floating mandap. Reception starts at 8:00 PM.
                   </p>
                 </div>
               </div>

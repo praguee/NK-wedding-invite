@@ -6,7 +6,6 @@ import Navigation from './components/Navigation'
 import Hero from './components/Hero'
 import Story from './components/Story'
 import JabWeMet from './components/JabWeMet'
-import InviteDetails from './components/InviteDetails'
 import Gallery from './components/Gallery'
 import Timeline from './components/Timeline'
 import RSVPForm from './components/RSVPForm'
@@ -37,9 +36,8 @@ export default function Home() {
         <Hero />
         <FadeUp><Story /></FadeUp>
         <FadeUp delay={0.05}><JabWeMet /></FadeUp>
-        <FadeUp><InviteDetails /></FadeUp>
-        <FadeUp delay={0.05}><Gallery /></FadeUp>
         <FadeUp><Timeline /></FadeUp>
+        <FadeUp delay={0.05}><Gallery /></FadeUp>
         <FadeUp delay={0.05}><RSVPForm /></FadeUp>
         <FadeUp><GuestBook /></FadeUp>
         <FadeUp delay={0.05}><Transportation /></FadeUp>

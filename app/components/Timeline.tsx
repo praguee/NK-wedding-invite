@@ -40,7 +40,7 @@ export default function Timeline() {
       <div className="max-w-lg mx-auto px-6">
         <SectionOrnament />
         <h2 className="text-4xl md:text-5xl font-extralight text-center mb-3 tracking-tight">
-          Schedule
+          You&apos;re Invited
         </h2>
         <p className="text-center mb-12 text-sm" style={{ color: '#9C7A5A' }}>
           Friday, December 4, 2026

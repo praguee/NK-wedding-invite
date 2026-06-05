@@ -9,7 +9,7 @@ export default function Navigation() {
 
   const sections = [
     { label: 'Our Story', href: '#story' },
-    { label: 'Invite',    href: '#invite' },
+    { label: 'Schedule',  href: '#timeline' },
     { label: 'Gallery',   href: '#gallery' },
     { label: 'Travel',    href: '#travel' },
     { label: 'RSVP',      href: '#rsvp' },
