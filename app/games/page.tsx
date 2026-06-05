@@ -267,6 +267,7 @@ function Quiz() {
   }
 
   const reset = () => {
+    choosingRef.current = false
     setState('idle'); setQIdx(0); setSelected(null)
     setAnswers(Array(QUESTIONS.length).fill(null)); setRevealed(false); setScore(0)
   }
