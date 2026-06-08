@@ -1,10 +1,12 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import SectionOrnament from './SectionOrnament'
 import { StaggerContainer, StaggerItem } from './ScrollReveal'
+import { useMediaQuery } from '@/app/hooks/useMediaQuery'
+import MobileGallery from './MobileGallery'
 
 const PHOTOS = [
   {
@@ -166,10 +168,14 @@ function PhotoCard({
   )
 }
 
-import { useEffect } from 'react'
-
 export default function Gallery() {
   const [lightbox, setLightbox] = useState<number | null>(null)
+  const isMobile = useMediaQuery('(max-width: 767px)')
+
+  // Notify FloatingRSVPButton when lightbox opens/closes
+  useEffect(() => {
+    window.dispatchEvent(new CustomEvent('nk:lightbox', { detail: { open: lightbox !== null } }))
+  }, [lightbox])
   const idx     = PHOTOS.findIndex(p => p.id === lightbox)
   const current = PHOTOS[idx]
   const prev    = () => setLightbox(PHOTOS[(idx - 1 + PHOTOS.length) % PHOTOS.length].id)
@@ -205,8 +211,14 @@ export default function Gallery() {
           </div>
         </div>
 
-        {/* Editorial asymmetric grid */}
-        <StaggerContainer className="grid grid-cols-1 md:grid-cols-12 gap-3" style={{ gridAutoRows: 'auto' }}>
+        {/* Mobile: swipe carousel */}
+        {isMobile && (
+          <MobileGallery photos={PHOTOS} onOpen={(id) => setLightbox(id)} />
+        )}
+
+        {/* Tablet + Desktop: editorial asymmetric grid */}
+        {!isMobile && (
+        <StaggerContainer className="grid grid-cols-1 md:grid-cols-12 md:auto-rows-[340px] lg:auto-rows-auto gap-3">
 
           <StaggerItem className="md:col-span-5" style={{ minHeight: 320 }}>
             <div style={{ height: '100%', minHeight: 320, position: 'relative' }}>
@@ -230,6 +242,7 @@ export default function Gallery() {
           </StaggerItem>
 
         </StaggerContainer>
+        )}
       </div>
 
       {/* ── Lightbox with AnimatePresence ── */}
