@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import SectionOrnament from './SectionOrnament'
@@ -171,9 +171,11 @@ function PhotoCard({
 export default function Gallery() {
   const [lightbox, setLightbox] = useState<number | null>(null)
   const isMobile = useMediaQuery('(max-width: 767px)')
+  const lightboxMounted = useRef(false)
 
-  // Notify FloatingRSVPButton when lightbox opens/closes
+  // Notify FloatingRSVPButton when lightbox opens/closes — skip initial mount
   useEffect(() => {
+    if (!lightboxMounted.current) { lightboxMounted.current = true; return }
     window.dispatchEvent(new CustomEvent('nk:lightbox', { detail: { open: lightbox !== null } }))
   }, [lightbox])
   const idx     = PHOTOS.findIndex(p => p.id === lightbox)
@@ -205,9 +207,11 @@ export default function Gallery() {
                 {PHOTOS.length} moments · more coming
               </p>
             </div>
+            {!isMobile && (
             <p className="text-xs tracking-widest uppercase" style={{ color: '#C4B09A', marginBottom: 4 }}>
               Hover to read
             </p>
+            )}
           </div>
         </div>
 
