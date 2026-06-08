@@ -186,7 +186,7 @@ body {
   scrollbar-width: none;
 }
 .gallery-scroll::-webkit-scrollbar { display: none; }
-.gallery-slide { scroll-snap-align: start; flex-shrink: 0; }
+.gallery-slide { scroll-snap-align: center; flex-shrink: 0; }
 
 /* ==========================================================================
    Lotus Decorations

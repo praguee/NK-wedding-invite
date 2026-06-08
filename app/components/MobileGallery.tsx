@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
 
@@ -30,13 +30,23 @@ export default function MobileGallery({ photos, onOpen }: MobileGalleryProps) {
     if (rafRef.current !== null) return
     rafRef.current = requestAnimationFrame(() => {
       const el = scrollRef.current
-      if (el && el.scrollWidth > 0) {
-        const slideWidth = el.scrollWidth / photos.length
-        setActiveIndex(Math.round(el.scrollLeft / slideWidth))
+      if (el) {
+        const gap = 8
+        const firstSlide = el.firstElementChild as HTMLElement | null
+        const slideWidth = firstSlide ? firstSlide.offsetWidth + gap : 0
+        if (slideWidth > 0) {
+          setActiveIndex(Math.round(el.scrollLeft / slideWidth))
+        }
       }
       rafRef.current = null
     })
-  }, [photos.length])
+  }, [])
+
+  useEffect(() => {
+    return () => {
+      if (rafRef.current !== null) cancelAnimationFrame(rafRef.current)
+    }
+  }, [])
 
   return (
     <div>
