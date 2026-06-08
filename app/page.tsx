@@ -15,6 +15,7 @@ import Addresses from './components/Addresses'
 import Accommodations from './components/Accommodations'
 import ContactFAQ from './components/ContactFAQ'
 import { FadeUp } from './components/ScrollReveal'
+import FloatingRSVPButton from './components/FloatingRSVPButton'
 
 const IntroScreen = dynamic(() => import('./components/IntroScreen'), { ssr: false })
 
@@ -32,6 +33,7 @@ export default function Home() {
   const mainContent = (
     <>
       <Navigation />
+      <FloatingRSVPButton />
       <main id="main-content">
         <Hero />
         <FadeUp><Story /></FadeUp>
