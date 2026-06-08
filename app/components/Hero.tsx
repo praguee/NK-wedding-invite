@@ -5,6 +5,7 @@ import Image from 'next/image'
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion'
 import { COUPLE, EVENT } from '@/lib/constants'
 import SectionOrnament from './SectionOrnament'
+import LotusDecoration from './LotusDecoration'
 
 interface TimeLeft {
   days: number; hours: number; minutes: number; seconds: number
@@ -133,7 +134,7 @@ export default function Hero() {
   const isWeddingDay = Object.values(timeLeft).every((v) => v === 0)
 
   return (
-    <section className="min-h-screen relative flex flex-col items-center justify-end pb-16 pt-24 overflow-hidden animate-fade-in">
+    <section className="min-h-[100svh] md:min-h-screen relative flex flex-col items-center justify-end pb-16 pt-24 overflow-hidden animate-fade-in">
 
       {/* ── Parallax hero image ── */}
       <motion.div
@@ -146,9 +147,9 @@ export default function Hero() {
           fill
           priority
           sizes="100vw"
+          className="hero-image"
           style={{
             objectFit: 'cover',
-            objectPosition: 'center 20%',
             filter: 'contrast(1.08) saturate(1.15) brightness(0.92)',
           }}
         />
@@ -166,6 +167,11 @@ export default function Hero() {
       <div style={{
         position: 'absolute', inset: 0, zIndex: 1, pointerEvents: 'none',
         background: 'radial-gradient(ellipse 80% 40% at 50% 65%, rgba(196,120,40,0.12) 0%, transparent 70%)',
+      }} />
+      {/* Mobile: stronger bottom overlay so text stays readable on small screens */}
+      <div className="block md:hidden" style={{
+        position: 'absolute', inset: 0, zIndex: 1, pointerEvents: 'none',
+        background: 'linear-gradient(to top, rgba(5,2,15,.78), rgba(5,2,15,.35), transparent)',
       }} />
 
       {/* ── Floating gold particles ── */}
@@ -358,6 +364,9 @@ export default function Hero() {
           </motion.a>
         </motion.div>
       </motion.div>
+      <LotusDecoration position="top-left"  size={130} opacity={0.08} />
+      <LotusDecoration position="top-right" size={130} opacity={0.08} />
+      <div id="hero-sentinel" aria-hidden="true" />
     </section>
   )
 }
