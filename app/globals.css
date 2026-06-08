@@ -165,3 +165,43 @@ body {
     0 16px 48px rgba(0, 0, 0, 0.08),                     /* ambient shadow */
     0 0 0 0.5px rgba(196, 154, 40, 0.12);                /* gold rim */
 }
+
+/* ==========================================================================
+   Hero
+   ========================================================================== */
+
+/* Responsive image position for hero-cover.jpg (sunset silhouette — couple upper-center) */
+.hero-image { object-position: center 22%; }
+@media (min-width: 768px) { .hero-image { object-position: center 20%; } }
+
+/* ==========================================================================
+   Gallery
+   ========================================================================== */
+
+/* Mobile swipe carousel */
+.gallery-scroll {
+  overflow-x: scroll;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.gallery-scroll::-webkit-scrollbar { display: none; }
+.gallery-slide { scroll-snap-align: start; flex-shrink: 0; }
+
+/* ==========================================================================
+   Lotus Decorations
+   ========================================================================== */
+
+@keyframes lotusRotate {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.lotus-animate {
+  animation: lotusRotate 90s linear infinite;
+  transform-origin: center center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lotus-animate { animation: none !important; }
+}
