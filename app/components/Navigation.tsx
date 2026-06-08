@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { Menu, X } from 'lucide-react'
 
@@ -27,8 +27,10 @@ export default function Navigation() {
     return () => observers.forEach((o) => o.disconnect())
   }, [])
 
-  // Notify FloatingRSVPButton when mobile menu opens/closes
+  const menuMounted = useRef(false)
+  // Notify FloatingRSVPButton when mobile menu opens/closes — skip initial mount
   useEffect(() => {
+    if (!menuMounted.current) { menuMounted.current = true; return }
     window.dispatchEvent(new CustomEvent('nk:menu', { detail: { open: isOpen } }))
   }, [isOpen])
 
