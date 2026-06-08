@@ -3,12 +3,15 @@
 
 import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useMediaQuery } from '@/app/hooks/useMediaQuery'
 
 export default function FloatingRSVPButton() {
   const [heroLeft,     setHeroLeft]     = useState(false)
   const [rsvpVisible,  setRsvpVisible]  = useState(false)
   const [lightboxOpen, setLightboxOpen] = useState(false)
   const [menuOpen,     setMenuOpen]     = useState(false)
+
+  const isMobile = useMediaQuery('(max-width: 767px)')
 
   // Watch hero sentinel — button shows when hero scrolls out of view
   useEffect(() => {
@@ -48,7 +51,7 @@ export default function FloatingRSVPButton() {
     }
   }, [])
 
-  const visible = heroLeft && !rsvpVisible && !lightboxOpen && !menuOpen
+  const visible = isMobile && heroLeft && !rsvpVisible && !lightboxOpen && !menuOpen
 
   return (
     // md:hidden — only renders visually on mobile; layout exists on all sizes
