@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import SectionOrnament from './SectionOrnament'
+import LotusDecoration from './LotusDecoration'
 import { SlideIn, StaggerContainer, StaggerItem } from './ScrollReveal'
 
 const RELATIONSHIP_START = new Date('2023-07-08T00:00:00+05:30')
@@ -26,7 +27,8 @@ export default function Story() {
   }, [])
 
   return (
-    <section id="story" className="py-24 bg-white" aria-labelledby="story-heading">
+    <section id="story" className="py-24 bg-white relative overflow-hidden" aria-labelledby="story-heading">
+      <LotusDecoration position="top-right" size={120} opacity={0.07} />
       <div className="max-w-4xl mx-auto px-6">
         <SectionOrnament />
         <h2 id="story-heading" className="text-4xl md:text-5xl font-extralight text-center mb-4 tracking-tight">

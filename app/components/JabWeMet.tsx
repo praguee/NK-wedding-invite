@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import SectionOrnament from './SectionOrnament'
+import LotusDecoration from './LotusDecoration'
 import { SlideIn, StaggerContainer, StaggerItem } from './ScrollReveal'
 
 const FIRST_MET = new Date('2022-12-23T00:00:00+05:30')
@@ -27,7 +28,8 @@ export default function JabWeMet() {
   }, [])
 
   return (
-    <section id="jab-we-met" className="py-24 bg-slate-50" aria-labelledby="jwm-heading">
+    <section id="jab-we-met" className="py-24 bg-slate-50 relative overflow-hidden" aria-labelledby="jwm-heading">
+      <LotusDecoration position="top-left" size={120} opacity={0.07} />
       <div className="max-w-4xl mx-auto px-6">
         <SectionOrnament />
         <h2 id="jwm-heading" className="text-4xl md:text-5xl font-extralight text-center mb-3 tracking-tight">

@@ -1,9 +1,5 @@
 'use client'
 
-'use client'
-
-'use client'
-
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
@@ -11,6 +7,7 @@ import toast from 'react-hot-toast'
 import { motion } from 'framer-motion'
 import { Heart } from 'lucide-react'
 import SectionOrnament from './SectionOrnament'
+import LotusDecoration from './LotusDecoration'
 
 interface FormState { name: string; plusOnes: string; message: string }
 const INITIAL: FormState = { name: '', plusOnes: '0', message: '' }
@@ -103,7 +100,8 @@ export default function RSVPForm() {
   }
 
   return (
-    <section id="rsvp" className="py-24 bg-slate-50">
+    <section id="rsvp" className="py-24 bg-slate-50 relative overflow-hidden">
+      <LotusDecoration position="bottom-left" size={100} opacity={0.04} />
       <div className="max-w-xl mx-auto px-6">
         <SectionOrnament />
         <h2 className="text-4xl md:text-5xl font-extralight text-center mb-3 tracking-tight">
