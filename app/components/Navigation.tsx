@@ -1,11 +1,36 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { Menu, X } from 'lucide-react'
 
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false)
+  const [activeSection, setActiveSection] = useState<string | null>(null)
+
+  // Active section highlighting via IntersectionObserver
+  useEffect(() => {
+    const SECTION_IDS = ['#story', '#jab-we-met', '#timeline', '#gallery', '#rsvp', '#messages', '#travel', '#contact']
+    const observers: IntersectionObserver[] = []
+
+    SECTION_IDS.forEach((id) => {
+      const el = document.querySelector(id)
+      if (!el) return
+      const obs = new IntersectionObserver(
+        ([entry]) => { if (entry.isIntersecting) setActiveSection(id) },
+        { rootMargin: '-40% 0px -40% 0px', threshold: 0 }
+      )
+      obs.observe(el)
+      observers.push(obs)
+    })
+
+    return () => observers.forEach((o) => o.disconnect())
+  }, [])
+
+  // Notify FloatingRSVPButton when mobile menu opens/closes
+  useEffect(() => {
+    window.dispatchEvent(new CustomEvent('nk:menu', { detail: { open: isOpen } }))
+  }, [isOpen])
 
   const sections = [
     { label: 'Our Story', href: '#story' },
@@ -63,18 +88,26 @@ export default function Navigation() {
             style={{ color: '#C49A28', background: 'rgba(196,154,40,0.1)', border: '1px solid rgba(196,154,40,0.25)' }}>
             🐱 Games
           </Link>
-          {sections.map((s) => (
-            <a
-              key={s.label}
-              href={s.href}
-              className="text-xs tracking-widest uppercase transition-colors"
-              style={{ color: '#7C5A3A', letterSpacing: '0.09em' }}
-              onMouseEnter={e => (e.currentTarget.style.color = '#C49A28')}
-              onMouseLeave={e => (e.currentTarget.style.color = '#7C5A3A')}
-            >
-              {s.label}
-            </a>
-          ))}
+          {sections.map((s) => {
+            const isActive = activeSection === s.href
+            return (
+              <a
+                key={s.label}
+                href={s.href}
+                className="text-xs tracking-widest uppercase transition-colors"
+                style={{
+                  color: isActive ? '#C49A28' : '#7C5A3A',
+                  letterSpacing: '0.09em',
+                  borderBottom: isActive ? '1.5px solid #C49A28' : '1.5px solid transparent',
+                  paddingBottom: 2,
+                }}
+                onMouseEnter={e => { if (!isActive) e.currentTarget.style.color = '#C49A28' }}
+                onMouseLeave={e => { if (!isActive) e.currentTarget.style.color = '#7C5A3A' }}
+              >
+                {s.label}
+              </a>
+            )
+          })}
         </div>
 
         {/* Mobile menu button */}
