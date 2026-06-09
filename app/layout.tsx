@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Toaster } from 'react-hot-toast'
 import 'leaflet/dist/leaflet.css'
 import './globals.css'
+import CursorEffect from './components/CursorEffect'
 
 export const metadata: Metadata = {
   title: 'Nidhi & Parag Wedding | December 4, 2026',
@@ -21,6 +22,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="bg-white text-slate-900">
+        <CursorEffect />
         {children}
         <Toaster position="bottom-center" toastOptions={{ duration: 4000 }} />
       </body>

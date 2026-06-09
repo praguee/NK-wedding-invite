@@ -170,9 +170,15 @@ body {
    Hero
    ========================================================================== */
 
-/* Responsive image position for hero-cover.jpg (sunset silhouette — couple upper-center) */
-.hero-image { object-position: center 22%; }
-@media (min-width: 768px) { .hero-image { object-position: center 20%; } }
+/* CSS background-image for hero — per-breakpoint focal control */
+.hero-bg {
+  background-image: url('/images/hero-cover.jpg');
+  background-size: cover;
+  background-position: center 30%;
+}
+@media (min-width: 768px) {
+  .hero-bg { background-position: center 20%; }
+}
 
 /* ==========================================================================
    Gallery
@@ -204,4 +210,18 @@ body {
 
 @media (prefers-reduced-motion: reduce) {
   .lotus-animate { animation: none !important; }
+}
+
+/* ==========================================================================
+   Cursor
+   ========================================================================== */
+
+@keyframes cursorPetalBurst {
+  0%   { transform: var(--petal-transform) translateY(-4px)  scaleY(1);   opacity: 0.9; }
+  70%  { transform: var(--petal-transform) translateY(-26px) scaleY(1.1); opacity: 0.8; }
+  100% { transform: var(--petal-transform) translateY(-36px) scaleY(0.4); opacity: 0;   }
+}
+
+.cursor-petal {
+  animation: cursorPetalBurst 0.65s ease-out forwards;
 }

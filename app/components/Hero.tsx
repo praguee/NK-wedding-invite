@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import Image from 'next/image'
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion'
 import { COUPLE, EVENT } from '@/lib/constants'
 import SectionOrnament from './SectionOrnament'
@@ -141,17 +140,9 @@ export default function Hero() {
         className="absolute inset-0"
         style={{ y: imageY, scale: 1.12 }}
       >
-        <Image
-          src="/images/hero-cover.jpg"
-          alt="Nidhi and Parag"
-          fill
-          priority
-          sizes="100vw"
-          className="hero-image"
-          style={{
-            objectFit: 'cover',
-            filter: 'contrast(1.08) saturate(1.15) brightness(0.92)',
-          }}
+        <div
+          className="hero-bg absolute inset-0"
+          style={{ filter: 'contrast(1.08) saturate(1.15) brightness(0.92)' }}
         />
       </motion.div>
 
