@@ -13,6 +13,7 @@
   touch-action: none;
   -webkit-tap-highlight-color: transparent;
   background: #0a0a14;
+  cursor: default;
 }
 
 .overlayFadingOut {
