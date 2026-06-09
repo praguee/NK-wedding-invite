@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { motion } from 'framer-motion'
 import SectionOrnament from '../components/SectionOrnament'
 
@@ -61,6 +62,13 @@ export default function MenuPage() {
       style={{ background: '#FFFDF6' }}
     >
       <div className="max-w-2xl mx-auto">
+        <Link
+          href="/"
+          className="inline-flex items-center gap-2 mb-12 text-xs uppercase tracking-widest transition-colors"
+          style={{ color: '#9C7A5A' }}
+        >
+          ← Invitation
+        </Link>
         <SectionOrnament />
 
         <h1 className="text-4xl md:text-5xl font-extralight text-center mb-3 tracking-tight">
