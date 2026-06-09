@@ -32,10 +32,10 @@ export default function Story() {
       <div className="max-w-4xl mx-auto px-6">
         <SectionOrnament />
         <h2 id="story-heading" className="text-4xl md:text-5xl font-extralight text-center mb-4 tracking-tight">
-          Our Story
+          The Way of Water
         </h2>
         <p className="text-center mb-14 text-sm" style={{ color: '#9C7A5A' }}>
-          The Way of Water <span style={{ opacity: 0.5 }}>— not directed by James Cameron</span>
+          <span style={{ opacity: 0.5 }}>not directed by James Cameron</span>
         </p>
 
         <div className="grid md:grid-cols-2 gap-12 items-start">

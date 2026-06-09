@@ -35,7 +35,7 @@ export default function Navigation() {
   }, [isOpen])
 
   const sections = [
-    { label: 'Our Story', href: '#story' },
+    { label: 'The Way of Water', href: '#story' },
     { label: 'Schedule',  href: '#timeline' },
     { label: 'Gallery',   href: '#gallery' },
     { label: 'Travel',    href: '#travel' },
