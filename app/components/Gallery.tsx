@@ -20,22 +20,12 @@ const PHOTOS = [
     objectPosition: 'center 60%',
   },
   {
-    id: 2,
-    src: '/images/gallery-wayofwater.jpg',
-    alt: 'The Way of Water — couple portrait',
-    index: '02',
-    title: 'The Way of Water',
-    caption: 'Water brought them together. Water will witness their forever.',
-    meta: 'Mumbai',
-    objectPosition: 'center 40%',
-  },
-  {
     id: 3,
     src: '/images/gallery-diwali-sparklers.jpg',
-    alt: 'Diwali with sparklers',
-    index: '03',
+    alt: 'Diwali together',
+    index: '02',
     title: 'Diwali',
-    caption: 'Sparklers, salwar, and the biggest smile.',
+    caption: 'The way they look at each other — always.',
     meta: 'Diwali · Mumbai',
     objectPosition: 'center 25%',
   },
@@ -43,7 +33,7 @@ const PHOTOS = [
     id: 4,
     src: '/images/gallery-diwali-lights.jpg',
     alt: 'Diwali fairy lights',
-    index: '04',
+    index: '03',
     title: 'Fairy Lights',
     caption: 'The kind of photo you frame.',
     meta: 'Diwali · Mumbai',
@@ -53,7 +43,7 @@ const PHOTOS = [
     id: 5,
     src: '/images/gallery-diwali2.jpg',
     alt: 'Diwali celebrations — dressed up',
-    index: '05',
+    index: '04',
     title: 'All Dressed Up',
     caption: 'He wore maroon. She wore purple. They matched the night.',
     meta: 'Diwali · Mumbai',
@@ -63,7 +53,7 @@ const PHOTOS = [
     id: 6,
     src: '/images/gallery-airport.jpg',
     alt: 'At the airport — long distance begins',
-    index: '06',
+    index: '05',
     title: 'See You Soon',
     caption: "The last flight before long distance. They didn't cry. Much.",
     meta: 'Mumbai Airport · Sept 2025',
@@ -73,7 +63,7 @@ const PHOTOS = [
     id: 7,
     src: '/images/gallery-mirror.jpg',
     alt: 'Mirror selfie in a hotel corridor',
-    index: '07',
+    index: '06',
     title: 'Mirror, Mirror',
     caption: 'Hotel corridor. The architecture posed too.',
     meta: 'Mumbai',
@@ -83,7 +73,7 @@ const PHOTOS = [
     id: 8,
     src: '/images/gallery-park.jpg',
     alt: 'Under the lights at a park at night',
-    index: '08',
+    index: '07',
     title: 'Under the Lights',
     caption: 'Pretending to look at the tree.',
     meta: 'Mumbai',
@@ -93,7 +83,7 @@ const PHOTOS = [
     id: 9,
     src: '/images/gallery-christmas.jpg',
     alt: 'First Christmas together',
-    index: '09',
+    index: '08',
     title: 'First Christmas',
     caption: "She wore the crown. He didn't argue.",
     meta: 'Christmas · Mumbai',
@@ -103,18 +93,18 @@ const PHOTOS = [
 
 // colSpan, rowSpan, revealDelay
 // Grid: 12 columns, auto-rows 240px
-// Row 1-2: wish(3,2) | way-of-water(5,1) | sparklers(4,2) | fairy-lights(5,1)
-// Row 3-4: diwali-blue(4,1) | airport(4,2) | mirror(4,1) | park(4,1) | christmas(4,1)
+// Row 1-2: wish(5,2) | diwali(4,1) | lights(3,1)
+// Row 2:   (wish)    | diwali2(4,1) | airport(3,1)
+// Row 3:   mirror(3,1) | park(4,1) | christmas(5,1)
 const GRID_CONFIG = [
-  { colSpan: 3, rowSpan: 2, delay: 0.00 },
-  { colSpan: 5, rowSpan: 1, delay: 0.10 },
-  { colSpan: 4, rowSpan: 2, delay: 0.20 },
-  { colSpan: 5, rowSpan: 1, delay: 0.14 },
-  { colSpan: 4, rowSpan: 1, delay: 0.00 },
-  { colSpan: 4, rowSpan: 2, delay: 0.10 },
-  { colSpan: 4, rowSpan: 1, delay: 0.20 },
-  { colSpan: 4, rowSpan: 1, delay: 0.06 },
-  { colSpan: 4, rowSpan: 1, delay: 0.20 },
+  { colSpan: 5, rowSpan: 2, delay: 0.00 },
+  { colSpan: 4, rowSpan: 1, delay: 0.10 },
+  { colSpan: 3, rowSpan: 1, delay: 0.20 },
+  { colSpan: 4, rowSpan: 1, delay: 0.14 },
+  { colSpan: 3, rowSpan: 1, delay: 0.06 },
+  { colSpan: 3, rowSpan: 1, delay: 0.00 },
+  { colSpan: 4, rowSpan: 1, delay: 0.10 },
+  { colSpan: 5, rowSpan: 1, delay: 0.20 },
 ]
 
 const EASE = [0.16, 1, 0.3, 1] as const

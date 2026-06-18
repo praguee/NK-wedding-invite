@@ -35,6 +35,9 @@ yarn-error.log*
 dist/
 .superpowers/
 
+# source image originals (high-res PNGs kept locally, not in git)
+/images/
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
