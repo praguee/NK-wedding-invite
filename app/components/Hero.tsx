@@ -215,6 +215,7 @@ export default function Hero() {
         <div style={{ lineHeight: 1.15, paddingBottom: '0.1em' }}>
           <motion.h1
             variants={heroUp}
+            aria-label={`${COUPLE.brideName} & ${COUPLE.groomName}`}
             className="font-extralight tracking-tight block"
             style={{
               fontSize: 'clamp(48px, 11vw, 92px)',
@@ -231,8 +232,9 @@ export default function Hero() {
           >
             ✦ &amp; ✦
           </motion.p>
-          <motion.h1
+          <motion.div
             variants={heroUp}
+            aria-hidden="true"
             className="font-extralight tracking-tight block"
             style={{
               fontSize: 'clamp(48px, 11vw, 92px)',
@@ -241,7 +243,7 @@ export default function Hero() {
             }}
           >
             {COUPLE.groomName}
-          </motion.h1>
+          </motion.div>
         </div>
 
         <motion.p
@@ -254,7 +256,7 @@ export default function Hero() {
 
         {/* ── Countdown ── */}
         {isWeddingDay ? (
-          <motion.p variants={heroUp} className="text-2xl font-light animate-pulse mb-10">
+          <motion.p variants={heroUp} className="text-2xl font-light motion-safe:animate-pulse mb-10">
             Today&apos;s the day! 🎉
           </motion.p>
         ) : (
@@ -343,8 +345,10 @@ export default function Hero() {
           <motion.a
             href="#rsvp"
             whileHover={{ scale: 1.06 }}
+            whileFocus={{ scale: 1.06 }}
             whileTap={{ scale: 0.96 }}
             transition={{ type: 'spring', stiffness: 380, damping: 18 }}
+            className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[rgba(196,154,40,0.8)]"
             style={{
               display: 'inline-block',
               background: 'linear-gradient(135deg, #B8850A, #E8C547, #C49A28)',
