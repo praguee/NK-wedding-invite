@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import SectionOrnament from './SectionOrnament'
 import LotusDecoration from './LotusDecoration'
+import Image from 'next/image'
 import { SlideIn, StaggerContainer, StaggerItem, TextReveal } from './ScrollReveal'
 
 const RELATIONSHIP_START = new Date('2023-07-08T00:00:00+05:30')
@@ -93,31 +94,18 @@ export default function Story() {
           {/* Photo panel — slides in from right */}
           <SlideIn from="right" delay={0.12} className="order-1 md:order-2 space-y-4">
             <motion.div
-              className="aspect-[4/5] rounded-2xl flex items-center justify-center relative overflow-hidden"
-              style={{
-                background: 'linear-gradient(160deg, #f0e8d8 0%, #e8d5c4 50%, #f5edd8 100%)',
-                boxShadow: '0 8px 40px rgba(196,154,40,0.15)',
-              }}
+              className="aspect-[4/5] rounded-2xl relative overflow-hidden"
+              style={{ boxShadow: '0 8px 40px rgba(196,154,40,0.15)' }}
               whileHover={{ scale: 1.01 }}
               transition={{ duration: 0.4 }}
             >
-              <div className="text-center p-8">
-                <p className="text-5xl mb-4" role="presentation" aria-hidden="true">💧</p>
-                <p className="font-light text-sm italic leading-relaxed" style={{ color: '#9C7A5A' }}>
-                  Engagement &amp; pre-wedding<br />photos coming soon
-                </p>
-              </div>
-              {[
-                { style: { top:12,left:12 },    d:'M0 32 L0 0 L32 0',   cx:0,  cy:0  },
-                { style: { top:12,right:12 },   d:'M32 32 L32 0 L0 0',  cx:32, cy:0  },
-                { style: { bottom:12,left:12 }, d:'M0 0 L0 32 L32 32',  cx:0,  cy:32 },
-                { style: { bottom:12,right:12 },d:'M32 0 L32 32 L0 32', cx:32, cy:32 },
-              ].map((f, i) => (
-                <svg key={i} aria-hidden="true" style={{ position:'absolute', width:32, height:32, opacity:0.35, ...f.style }} viewBox="0 0 32 32">
-                  <path d={f.d} fill="none" stroke="#C49A28" strokeWidth="1.5"/>
-                  <circle cx={f.cx} cy={f.cy} r="3" fill="#C49A28"/>
-                </svg>
-              ))}
+              <Image
+                src="/images/story-wayofwater.jpg"
+                alt="Nidhi and Parag — The Way of Water"
+                fill
+                sizes="(max-width: 768px) 100vw, 40vw"
+                style={{ objectFit: 'cover', objectPosition: 'center 30%' }}
+              />
             </motion.div>
             <div className="glass-gold rounded-2xl px-5 py-4 text-center">
               <p className="text-xs tracking-widest uppercase mb-1" style={{ color: '#C49A28' }}>The Wedding</p>

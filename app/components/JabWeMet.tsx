@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import SectionOrnament from './SectionOrnament'
 import LotusDecoration from './LotusDecoration'
+import Image from 'next/image'
 import { SlideIn, StaggerContainer, StaggerItem, TextReveal } from './ScrollReveal'
 
 const FIRST_MET = new Date('2022-12-23T00:00:00+05:30')
@@ -99,30 +100,17 @@ export default function JabWeMet() {
           <SlideIn from="right" delay={0.12}>
             <motion.div
               className="aspect-[4/5] rounded-2xl relative overflow-hidden"
-              style={{
-                background: 'linear-gradient(160deg, #f0e8d8, #e8d5c4)',
-                boxShadow: '0 8px 40px rgba(196,154,40,0.12)',
-              }}
+              style={{ boxShadow: '0 8px 40px rgba(196,154,40,0.12)' }}
               whileHover={{ scale: 1.01 }}
               transition={{ duration: 0.4 }}
             >
-              {[
-                { top: 12, left: 12,  d: 'M0 32 L0 0 L32 0',   cx: 0,  cy: 0  },
-                { top: 12, right: 12, d: 'M32 32 L32 0 L0 0',  cx: 32, cy: 0  },
-                { bottom: 12, left: 12,  d: 'M0 0 L0 32 L32 32', cx: 0, cy: 32 },
-                { bottom: 12, right: 12, d: 'M32 0 L32 32 L0 32',cx: 32,cy: 32 },
-              ].map((f, i) => (
-                <svg key={i} aria-hidden="true" style={{ position: 'absolute', width: 32, height: 32, opacity: 0.35, ...f }} viewBox="0 0 32 32">
-                  <path d={f.d} fill="none" stroke="#C49A28" strokeWidth="1.5"/>
-                  <circle cx={f.cx} cy={f.cy} r="3" fill="#C49A28"/>
-                </svg>
-              ))}
-              <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 p-8">
-                <span role="presentation" aria-hidden="true" style={{ fontSize: 40 }}>📸</span>
-                <p className="text-center text-sm italic" style={{ color: '#9C7A5A' }}>
-                  Photos from when they met<br/>— coming soon
-                </p>
-              </div>
+              <Image
+                src="/images/jabwemet.jpg"
+                alt="Nidhi and Parag — Jab We Met"
+                fill
+                sizes="(max-width: 768px) 100vw, 40vw"
+                style={{ objectFit: 'cover', objectPosition: 'center 25%' }}
+              />
             </motion.div>
           </SlideIn>
 
