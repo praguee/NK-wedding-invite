@@ -2,56 +2,122 @@
 
 import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion'
 import SectionOrnament from './SectionOrnament'
-import { StaggerContainer, StaggerItem, TextReveal } from './ScrollReveal'
+import { TextReveal } from './ScrollReveal'
 import { useMediaQuery } from '@/app/hooks/useMediaQuery'
 import MobileGallery from './MobileGallery'
 
 const PHOTOS = [
   {
     id: 1,
-    src: '/images/gallery-diwali.jpg',
-    alt: 'Diwali celebrations',
+    src: '/images/gallery-wish.jpg',
+    alt: 'A wish written in Birmingham',
     index: '01',
-    title: 'Diwali',
-    caption: "The lights were beautiful. They didn't notice.",
-    meta: '2024',
-    tall: true,
+    title: 'A Wish',
+    caption: "She wrote it down in Birmingham. You're reading it.",
+    meta: 'Birmingham · 2025',
+    objectPosition: 'center 60%',
   },
   {
     id: 2,
-    src: '/images/gallery-agentjacks.jpg',
-    alt: "Agent Jack's",
+    src: '/images/gallery-wayofwater.jpg',
+    alt: 'The Way of Water — couple portrait',
     index: '02',
-    title: "Agent Jack's",
-    caption: 'Negotiated drinks for 30 mins. Got two. Fully worth it.',
-    meta: 'Birmingham',
-    tall: false,
+    title: 'The Way of Water',
+    caption: 'Water brought them together. Water will witness their forever.',
+    meta: 'Mumbai',
+    objectPosition: 'center 40%',
   },
   {
     id: 3,
-    src: '/images/gallery-wish.jpg',
-    alt: 'A wish in Birmingham',
+    src: '/images/gallery-diwali-sparklers.jpg',
+    alt: 'Diwali with sparklers',
     index: '03',
-    title: 'A Wish',
-    caption: "She wrote it down in Birmingham. You're reading it.",
-    meta: 'Birmingham',
-    tall: false,
+    title: 'Diwali',
+    caption: 'Sparklers, salwar, and the biggest smile.',
+    meta: 'Diwali · Mumbai',
+    objectPosition: 'center 25%',
   },
   {
     id: 4,
-    src: '/images/gallery-longdistance.jpg',
-    alt: 'Long distance begins',
+    src: '/images/gallery-diwali-lights.jpg',
+    alt: 'Diwali fairy lights',
     index: '04',
-    title: 'Sept 23, 2025',
-    caption: 'Two time zones. One very expensive phone bill. Still here.',
-    meta: 'Long Distance',
-    tall: true,
+    title: 'Fairy Lights',
+    caption: 'The kind of photo you frame.',
+    meta: 'Diwali · Mumbai',
+    objectPosition: 'center 25%',
+  },
+  {
+    id: 5,
+    src: '/images/gallery-diwali2.jpg',
+    alt: 'Diwali celebrations — dressed up',
+    index: '05',
+    title: 'All Dressed Up',
+    caption: 'He wore maroon. She wore purple. They matched the night.',
+    meta: 'Diwali · Mumbai',
+    objectPosition: 'center 20%',
+  },
+  {
+    id: 6,
+    src: '/images/gallery-airport.jpg',
+    alt: 'At the airport — long distance begins',
+    index: '06',
+    title: 'See You Soon',
+    caption: "The last flight before long distance. They didn't cry. Much.",
+    meta: 'Mumbai Airport · Sept 2025',
+    objectPosition: 'center 30%',
+  },
+  {
+    id: 7,
+    src: '/images/gallery-mirror.jpg',
+    alt: 'Mirror selfie in a hotel corridor',
+    index: '07',
+    title: 'Mirror, Mirror',
+    caption: 'Hotel corridor. The architecture posed too.',
+    meta: 'Mumbai',
+    objectPosition: 'center 15%',
+  },
+  {
+    id: 8,
+    src: '/images/gallery-park.jpg',
+    alt: 'Under the lights at a park at night',
+    index: '08',
+    title: 'Under the Lights',
+    caption: 'Pretending to look at the tree.',
+    meta: 'Mumbai',
+    objectPosition: 'center 30%',
+  },
+  {
+    id: 9,
+    src: '/images/gallery-christmas.jpg',
+    alt: 'First Christmas together',
+    index: '09',
+    title: 'First Christmas',
+    caption: "She wore the crown. He didn't argue.",
+    meta: 'Christmas · Mumbai',
+    objectPosition: 'center 25%',
   },
 ]
 
-const EASE = [0.25, 0.46, 0.45, 0.94] as const
+// colSpan, rowSpan, revealDelay
+// Grid: 12 columns, auto-rows 240px
+// Row 1-2: wish(3,2) | way-of-water(5,1) | sparklers(4,2) | fairy-lights(5,1)
+// Row 3-4: diwali-blue(4,1) | airport(4,2) | mirror(4,1) | park(4,1) | christmas(4,1)
+const GRID_CONFIG = [
+  { colSpan: 3, rowSpan: 2, delay: 0.00 },
+  { colSpan: 5, rowSpan: 1, delay: 0.10 },
+  { colSpan: 4, rowSpan: 2, delay: 0.20 },
+  { colSpan: 5, rowSpan: 1, delay: 0.14 },
+  { colSpan: 4, rowSpan: 1, delay: 0.00 },
+  { colSpan: 4, rowSpan: 2, delay: 0.10 },
+  { colSpan: 4, rowSpan: 1, delay: 0.20 },
+  { colSpan: 4, rowSpan: 1, delay: 0.06 },
+  { colSpan: 4, rowSpan: 1, delay: 0.20 },
+]
+
+const EASE = [0.16, 1, 0.3, 1] as const
 
 function PhotoCard({
   photo,
@@ -63,109 +129,155 @@ function PhotoCard({
   const [hovered, setHovered] = useState(false)
 
   return (
-    <motion.div
-      className="relative overflow-hidden cursor-pointer"
-      style={{ borderRadius: 20, width: '100%', height: '100%' }}
-      whileHover={{ scale: 1.015 }}
-      transition={{ duration: 0.4, ease: EASE }}
-      onHoverStart={() => setHovered(true)}
-      onHoverEnd={() => setHovered(false)}
+    <div
+      className="relative overflow-hidden cursor-pointer w-full h-full"
+      style={{ borderRadius: 14 }}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
       onClick={onOpen}
+      role="button"
+      tabIndex={0}
+      onKeyDown={e => e.key === 'Enter' && onOpen()}
+      aria-label={`Open photo: ${photo.title}`}
     >
-      {/* Index ghost number */}
+      {/* Index — ghost number, fades when hovered */}
       <motion.span
         style={{
-          position: 'absolute', top: 14, left: 18, zIndex: 10,
-          fontSize: 11, fontWeight: 700, letterSpacing: '0.14em',
-          color: 'rgba(255,255,255,0.35)', pointerEvents: 'none',
+          position: 'absolute', top: 14, left: 16, zIndex: 10,
+          fontSize: 10, fontWeight: 700, letterSpacing: '0.16em',
+          color: 'rgba(255,255,255,0.32)', pointerEvents: 'none',
         }}
         animate={{ opacity: hovered ? 0 : 1 }}
-        transition={{ duration: 0.2 }}
+        transition={{ duration: 0.18 }}
       >
         {photo.index}
       </motion.span>
 
-      {/* Photo — zoom on hover */}
+      {/* Image — zooms on hover */}
       <motion.div
         className="absolute inset-0"
         animate={{ scale: hovered ? 1.07 : 1 }}
-        transition={{ duration: 0.7, ease: EASE }}
+        transition={{ duration: 1.0, ease: EASE }}
       >
         <Image
           src={photo.src}
           alt={photo.alt}
           fill
-          sizes="(max-width: 768px) 100vw, 50vw"
-          style={{ objectFit: 'cover', objectPosition: 'center 20%' }}
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          style={{ objectFit: 'cover', objectPosition: photo.objectPosition }}
         />
       </motion.div>
 
-      {/* Gradient overlay — CSS for gradient (framer-motion can't interpolate gradients) */}
-      <div style={{
-        position: 'absolute', inset: 0,
-        background: hovered
-          ? 'linear-gradient(to top, rgba(3,1,10,0.94) 0%, rgba(3,1,10,0.4) 50%, rgba(3,1,10,0.1) 100%)'
-          : 'linear-gradient(to top, rgba(3,1,10,0.75) 0%, rgba(3,1,10,0.05) 55%, transparent 100%)',
-        transition: 'background 0.4s ease',
-      }} />
+      {/* Gold diagonal sheen — sweeps on hover */}
+      <motion.div
+        style={{
+          position: 'absolute', inset: 0, pointerEvents: 'none',
+          background: 'linear-gradient(125deg, transparent 25%, rgba(196,154,40,0.15) 50%, transparent 75%)',
+          backgroundSize: '250% 250%',
+        }}
+        animate={{
+          opacity: hovered ? 1 : 0,
+          backgroundPosition: hovered ? '100% 100%' : '0% 0%',
+        }}
+        transition={{ duration: 0.8, ease: EASE }}
+      />
+
+      {/* Dark vignette — deepens on hover */}
+      <div
+        style={{
+          position: 'absolute', inset: 0, pointerEvents: 'none',
+          background: hovered
+            ? 'linear-gradient(to top, rgba(3,1,10,0.92) 0%, rgba(3,1,10,0.3) 50%, rgba(3,1,10,0.06) 100%)'
+            : 'linear-gradient(to top, rgba(3,1,10,0.70) 0%, rgba(3,1,10,0.04) 55%, transparent 100%)',
+          transition: 'background 0.5s ease',
+        }}
+      />
 
       {/* Bottom content */}
-      <motion.div
-        style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '20px 20px 22px' }}
-        animate={{ y: hovered ? 0 : 5 }}
-        transition={{ duration: 0.35, ease: EASE }}
-      >
-        <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 12 }}>
+      <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '18px 16px 18px' }}>
+        <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 8 }}>
           <div style={{ flex: 1, minWidth: 0 }}>
+            {/* Meta label */}
             <span style={{
-              display: 'inline-block', fontSize: 9, fontWeight: 700,
-              letterSpacing: '0.14em', textTransform: 'uppercase',
-              color: '#C49A28', marginBottom: 6,
-            }}>{photo.meta}</span>
+              display: 'block', fontSize: 8, fontWeight: 700,
+              letterSpacing: '0.15em', textTransform: 'uppercase',
+              color: '#C49A28', marginBottom: 5, opacity: 0.9,
+            }}>
+              {photo.meta}
+            </span>
+
+            {/* Title */}
             <motion.p
               style={{ fontWeight: 300, color: 'white', lineHeight: 1.1 }}
-              animate={{ fontSize: hovered ? 20 : 17 }}
-              transition={{ duration: 0.3 }}
+              animate={{ fontSize: hovered ? 19 : 15 }}
+              transition={{ duration: 0.35, ease: EASE }}
             >
               {photo.title}
             </motion.p>
+
+            {/* Caption — maxHeight slide-up */}
             <motion.p
               style={{
-                fontSize: 12, color: 'rgba(255,255,255,0.6)', lineHeight: 1.5,
+                fontSize: 12, color: 'rgba(255,255,255,0.58)', lineHeight: 1.5,
                 overflow: 'hidden',
               }}
               animate={{
-                maxHeight: hovered ? 80 : 0,
+                maxHeight: hovered ? 70 : 0,
                 opacity: hovered ? 1 : 0,
-                marginTop: hovered ? 6 : 0,
+                marginTop: hovered ? 5 : 0,
               }}
-              transition={{ duration: 0.35 }}
+              transition={{ duration: 0.38, ease: EASE }}
             >
               {photo.caption}
             </motion.p>
           </div>
 
-          {/* Expand button */}
+          {/* Expand arrow */}
           <motion.div
             style={{
-              width: 38, height: 38, borderRadius: '50%',
-              border: '1px solid rgba(255,255,255,0.4)',
+              width: 34, height: 34, borderRadius: '50%', flexShrink: 0,
+              border: '1px solid rgba(255,255,255,0.32)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              color: 'white', fontSize: 16, flexShrink: 0,
+              color: 'white',
             }}
-            animate={{
-              opacity: hovered ? 1 : 0,
-              scale: hovered ? 1 : 0.65,
-              rotate: hovered ? 0 : -45,
-            }}
+            animate={{ opacity: hovered ? 1 : 0, scale: hovered ? 1 : 0.55, rotate: hovered ? 0 : -45 }}
             transition={{ duration: 0.28, ease: EASE }}
           >
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+            <svg width="13" height="13" viewBox="0 0 14 14" fill="none" aria-hidden="true">
               <path d="M2 12L12 2M12 2H5M12 2V9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
           </motion.div>
         </div>
-      </motion.div>
+      </div>
+    </div>
+  )
+}
+
+// Wipe-from-bottom reveal — clip-path slides up to reveal image
+function WipeReveal({
+  children,
+  delay = 0,
+  reducedMotion,
+}: {
+  children: React.ReactNode
+  delay?: number
+  reducedMotion: boolean
+}) {
+  return (
+    <motion.div
+      style={{ height: '100%', borderRadius: 14 }}
+      initial={reducedMotion
+        ? { opacity: 0, y: 12 }
+        : { clipPath: 'inset(0 0 100% 0 round 14px)', opacity: 0.7 }
+      }
+      whileInView={reducedMotion
+        ? { opacity: 1, y: 0 }
+        : { clipPath: 'inset(0 0 0% 0 round 14px)', opacity: 1 }
+      }
+      viewport={{ once: true, margin: '-48px' }}
+      transition={{ duration: reducedMotion ? 0.4 : 1.15, ease: EASE, delay }}
+    >
+      {children}
     </motion.div>
   )
 }
@@ -173,19 +285,19 @@ function PhotoCard({
 export default function Gallery() {
   const [lightbox, setLightbox] = useState<number | null>(null)
   const isMobile = useMediaQuery('(max-width: 767px)')
+  const reducedMotion = useReducedMotion() ?? false
   const lightboxMounted = useRef(false)
 
-  // Notify FloatingRSVPButton when lightbox opens/closes — skip initial mount
   useEffect(() => {
     if (!lightboxMounted.current) { lightboxMounted.current = true; return }
     window.dispatchEvent(new CustomEvent('nk:lightbox', { detail: { open: lightbox !== null } }))
   }, [lightbox])
+
   const idx     = PHOTOS.findIndex(p => p.id === lightbox)
   const current = PHOTOS[idx]
   const prev    = () => setLightbox(PHOTOS[(idx - 1 + PHOTOS.length) % PHOTOS.length].id)
   const next    = () => setLightbox(PHOTOS[(idx + 1) % PHOTOS.length].id)
 
-  // Keyboard navigation for lightbox
   useEffect(() => {
     if (lightbox === null) return
     const handler = (e: KeyboardEvent) => {
@@ -199,22 +311,38 @@ export default function Gallery() {
 
   return (
     <section id="gallery" className="py-20 bg-white">
-      <div className="max-w-5xl mx-auto px-6">
-        <div className="mb-10">
+      <div className="max-w-6xl mx-auto px-6">
+
+        {/* Header */}
+        <div className="mb-12">
           <SectionOrnament />
           <div className="flex items-end justify-between">
             <div>
               <TextReveal delay={0.05}>
                 <h2 className="text-4xl md:text-5xl lg:text-6xl font-extralight tracking-tight">Gallery</h2>
               </TextReveal>
-              <p className="text-sm mt-1" style={{ color: '#9C7A5A' }}>
+              <motion.p
+                className="text-sm mt-1"
+                style={{ color: '#9C7A5A' }}
+                initial={{ opacity: 0, y: 6 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.3, duration: 0.6, ease: EASE }}
+              >
                 {PHOTOS.length} moments · more coming
-              </p>
+              </motion.p>
             </div>
             {!isMobile && (
-            <p className="text-xs tracking-widest uppercase" style={{ color: '#C4B09A', marginBottom: 4 }}>
-              Hover to read
-            </p>
+              <motion.p
+                className="text-xs tracking-widest uppercase"
+                style={{ color: '#C4B09A', marginBottom: 4 }}
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.5, duration: 0.6 }}
+              >
+                Hover to read
+              </motion.p>
             )}
           </div>
         </div>
@@ -224,36 +352,36 @@ export default function Gallery() {
           <MobileGallery photos={PHOTOS} onOpen={(id) => setLightbox(id)} />
         )}
 
-        {/* Tablet + Desktop: editorial asymmetric grid */}
+        {/* Desktop: editorial asymmetric grid */}
         {!isMobile && (
-        <StaggerContainer className="grid grid-cols-1 md:grid-cols-12 md:auto-rows-[340px] lg:auto-rows-auto gap-3">
-
-          <StaggerItem className="md:col-span-5" style={{ minHeight: 320 }}>
-            <div style={{ height: '100%', minHeight: 320, position: 'relative' }}>
-              <PhotoCard photo={PHOTOS[0]} onOpen={() => setLightbox(PHOTOS[0].id)} />
-            </div>
-          </StaggerItem>
-
-          <StaggerItem className="md:col-span-4 flex flex-col gap-3">
-            <div style={{ flex: 1, minHeight: 200, position: 'relative' }}>
-              <PhotoCard photo={PHOTOS[1]} onOpen={() => setLightbox(PHOTOS[1].id)} />
-            </div>
-            <div style={{ flex: 1, minHeight: 200, position: 'relative' }}>
-              <PhotoCard photo={PHOTOS[2]} onOpen={() => setLightbox(PHOTOS[2].id)} />
-            </div>
-          </StaggerItem>
-
-          <StaggerItem className="md:col-span-3" style={{ minHeight: 320 }}>
-            <div style={{ height: '100%', minHeight: 320, position: 'relative' }}>
-              <PhotoCard photo={PHOTOS[3]} onOpen={() => setLightbox(PHOTOS[3].id)} />
-            </div>
-          </StaggerItem>
-
-        </StaggerContainer>
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(12, 1fr)',
+            gridAutoRows: '240px',
+            gap: 10,
+          }}>
+            {PHOTOS.map((photo, i) => {
+              const cfg = GRID_CONFIG[i]
+              return (
+                <div
+                  key={photo.id}
+                  style={{
+                    gridColumn: `span ${cfg.colSpan}`,
+                    gridRow: `span ${cfg.rowSpan}`,
+                    display: 'flex',
+                  }}
+                >
+                  <WipeReveal delay={cfg.delay} reducedMotion={reducedMotion}>
+                    <PhotoCard photo={photo} onOpen={() => setLightbox(photo.id)} />
+                  </WipeReveal>
+                </div>
+              )
+            })}
+          </div>
         )}
       </div>
 
-      {/* ── Lightbox with AnimatePresence ── */}
+      {/* ── Lightbox ── */}
       <AnimatePresence>
         {lightbox !== null && current && (
           <motion.div
@@ -261,9 +389,9 @@ export default function Gallery() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.22 }}
+            transition={{ duration: 0.24 }}
             className="fixed inset-0 z-50 flex items-center justify-center p-4"
-            style={{ background: 'rgba(3,1,10,0.96)' }}
+            style={{ background: 'rgba(3,1,10,0.97)', backdropFilter: 'blur(10px)' }}
             onClick={() => setLightbox(null)}
             role="dialog"
             aria-modal="true"
@@ -274,27 +402,27 @@ export default function Gallery() {
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ delay: 0.1 }}
+              transition={{ delay: 0.12 }}
               className="absolute top-5 right-5 p-2"
-              style={{ color: 'rgba(255,255,255,0.5)' }}
+              style={{ color: 'rgba(255,255,255,0.45)' }}
               onClick={() => setLightbox(null)}
-              whileHover={{ color: 'rgba(255,255,255,1)', scale: 1.1 }}
+              whileHover={{ color: 'white', scale: 1.12 }}
               aria-label="Close gallery"
             >
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
                 <path d="M4 4L20 20M20 4L4 20" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
               </svg>
             </motion.button>
 
             {/* Prev */}
             <motion.button
-              initial={{ opacity: 0, x: -10 }}
+              initial={{ opacity: 0, x: -12 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0 }}
               className="absolute left-4 top-1/2 -translate-y-1/2 p-3"
-              style={{ color: 'rgba(255,255,255,0.4)' }}
+              style={{ color: 'rgba(255,255,255,0.35)' }}
               onClick={e => { e.stopPropagation(); prev() }}
-              whileHover={{ color: 'white', x: -2 }}
+              whileHover={{ color: 'white', x: -3 }}
               aria-label="Previous photo"
             >
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -302,32 +430,35 @@ export default function Gallery() {
               </svg>
             </motion.button>
 
-            {/* Photo frame — scales in on open */}
+            {/* Photo frame */}
             <motion.div
-              initial={{ scale: 0.88, opacity: 0, y: 20 }}
+              initial={{ scale: 0.88, opacity: 0, y: 28 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
-              exit={{ scale: 0.88, opacity: 0, y: 20 }}
-              transition={{ duration: 0.3, ease: EASE }}
+              exit={{ scale: 0.88, opacity: 0, y: 28 }}
+              transition={{ duration: 0.38, ease: EASE }}
               className="relative rounded-2xl overflow-hidden"
               style={{ maxWidth: 'min(440px, 90vw)', maxHeight: '88vh', aspectRatio: '3/4', width: '100%' }}
               onClick={e => e.stopPropagation()}
             >
-              {/* Photo — fades when navigating between photos */}
               <AnimatePresence mode="wait">
                 <motion.div
                   key={current.id}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.2 }}
+                  initial={{ opacity: 0, scale: 1.04 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.96 }}
+                  transition={{ duration: 0.28, ease: EASE }}
                   className="absolute inset-0"
                 >
-                  <Image src={current.src} alt={current.alt} fill
-                    style={{ objectFit: 'cover', objectPosition: 'center 20%' }} />
+                  <Image
+                    src={current.src}
+                    alt={current.alt}
+                    fill
+                    style={{ objectFit: 'cover', objectPosition: current.objectPosition }}
+                  />
                 </motion.div>
               </AnimatePresence>
 
-              {/* Caption overlay */}
+              {/* Caption */}
               <div style={{
                 position: 'absolute', bottom: 0, left: 0, right: 0,
                 background: 'linear-gradient(to top, rgba(3,1,10,0.95) 0%, transparent 100%)',
@@ -337,19 +468,28 @@ export default function Gallery() {
                   {current.meta}
                 </span>
                 <p style={{ color: 'white', fontSize: 20, fontWeight: 300, marginBottom: 6 }}>{current.title}</p>
-                <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: 13, lineHeight: 1.5 }}>{current.caption}</p>
+                <p style={{ color: 'rgba(255,255,255,0.58)', fontSize: 13, lineHeight: 1.5 }}>{current.caption}</p>
               </div>
+
+              {/* Counter inside frame */}
+              <span style={{
+                position: 'absolute', top: 16, left: 18,
+                fontSize: 10, fontWeight: 700, letterSpacing: '0.14em',
+                color: 'rgba(255,255,255,0.35)',
+              }}>
+                {current.index}
+              </span>
             </motion.div>
 
             {/* Next */}
             <motion.button
-              initial={{ opacity: 0, x: 10 }}
+              initial={{ opacity: 0, x: 12 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0 }}
               className="absolute right-4 top-1/2 -translate-y-1/2 p-3"
-              style={{ color: 'rgba(255,255,255,0.4)' }}
+              style={{ color: 'rgba(255,255,255,0.35)' }}
               onClick={e => { e.stopPropagation(); next() }}
-              whileHover={{ color: 'white', x: 2 }}
+              whileHover={{ color: 'white', x: 3 }}
               aria-label="Next photo"
             >
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -357,7 +497,7 @@ export default function Gallery() {
               </svg>
             </motion.button>
 
-            <p className="absolute bottom-5 text-white/25 text-xs tracking-widest">
+            <p className="absolute bottom-5 text-xs tracking-widest" style={{ color: 'rgba(255,255,255,0.22)' }}>
               {idx + 1} — {PHOTOS.length}
             </p>
           </motion.div>
