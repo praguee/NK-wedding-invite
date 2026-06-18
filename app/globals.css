@@ -174,10 +174,10 @@ body {
 .hero-bg {
   background-image: url('/images/hero-cover.jpg');
   background-size: cover;
-  background-position: center 30%;
+  background-position: 35% center;
 }
 @media (min-width: 768px) {
-  .hero-bg { background-position: center 20%; }
+  .hero-bg { background-position: 40% center; }
 }
 
 /* ==========================================================================
