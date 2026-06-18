@@ -8,8 +8,8 @@ interface IntroScreenProps {
   onUnlock: () => void
 }
 
-const BIRMINGHAM = { lat: 52.4862, lng: -1.8904, color: '#fb7185', label: 'Birmingham · Nidhi 👧', radius: 90 }
-const MUMBAI     = { lat: 19.076,  lng: 72.877,  color: '#fbbf24', label: 'Mumbai · Parag 👦',    radius: 110 }
+const BIRMINGHAM = { lat: 52.4862, lng: -1.8904, color: '#8B2252', label: 'Birmingham · Nidhi', radius: 90 }
+const MUMBAI     = { lat: 19.076,  lng: 72.877,  color: '#C49A28', label: 'Mumbai · Parag',      radius: 110 }
 
 // Geographic zones: [minLat, maxLat, minLng, maxLng, message]
 // Checked in order — first match wins. Put specific cities before large regions.
@@ -130,7 +130,7 @@ export default function IntroScreen({ onUnlock }: IntroScreenProps) {
         attributionControl: false,
       })
 
-      L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
         subdomains: 'abcd',
         maxZoom: 19,
       }).addTo(map)
@@ -312,7 +312,7 @@ export default function IntroScreen({ onUnlock }: IntroScreenProps) {
         {/* Static dashed arc */}
         <path
           d={pathD}
-          stroke="rgba(255,255,255,0.10)"
+          stroke="rgba(196,154,40,0.20)"
           strokeWidth="1"
           strokeDasharray="4 7"
           fill="none"
@@ -321,7 +321,7 @@ export default function IntroScreen({ onUnlock }: IntroScreenProps) {
         {/* Animated glowing arc that draws itself */}
         <path
           d={pathD}
-          stroke="rgba(255,255,255,0.22)"
+          stroke="rgba(196,154,40,0.50)"
           strokeWidth="1.5"
           fill="none"
           strokeDasharray="60 9999"
@@ -352,7 +352,7 @@ export default function IntroScreen({ onUnlock }: IntroScreenProps) {
           {/* Plane icon */}
           <path
             d="M0,-7 L3,3 L0,1 L-3,3 Z"
-            fill="white"
+            fill="#C49A28"
             transform="scale(1.4)"
           />
         </g>
@@ -401,7 +401,7 @@ export default function IntroScreen({ onUnlock }: IntroScreenProps) {
               style={{ objectFit: 'cover', objectPosition: 'center center' }} />
           </div>
           {/* Label pill */}
-          <div className={styles.cityLabel} style={{ marginTop: 0 }}>Birmingham · Nidhi 👧</div>
+          <div className={styles.cityLabel} style={{ marginTop: 0 }}>{BIRMINGHAM.label}</div>
           {/* Connecting line to map point */}
           <div style={{ width: 1, height: 8, background: `${BIRMINGHAM.color}80` }} />
         </div>
@@ -439,7 +439,7 @@ export default function IntroScreen({ onUnlock }: IntroScreenProps) {
             <Image src="/images/parag-avatar.png" alt="Parag" fill
               style={{ objectFit: 'cover', objectPosition: '50% 8%' }} />
           </div>
-          <div className={styles.cityLabel} style={{ marginTop: 0 }}>Mumbai · Parag 👦</div>
+          <div className={styles.cityLabel} style={{ marginTop: 0 }}>{MUMBAI.label}</div>
           <div style={{ width: 1, height: 8, background: `${MUMBAI.color}80` }} />
         </div>
       )}
@@ -464,7 +464,7 @@ export default function IntroScreen({ onUnlock }: IntroScreenProps) {
           onPointerMove={onPointerMove}
           onPointerUp={onPointerUp}
           viewBox="0 0 24 24"
-          fill="white"
+          fill="#C49A28"
           xmlns="http://www.w3.org/2000/svg"
         >
           <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z" />
