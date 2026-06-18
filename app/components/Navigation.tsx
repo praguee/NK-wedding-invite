@@ -93,7 +93,7 @@ export default function Navigation() {
           <Link href="/games"
             className="text-xs tracking-widest uppercase px-3 py-1.5 rounded-full transition-all font-medium"
             style={{ color: '#C49A28', background: 'rgba(196,154,40,0.1)', border: '1px solid rgba(196,154,40,0.25)' }}>
-            🐱 Games
+            Trivia
           </Link>
           {sections.map((s) => {
             const isActive = activeSection === s.href
@@ -154,7 +154,7 @@ export default function Navigation() {
             style={{ color: '#C49A28', background: 'rgba(196,154,40,0.05)', borderBottom: '1px solid rgba(196,154,40,0.1)', letterSpacing: '0.09em' }}
             onClick={() => setIsOpen(false)}
           >
-            🐱 Games
+            Trivia
           </Link>
           {sections.map((s) => (
             <a
