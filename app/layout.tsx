@@ -29,7 +29,7 @@ const greatVibes = Great_Vibes({
 
 export const metadata: Metadata = {
   title: 'Nidhi & Parag Wedding | December 4, 2026',
-  description: 'Join us for our Hindu Maharashtrian wedding at Abhishek Farms, Yeoor Hills, Thane on December 4, 2026.',
+  description: 'Join us for our wedding at Abhishek Farms, Yeoor Hills, Thane on December 4, 2026.',
   openGraph: {
     title: 'Nidhi & Parag Wedding',
     description: 'Join us for our wedding celebration on December 4, 2026',
