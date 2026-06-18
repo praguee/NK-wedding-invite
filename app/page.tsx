@@ -15,7 +15,6 @@ import Transportation from './components/Transportation'
 import Addresses from './components/Addresses'
 import Accommodations from './components/Accommodations'
 import ContactFAQ from './components/ContactFAQ'
-import { FadeUp } from './components/ScrollReveal'
 import FloatingRSVPButton from './components/FloatingRSVPButton'
 
 const IntroScreen = dynamic(() => import('./components/IntroScreen'), { ssr: false })
@@ -37,30 +36,43 @@ export default function Home() {
       <FloatingRSVPButton />
       <main id="main-content">
         <Hero />
-        <FadeUp><Story /></FadeUp>
-        <FadeUp delay={0.05}><JabWeMet /></FadeUp>
-        <FadeUp><InviteDetails /></FadeUp>
-        <FadeUp delay={0.05}><Gallery /></FadeUp>
-        <FadeUp><Timeline /></FadeUp>
-        <FadeUp delay={0.05}><RSVPForm /></FadeUp>
-        <FadeUp><GuestBook /></FadeUp>
-        <FadeUp delay={0.05}><Transportation /></FadeUp>
-        <FadeUp><Addresses /></FadeUp>
-        <FadeUp delay={0.05}><Accommodations /></FadeUp>
-        <FadeUp><ContactFAQ /></FadeUp>
+        <Story />
+        <JabWeMet />
+        <InviteDetails />
+        <Gallery />
+        <Timeline />
+        <RSVPForm />
+        <GuestBook />
+        <Transportation />
+        <Addresses />
+        <Accommodations />
+        <ContactFAQ />
       </main>
+
+      {/* Ivory → footer gradient bridge */}
+      <div
+        aria-hidden="true"
+        style={{
+          height: 80,
+          background: 'linear-gradient(to bottom, #FFFDF6 0%, #2A1030 100%)',
+          marginBottom: -2,
+        }}
+      />
+
       <footer
         className="text-white py-16 text-center relative overflow-hidden"
-        style={{ background: 'linear-gradient(160deg, #3B1942 0%, #1A0A2E 60%, #0D0618 100%)' }}
+        style={{ background: 'linear-gradient(160deg, #2A1030 0%, #1A0A2E 60%, #0D0618 100%)' }}
       >
-        {/* Subtle mandala watermark in footer */}
+        {/* Subtle mandala watermark */}
         <div style={{
           position: 'absolute', inset: 0, opacity: 0.05, pointerEvents: 'none',
           backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 200 200'%3E%3Ccircle cx='100' cy='100' r='90' fill='none' stroke='%23C49A28' stroke-width='1'/%3E%3Ccircle cx='100' cy='100' r='70' fill='none' stroke='%23C49A28' stroke-width='0.8'/%3E%3Ccircle cx='100' cy='100' r='50' fill='none' stroke='%23C49A28' stroke-width='0.7'/%3E%3Ccircle cx='100' cy='100' r='30' fill='none' stroke='%23C49A28' stroke-width='0.6'/%3E%3C/svg%3E")`,
           backgroundSize: '200px 200px',
         }} />
         <div className="relative z-10">
-          <p className="text-3xl font-extralight tracking-[0.2em] mb-2" style={{ color: '#C49A28', textShadow: '0 0 32px rgba(196,154,40,0.55)' }}>N <span aria-hidden="true">✦</span> P</p>
+          <p className="text-3xl font-extralight tracking-[0.2em] mb-2" style={{ color: '#C49A28', textShadow: '0 0 32px rgba(196,154,40,0.55)' }}>
+            N <span aria-hidden="true">✦</span> P
+          </p>
           <p className="text-sm tracking-[0.15em] mb-1" style={{ color: 'rgba(196,154,40,0.7)' }}>
             Birmingham ✈ Mumbai · 04 · 12 · 2026
           </p>

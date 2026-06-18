@@ -33,7 +33,7 @@ export default function JabWeMet() {
       <div className="max-w-4xl mx-auto px-6">
         <SectionOrnament />
         <TextReveal delay={0.05}>
-          <h2 id="jwm-heading" className="text-4xl md:text-5xl font-extralight text-center mb-3 tracking-tight">
+          <h2 id="jwm-heading" className="text-4xl md:text-5xl lg:text-6xl font-extralight text-center mb-3 tracking-tight">
             Jab We Met
           </h2>
         </TextReveal>

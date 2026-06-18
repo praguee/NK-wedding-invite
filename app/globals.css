@@ -155,22 +155,30 @@ h2, h3 {
 
 /* ── Apple Liquid Glass — premium frosted variant ─────────────── */
 .glass-gold {
-  /* Base: very translucent warm white — content behind shows through */
   background: rgba(255, 253, 248, 0.52);
-  /* Heavy blur + saturation boost = true frosted glass depth */
   backdrop-filter: blur(48px) saturate(200%) brightness(1.04);
   -webkit-backdrop-filter: blur(48px) saturate(200%) brightness(1.04);
-  /* Layered borders: outer white highlight + inner gold whisper */
   border: 1px solid rgba(255, 255, 255, 0.72);
   border-bottom: 1px solid rgba(255, 255, 255, 0.38);
-  /* Layered shadows: top specular reflection + deep ambient shadow */
   box-shadow:
-    0 0 0 0.5px rgba(255, 255, 255, 0.5) inset,         /* inner top highlight */
-    0 1px 0 rgba(255, 255, 255, 0.6) inset,              /* glass top edge */
-    0 -1px 0 rgba(0, 0, 0, 0.04) inset,                  /* glass bottom edge */
-    0 4px 16px rgba(0, 0, 0, 0.06),                      /* near shadow */
-    0 16px 48px rgba(0, 0, 0, 0.08),                     /* ambient shadow */
-    0 0 0 0.5px rgba(196, 154, 40, 0.12);                /* gold rim */
+    0 0 0 0.5px rgba(255, 255, 255, 0.5) inset,
+    0 1px 0 rgba(255, 255, 255, 0.6) inset,
+    0 -1px 0 rgba(0, 0, 0, 0.04) inset,
+    0 4px 16px rgba(0, 0, 0, 0.06),
+    0 16px 48px rgba(0, 0, 0, 0.08),
+    0 0 0 0.5px rgba(196, 154, 40, 0.12);
+  transition: box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+/* Subtle lift + gold border glow on hover */
+.glass-gold:hover {
+  box-shadow:
+    0 0 0 0.5px rgba(255, 255, 255, 0.6) inset,
+    0 1px 0 rgba(255, 255, 255, 0.7) inset,
+    0 -1px 0 rgba(0, 0, 0, 0.04) inset,
+    0 6px 24px rgba(0, 0, 0, 0.08),
+    0 20px 56px rgba(0, 0, 0, 0.1),
+    0 0 0 1px rgba(196, 154, 40, 0.22);
 }
 
 /* ==========================================================================

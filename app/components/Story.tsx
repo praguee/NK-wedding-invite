@@ -32,7 +32,7 @@ export default function Story() {
       <div className="max-w-4xl mx-auto px-6">
         <SectionOrnament />
         <TextReveal delay={0.05}>
-          <h2 id="story-heading" className="text-4xl md:text-5xl font-extralight text-center mb-4 tracking-tight">
+          <h2 id="story-heading" className="text-4xl md:text-5xl lg:text-6xl font-extralight text-center mb-4 tracking-tight">
             The Way of Water
           </h2>
         </TextReveal>

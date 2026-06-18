@@ -5,14 +5,15 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { supabase } from '@/lib/supabase'
 import type { RSVP } from '@/lib/types'
 import SectionOrnament from './SectionOrnament'
+import { TextReveal } from './ScrollReveal'
 
 const GRADIENTS = [
-  ['#c084fc', '#818cf8'],
-  ['#f472b6', '#fb7185'],
-  ['#34d399', '#059669'],
-  ['#60a5fa', '#3b82f6'],
-  ['#fbbf24', '#f97316'],
-  ['#a78bfa', '#7c3aed'],
+  ['#C49A28', '#B8850A'],
+  ['#8B2252', '#A03268'],
+  ['#9C7A5A', '#7C5A3A'],
+  ['#C49A28', '#8B2252'],
+  ['#D4AA38', '#9C7A5A'],
+  ['#7A2040', '#5A1228'],
 ]
 
 function nameGradient(name: string): [string, string] {
@@ -66,9 +67,11 @@ export default function GuestBook() {
         {/* Header */}
         <div className="flex items-end justify-between mb-8">
           <div>
-            <h2 id="guestbook-heading" className="text-4xl md:text-5xl font-extralight tracking-tight" style={{ color: '#2A1200' }}>
-              Guest Book
-            </h2>
+            <TextReveal delay={0.05}>
+              <h2 id="guestbook-heading" className="text-4xl md:text-5xl lg:text-6xl font-extralight tracking-tight" style={{ color: '#2A1200' }}>
+                Guest Book
+              </h2>
+            </TextReveal>
             <p className="text-sm mt-1" style={{ color: '#9C7A5A' }}>Wishes from our family and friends</p>
           </div>
           {messages.length > 0 && (

@@ -11,7 +11,7 @@ export default function InviteDetails() {
       <div className="max-w-3xl mx-auto px-6">
         <SectionOrnament />
         <TextReveal delay={0.05}>
-          <h2 className="text-4xl md:text-5xl font-extralight text-center mb-16 tracking-tight">
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-extralight text-center mb-16 tracking-tight">
             You&apos;re Invited
           </h2>
         </TextReveal>

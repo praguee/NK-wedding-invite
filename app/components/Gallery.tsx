@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import SectionOrnament from './SectionOrnament'
-import { StaggerContainer, StaggerItem } from './ScrollReveal'
+import { StaggerContainer, StaggerItem, TextReveal } from './ScrollReveal'
 import { useMediaQuery } from '@/app/hooks/useMediaQuery'
 import MobileGallery from './MobileGallery'
 
@@ -204,7 +204,9 @@ export default function Gallery() {
           <SectionOrnament />
           <div className="flex items-end justify-between">
             <div>
-              <h2 className="text-4xl md:text-5xl font-extralight tracking-tight">Gallery</h2>
+              <TextReveal delay={0.05}>
+                <h2 className="text-4xl md:text-5xl lg:text-6xl font-extralight tracking-tight">Gallery</h2>
+              </TextReveal>
               <p className="text-sm mt-1" style={{ color: '#9C7A5A' }}>
                 {PHOTOS.length} moments · more coming
               </p>

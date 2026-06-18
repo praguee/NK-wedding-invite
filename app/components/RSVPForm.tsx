@@ -8,6 +8,7 @@ import { motion } from 'framer-motion'
 import { Heart } from 'lucide-react'
 import SectionOrnament from './SectionOrnament'
 import LotusDecoration from './LotusDecoration'
+import { TextReveal } from './ScrollReveal'
 
 interface FormState { name: string; plusOnes: string; message: string }
 const INITIAL: FormState = { name: '', plusOnes: '0', message: '' }
@@ -15,16 +16,17 @@ const INITIAL_SUBMITTED = false
 
 function GamesPrompt({ redirecting }: { redirecting: boolean }) {
   return (
-    <div className="mt-4 rounded-2xl overflow-hidden"
-      style={{ background: 'linear-gradient(135deg, #1A0830 0%, #0D0520 100%)', border: '1px solid rgba(196,154,40,0.25)' }}>
+    <div className="mt-4 glass-gold rounded-2xl overflow-hidden">
+      {/* Gold → burgundy accent line */}
+      <div style={{ height: 2, background: 'linear-gradient(90deg, #C49A28, #8B2252, #D4AA38, #C49A28)', backgroundSize: '200% 100%' }} />
       <div className="p-5">
-        <p className="text-xs tracking-widest uppercase mb-2" style={{ color: 'rgba(196,154,40,0.8)' }}>
-          One more thing 🐱
+        <p className="text-xs tracking-widest uppercase mb-2" style={{ color: '#9C7A5A' }}>
+          One more thing
         </p>
-        <p className="text-sm font-light text-white mb-1">
+        <p className="text-sm font-light mb-1" style={{ color: '#2A1200' }}>
           Think you know us? Take the quiz →
         </p>
-        <p className="text-xs mb-4" style={{ color: 'rgba(255,255,255,0.45)' }}>
+        <p className="text-xs mb-4" style={{ color: '#9C7A5A' }}>
           Score 60%+ and get a live caricature drawn at the reception.
         </p>
         {redirecting ? (
@@ -104,9 +106,11 @@ export default function RSVPForm() {
       <LotusDecoration position="bottom-left" size={100} opacity={0.04} />
       <div className="max-w-xl mx-auto px-6">
         <SectionOrnament />
-        <h2 className="text-4xl md:text-5xl font-extralight text-center mb-3 tracking-tight">
-          Will you be there?
-        </h2>
+        <TextReveal delay={0.05}>
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-extralight text-center mb-3 tracking-tight">
+            Will you be there?
+          </h2>
+        </TextReveal>
         <p className="text-center mb-10" style={{ color: '#9C7A5A', fontSize: 15 }}>
           We&apos;d love to celebrate with you — let us know you&apos;re coming 🎊
         </p>

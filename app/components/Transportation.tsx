@@ -4,7 +4,7 @@ import Image from 'next/image'
 import { VENUE } from '@/lib/constants'
 import { Car, Navigation, MapPin } from 'lucide-react'
 import SectionOrnament from './SectionOrnament'
-import { StaggerContainer, StaggerItem } from './ScrollReveal'
+import { StaggerContainer, StaggerItem, TextReveal } from './ScrollReveal'
 import { motion } from 'framer-motion'
 
 export default function Transportation() {
@@ -12,9 +12,11 @@ export default function Transportation() {
     <section id="travel" className="py-24 bg-slate-50">
       <div className="max-w-4xl mx-auto px-6">
         <SectionOrnament />
-        <h2 className="text-4xl md:text-5xl font-extralight text-center mb-4 tracking-tight">
-          Venue & Getting There
-        </h2>
+        <TextReveal delay={0.05}>
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-extralight text-center mb-4 tracking-tight">
+            Venue &amp; Getting There
+          </h2>
+        </TextReveal>
         <p className="text-center mb-12 text-sm" style={{ color: '#9C7A5A' }}>
           Everything you need to find us — and get home safely
         </p>

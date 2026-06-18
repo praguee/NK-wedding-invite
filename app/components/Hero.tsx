@@ -360,6 +360,20 @@ export default function Hero() {
 
       <LotusDecoration position="top-left"  size={130} opacity={0.08} />
       <LotusDecoration position="top-right" size={130} opacity={0.08} />
+
+      {/* ── Gradient bridge: hero fades into the ivory Story section ── */}
+      <div
+        aria-hidden="true"
+        style={{
+          position: 'absolute',
+          bottom: 0, left: 0, right: 0,
+          height: 200,
+          background: 'linear-gradient(to bottom, transparent 0%, rgba(255,253,246,0.7) 65%, #FFFDF6 100%)',
+          zIndex: 5,
+          pointerEvents: 'none',
+        }}
+      />
+
       <div id="hero-sentinel" aria-hidden="true" />
     </section>
   )
