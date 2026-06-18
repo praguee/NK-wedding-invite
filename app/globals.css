@@ -167,20 +167,6 @@ body {
 }
 
 /* ==========================================================================
-   Hero
-   ========================================================================== */
-
-/* CSS background-image for hero — per-breakpoint focal control */
-.hero-bg {
-  background-image: url('/images/hero-cover.jpg');
-  background-size: cover;
-  background-position: center top;
-}
-@media (min-width: 768px) {
-  .hero-bg { background-position: center top; }
-}
-
-/* ==========================================================================
    Gallery
    ========================================================================== */
 
