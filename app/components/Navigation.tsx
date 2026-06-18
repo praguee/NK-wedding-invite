@@ -77,10 +77,9 @@ export default function Navigation() {
             <circle cx="16" cy="16" r="2.5" fill="#C49A28" opacity="0.8"/>
           </svg>
           <span
-            className="font-light tracking-[0.12em]"
-            style={{ fontSize: 17, color: '#5C3A1E', letterSpacing: '0.12em' }}
+            style={{ fontFamily: 'var(--font-great-vibes)', fontSize: 22, color: '#5C3A1E', lineHeight: 1 }}
           >
-            N <span aria-hidden="true" style={{ color: '#C49A28', fontSize: 11 }}>✦</span> P
+            N <span aria-hidden="true" style={{ color: '#C49A28', fontSize: 14, fontFamily: 'inherit' }}>✦</span> P
           </span>
         </a>
 

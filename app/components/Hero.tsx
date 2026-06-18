@@ -238,10 +238,13 @@ export default function Hero() {
         <div style={{ lineHeight: 1.15, paddingBottom: '0.1em' }}>
           <h1
             aria-label={`${COUPLE.brideName} & ${COUPLE.groomName}`}
-            className="font-extralight tracking-tight block"
+            className="block"
             style={{
-              fontSize: 'clamp(48px, 11vw, 92px)',
+              fontFamily: 'var(--font-great-vibes)',
+              fontSize: 'clamp(56px, 13vw, 108px)',
+              fontWeight: 400,
               color: '#C49A28',
+              lineHeight: 1.1,
               textShadow: '0 0 48px rgba(196,154,40,0.28), 0 0 120px rgba(196,154,40,0.12)',
             }}
           >
@@ -258,10 +261,13 @@ export default function Hero() {
           </motion.p>
           <div
             aria-hidden="true"
-            className="font-extralight tracking-tight block"
+            className="block"
             style={{
-              fontSize: 'clamp(48px, 11vw, 92px)',
+              fontFamily: 'var(--font-great-vibes)',
+              fontSize: 'clamp(56px, 13vw, 108px)',
+              fontWeight: 400,
               color: '#C49A28',
+              lineHeight: 1.1,
               textShadow: '0 0 48px rgba(196,154,40,0.28), 0 0 120px rgba(196,154,40,0.12)',
             }}
           >

@@ -24,8 +24,9 @@ html {
 
 /* ── Warm ivory body with subtle Indian diamond lattice pattern ── */
 body {
-  font-family: system-ui, -apple-system, sans-serif;
-  line-height: 1.6;
+  font-family: var(--font-cormorant), 'Georgia', serif;
+  font-size: 18px;
+  line-height: 1.7;
   background-color: var(--ivory);
   /*
    * Classic Indian "jali" (lattice) pattern:

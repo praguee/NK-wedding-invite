@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { Cinzel } from 'next/font/google'
+import { Cinzel, Cormorant_Garamond, Great_Vibes } from 'next/font/google'
 import { Toaster } from 'react-hot-toast'
 import 'leaflet/dist/leaflet.css'
 import './globals.css'
@@ -9,6 +9,21 @@ const cinzel = Cinzel({
   subsets: ['latin'],
   weight: ['400'],
   variable: '--font-cinzel',
+  display: 'swap',
+})
+
+const cormorant = Cormorant_Garamond({
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '600'],
+  style: ['normal', 'italic'],
+  variable: '--font-cormorant',
+  display: 'swap',
+})
+
+const greatVibes = Great_Vibes({
+  subsets: ['latin'],
+  weight: ['400'],
+  variable: '--font-great-vibes',
   display: 'swap',
 })
 
@@ -29,7 +44,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`bg-white text-slate-900 ${cinzel.variable}`}>
+      <body className={`bg-white text-slate-900 ${cinzel.variable} ${cormorant.variable} ${greatVibes.variable}`}>
         <CursorEffect />
         {children}
         <Toaster position="bottom-center" toastOptions={{ duration: 4000 }} />
