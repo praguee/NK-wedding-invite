@@ -138,7 +138,7 @@ export default function Hero() {
       {/* ── Parallax hero image ── */}
       <motion.div
         className="absolute inset-0"
-        style={{ y: imageY, scale: 1.12 }}
+        style={{ y: imageY, scale: 1.05 }}
       >
         <div
           className="hero-bg absolute inset-0"
