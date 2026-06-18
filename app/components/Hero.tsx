@@ -1,11 +1,46 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion'
+import { useEffect, useState, type CSSProperties } from 'react'
+import { motion, AnimatePresence, useScroll, useTransform, useReducedMotion } from 'framer-motion'
 import Image from 'next/image'
 import { COUPLE, EVENT } from '@/lib/constants'
 import SectionOrnament from './SectionOrnament'
 import LotusDecoration from './LotusDecoration'
+
+const CHAR_EASE = [0.16, 1, 0.3, 1] as const
+
+// Each letter tumbles in from below with a 3D flip — theatrical, distinctive
+function SplitText({
+  text,
+  delay = 0,
+  style,
+}: {
+  text: string
+  delay?: number
+  style?: CSSProperties
+}) {
+  const reduce = useReducedMotion()
+  if (reduce) return <span style={style}>{text}</span>
+  return (
+    <span style={{ perspective: 900, display: 'inline-block' }}>
+      {Array.from(text).map((char, i) => (
+        <motion.span
+          key={i}
+          initial={{ opacity: 0, y: 52, rotateX: -70 }}
+          animate={{ opacity: 1, y: 0, rotateX: 0 }}
+          transition={{
+            duration: 0.68,
+            ease: CHAR_EASE,
+            delay: delay + i * 0.06,
+          }}
+          style={{ display: 'inline-block', transformOrigin: 'bottom center' }}
+        >
+          {char === ' ' ? ' ' : char}
+        </motion.span>
+      ))}
+    </span>
+  )
+}
 
 interface TimeLeft {
   days: number; hours: number; minutes: number; seconds: number
@@ -201,8 +236,7 @@ export default function Hero() {
         </motion.p>
 
         <div style={{ lineHeight: 1.15, paddingBottom: '0.1em' }}>
-          <motion.h1
-            variants={heroUp}
+          <h1
             aria-label={`${COUPLE.brideName} & ${COUPLE.groomName}`}
             className="font-extralight tracking-tight block"
             style={{
@@ -211,17 +245,18 @@ export default function Hero() {
               textShadow: '0 0 48px rgba(196,154,40,0.28), 0 0 120px rgba(196,154,40,0.12)',
             }}
           >
-            {COUPLE.brideName}
-          </motion.h1>
+            <SplitText text={COUPLE.brideName} delay={0.32} />
+          </h1>
           <motion.p
-            variants={heroFade}
+            initial={{ opacity: 0, scale: 0.6 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5, ease: CHAR_EASE, delay: 0.82 }}
             className="text-lg font-light my-3 tracking-widest"
             style={{ color: 'rgba(196,154,40,0.6)' }}
           >
             <span aria-hidden="true">✦</span> &amp; <span aria-hidden="true">✦</span>
           </motion.p>
-          <motion.div
-            variants={heroUp}
+          <div
             aria-hidden="true"
             className="font-extralight tracking-tight block"
             style={{
@@ -230,8 +265,8 @@ export default function Hero() {
               textShadow: '0 0 48px rgba(196,154,40,0.28), 0 0 120px rgba(196,154,40,0.12)',
             }}
           >
-            {COUPLE.groomName}
-          </motion.div>
+            <SplitText text={COUPLE.groomName} delay={0.96} />
+          </div>
         </div>
 
         <motion.p

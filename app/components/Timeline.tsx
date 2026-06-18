@@ -1,7 +1,8 @@
 'use client'
 
+import { motion } from 'framer-motion'
 import SectionOrnament from './SectionOrnament'
-import { StaggerContainer, StaggerItem } from './ScrollReveal'
+import { StaggerContainer, StaggerItem, TextReveal } from './ScrollReveal'
 
 const EVENTS = [
   {
@@ -39,16 +40,22 @@ export default function Timeline() {
     <section id="timeline" className="py-20 bg-white">
       <div className="max-w-lg mx-auto px-6">
         <SectionOrnament />
-        <h2 className="text-4xl md:text-5xl font-extralight text-center mb-3 tracking-tight">
-          You&apos;re Invited
-        </h2>
+        <TextReveal delay={0.05}>
+          <h2 className="text-4xl md:text-5xl font-extralight text-center mb-3 tracking-tight">
+            You&apos;re Invited
+          </h2>
+        </TextReveal>
         <p className="text-center mb-12 text-sm" style={{ color: '#9C7A5A' }}>
           Friday, December 4, 2026
         </p>
 
         <div className="relative">
-          {/* Vertical connecting line */}
-          <div
+          {/* Vertical connecting line — draws down on scroll entry */}
+          <motion.div
+            initial={{ scaleY: 0 }}
+            whileInView={{ scaleY: 1 }}
+            viewport={{ once: true, margin: '-48px' }}
+            transition={{ duration: 1.8, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
             style={{
               position: 'absolute',
               left: 19,
@@ -57,6 +64,7 @@ export default function Timeline() {
               width: 1,
               background: 'linear-gradient(to bottom, #C4B09A, #C49A28, #9C7A5A, #8B2252)',
               opacity: 0.3,
+              transformOrigin: 'top center',
             }}
           />
 
@@ -64,21 +72,27 @@ export default function Timeline() {
             {EVENTS.map((event, i) => (
               <StaggerItem key={i}>
                 <div style={{ display: 'flex', gap: 20, alignItems: 'flex-start', padding: '16px 0' }}>
-                  {/* Dot */}
+                  {/* Dot — springs in with a pop */}
                   <div style={{ flexShrink: 0, paddingTop: 3 }}>
-                    <div style={{
-                      width: 38, height: 38,
-                      borderRadius: '50%',
-                      background: `${event.dot}18`,
-                      border: `1.5px solid ${event.dot}55`,
-                      display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      boxShadow: `0 0 12px ${event.dot}20`,
-                    }}>
+                    <motion.div
+                      initial={{ scale: 0, opacity: 0 }}
+                      whileInView={{ scale: 1, opacity: 1 }}
+                      viewport={{ once: true }}
+                      transition={{ type: 'spring', stiffness: 280, damping: 14, delay: 0.3 + i * 0.14 }}
+                      style={{
+                        width: 38, height: 38,
+                        borderRadius: '50%',
+                        background: `${event.dot}18`,
+                        border: `1.5px solid ${event.dot}55`,
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        boxShadow: `0 0 12px ${event.dot}20`,
+                      }}
+                    >
                       <div style={{
                         width: 10, height: 10, borderRadius: '50%',
                         background: event.dot, opacity: 0.85,
                       }} />
-                    </div>
+                    </motion.div>
                   </div>
 
                   {/* Content */}

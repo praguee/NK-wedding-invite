@@ -3,20 +3,22 @@
 import { VENUE, EVENT } from '@/lib/constants'
 import { MapPin, Clock } from 'lucide-react'
 import SectionOrnament from './SectionOrnament'
-import { StaggerContainer, StaggerItem } from './ScrollReveal'
+import { ScaleReveal, TextReveal } from './ScrollReveal'
 
 export default function InviteDetails() {
   return (
     <section id="invite" className="py-24 bg-slate-50">
       <div className="max-w-3xl mx-auto px-6">
         <SectionOrnament />
-        <h2 className="text-4xl md:text-5xl font-extralight text-center mb-16 tracking-tight">
-          You&apos;re Invited
-        </h2>
+        <TextReveal delay={0.05}>
+          <h2 className="text-4xl md:text-5xl font-extralight text-center mb-16 tracking-tight">
+            You&apos;re Invited
+          </h2>
+        </TextReveal>
 
-        <StaggerContainer className="space-y-6">
+        <div className="space-y-6">
 
-          <StaggerItem>
+          <ScaleReveal delay={0.1}>
             <div className="glass-gold p-8 rounded-2xl">
               <div className="flex gap-5 items-start">
                 <div className="p-3 rounded-xl" style={{ background: 'rgba(196,154,40,0.1)' }}>
@@ -33,9 +35,9 @@ export default function InviteDetails() {
                 </div>
               </div>
             </div>
-          </StaggerItem>
+          </ScaleReveal>
 
-          <StaggerItem>
+          <ScaleReveal delay={0.2}>
             <div className="glass-gold p-8 rounded-2xl">
               <div className="flex gap-5 items-start">
                 <div className="p-3 rounded-xl" style={{ background: 'rgba(196,154,40,0.1)' }}>
@@ -52,9 +54,9 @@ export default function InviteDetails() {
                 </div>
               </div>
             </div>
-          </StaggerItem>
+          </ScaleReveal>
 
-          <StaggerItem>
+          <ScaleReveal delay={0.3}>
             <div className="glass-gold p-8 rounded-2xl">
               <div className="flex gap-5 items-start">
                 <div className="p-3 rounded-xl" style={{ background: 'rgba(139,34,82,0.08)' }}>
@@ -82,9 +84,9 @@ export default function InviteDetails() {
                 </div>
               </div>
             </div>
-          </StaggerItem>
+          </ScaleReveal>
 
-        </StaggerContainer>
+        </div>
       </div>
     </section>
   )
