@@ -1,7 +1,7 @@
 # NK Wedding Invite — Project Guide
 
 ## What This Is
-Wedding invite website for **Nidhi Kesarkar (bride, lives in Birmingham UK)** and **Parag Khalde (groom, lives in Mumbai India)**.
+Wedding invite website for **Nidhi Kesarkar (bride, from Mumbai/Thane India — currently in Birmingham UK for PhD in Economics at University of Birmingham)** and **Parag Khalde (groom, lives in Mumbai India)**.
 - Wedding: **Friday, December 4, 2026 at 5:30 PM**
 - Reception: **8:00 PM onwards**
 - Venue: **Abhishek Farms, Narlepada, Yeoor Hills, Thane West, Maharashtra 400606**

@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-06-18T00:00:00Z",
+  "title": "Design System: NK Wedding Invite",
+  "extensions": {
+    "colorMeta": {
+      "gold":         { "role": "primary",   "displayName": "Temple Gold",      "canonical": "#C49A28", "tonalRamp": ["#3D2500","#5C3A00","#7A4E00","#9A6600","#C49A28","#D4AA38","#E8C880","#F5E4B4","#FDF6E0"] },
+      "gold-light":   { "role": "primary",   "displayName": "Shimmer Gold",     "canonical": "#D4AA38", "tonalRamp": ["#3D2500","#5C3A00","#7A5000","#A87800","#D4AA38","#E0BC60","#EED09A","#F8EDD0","#FFFBF0"] },
+      "burgundy":     { "role": "secondary", "displayName": "Ceremony Burgundy","canonical": "#8B2252", "tonalRamp": ["#1A0010","#380022","#5C0035","#8B2252","#AA4070","#CC8099","#DFB0C0","#F0D8DF","#FAF0F3"] },
+      "ivory":        { "role": "neutral",   "displayName": "Warm Ivory",       "canonical": "#FFFDF6", "tonalRamp": ["#2A1200","#5C3A2E","#7C5A3A","#9C7A5A","#C4B09A","#DDD0BC","#EEE6D4","#F8F4EC","#FFFDF6"] },
+      "ivory-warm":   { "role": "neutral",   "displayName": "Golden Cream",     "canonical": "#FAF3E0", "tonalRamp": ["#2A1200","#5C3A1E","#7C5A38","#9C7A54","#C4A878","#D9C8A0","#EDDFBD","#F5EDD0","#FAF3E0"] },
+      "text-deep":    { "role": "neutral",   "displayName": "Deep Brown",       "canonical": "#2A1200", "tonalRamp": ["#120800","#2A1200","#4A2A10","#6A3A20","#8A5030","#A87050","#C49A78","#E0C8A8","#F8EED8"] },
+      "text-warm":    { "role": "neutral",   "displayName": "Story Brown",      "canonical": "#5C3A2E", "tonalRamp": ["#200E08","#3C1E16","#5C3A2E","#7C5A4E","#9C7A6E","#C0A098","#D8BEB8","#EDD8D4","#FAF0EE"] },
+      "text-mid":     { "role": "neutral",   "displayName": "Warm Taupe",       "canonical": "#7C5A3A", "tonalRamp": ["#28180A","#4A3020","#7C5A3A","#9A7A58","#BEA080","#D8C0A0","#ECD8C0","#F6EEDC","#FBF6EE"] },
+      "text-muted":   { "role": "neutral",   "displayName": "Dusty Sienna",     "canonical": "#9C7A5A", "tonalRamp": ["#30200A","#5A3A20","#9C7A5A","#B89878","#D0B898","#E4D0B8","#F0E4D0","#F8F0E4","#FDF8F2"] },
+      "surface-dark": { "role": "neutral",   "displayName": "Void",             "canonical": "#0D0600", "tonalRamp": ["#0D0600","#1E1000","#302000","#4A3010","#6A4A20","#8A6840","#B0906C","#D8C0A0","#F8EED8"] }
+    },
+    "typographyMeta": {
+      "display":  { "displayName": "Display",  "purpose": "Hero couple names only. Extralight at extreme sizes — feels engraved, not printed." },
+      "headline": { "displayName": "Headline", "purpose": "One per section. Section titles like 'Will you be there?' or 'The Way of Water'." },
+      "title":    { "displayName": "Title",    "purpose": "Card headers, hotel names, timeline event titles. Normal weight for contrast." },
+      "body":     { "displayName": "Body",     "purpose": "Story paragraphs, FAQ answers, guest messages. Light, generous leading." },
+      "label":    { "displayName": "Label",    "purpose": "Nav links, form labels, countdown units. Uppercase + wide tracking = ceremonial formality." }
+    },
+    "shadows": [
+      { "name": "hero-overlay-top",    "value": "linear-gradient(to bottom, rgba(10,4,25,0.55) 0%, rgba(10,4,25,0.05) 35%, transparent 55%)", "purpose": "Hero top-vignette — darkens sky, preserves couple." },
+      { "name": "hero-overlay-bottom", "value": "linear-gradient(to top, rgba(5,2,15,0.97) 0%, rgba(10,4,25,0.88) 25%, rgba(15,6,35,0.55) 50%, transparent 75%)", "purpose": "Hero bottom — makes text legible, creates cinematic depth." },
+      { "name": "hero-warm-radial",    "value": "radial-gradient(ellipse 80% 40% at 50% 65%, rgba(196,120,40,0.12) 0%, transparent 70%)", "purpose": "Warm centre glow suggesting firelight on water." },
+      { "name": "glass-card-rest",     "value": "0 0 0 0.5px rgba(255,255,255,0.5) inset, 0 1px 0 rgba(255,255,255,0.6) inset, 0 -1px 0 rgba(0,0,0,0.04) inset, 0 4px 16px rgba(0,0,0,0.06), 0 16px 48px rgba(0,0,0,0.08), 0 0 0 0.5px rgba(196,154,40,0.12)", "purpose": "Glass-gold card at rest. Four-layer: specular top, glass edge, ambient, gold rim." },
+      { "name": "glass-card-hover",    "value": "0 12px 40px rgba(196,154,40,0.16)", "purpose": "Card hover — warm gold aura, replaces rest shadow." },
+      { "name": "button-primary",      "value": "0 6px 24px rgba(196,154,40,0.45), 0 1px 0 rgba(255,255,255,0.25) inset", "purpose": "Gold CTA glow — makes button feel lit from within." },
+      { "name": "nav-bar",             "value": "0 1px 0 rgba(196,154,40,0.08), 0 4px 24px rgba(0,0,0,0.04)", "purpose": "Nav bottom-edge separation. Barely perceptible — just enough to float." }
+    ],
+    "motion": [
+      { "name": "ease-standard",    "value": "cubic-bezier(0.25, 0.46, 0.45, 0.94)", "purpose": "Default easing for all entrances and layout transitions." },
+      { "name": "ease-material",    "value": "cubic-bezier(0.4, 0, 0.2, 1)",          "purpose": "Digit flip in countdown, fast snappy transitions." },
+      { "name": "spring-cta",       "value": "stiffness: 380, damping: 18",            "purpose": "Primary button hover/tap spring. Responsive without bouncing." },
+      { "name": "spring-cursor",    "value": "stiffness: 800→50, damping: 45→14",      "purpose": "5-dot cursor trail, each dot progressively softer spring." },
+      { "name": "stagger-children", "value": "staggerChildren: 0.16, delayChildren: 0.25", "purpose": "Hero text entrance. Elements stagger in from below." },
+      { "name": "lotus-rotate",     "value": "rotate 90s linear infinite",             "purpose": "Decorative lotus watermark rotation. Disabled on prefers-reduced-motion." },
+      { "name": "float-particle",   "value": "translateY(-100vh) rotate(405deg) — 7–11s", "purpose": "Gold diamond particles rising from hero base. Disabled on prefers-reduced-motion." }
+    ],
+    "breakpoints": [
+      { "name": "md", "value": "768px",  "purpose": "Mobile→tablet layout shift. Hero min-height, nav desktop links, grid columns." },
+      { "name": "lg", "value": "1024px", "purpose": "Max content width plateau (~max-w-4xl / max-w-6xl)." }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The single gold CTA. Used for RSVP Now (hero), Count me in (form), Go Now (games prompt). Never more than one per viewport.",
+      "html": "<button class=\"ds-btn-primary\">RSVP Now</button>",
+      "css": ".ds-btn-primary { display: inline-block; background: linear-gradient(135deg, #B8850A, #E8C547, #C49A28); color: #2A1200; padding: 13px 44px; border-radius: 100px; font-weight: 700; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; text-decoration: none; border: none; cursor: pointer; box-shadow: 0 6px 24px rgba(196,154,40,0.45), 0 1px 0 rgba(255,255,255,0.25) inset; transition: transform 0.15s cubic-bezier(0.25,0.46,0.45,0.94); } .ds-btn-primary:hover { transform: scale(1.06); } .ds-btn-primary:active { transform: scale(0.96); } .ds-btn-primary:focus-visible { outline: 2px solid #C49A28; outline-offset: 3px; border-radius: 100px; } .ds-btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }"
+    },
+    {
+      "name": "Ghost Pill Button",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "Secondary CTAs in navigation (Menu, Trivia). Never competes with the primary button.",
+      "html": "<a class=\"ds-btn-ghost\" href=\"/menu\">🍽 Menu</a>",
+      "css": ".ds-btn-ghost { display: inline-block; color: #C49A28; background: rgba(196,154,40,0.1); border: 1px solid rgba(196,154,40,0.25); border-radius: 100px; padding: 6px 12px; font-size: 12px; letter-spacing: 0.09em; text-transform: uppercase; font-weight: 500; text-decoration: none; transition: background 0.2s, border-color 0.2s; } .ds-btn-ghost:hover { background: rgba(196,154,40,0.18); border-color: rgba(196,154,40,0.4); } .ds-btn-ghost:focus-visible { outline: 2px solid #C49A28; outline-offset: 3px; border-radius: 100px; }"
+    },
+    {
+      "name": "Glass-Gold Card",
+      "kind": "card",
+      "refersTo": "card-glass",
+      "description": "The signature container. Used for RSVP form, invite detail panels, address cards, hotel rows on hover.",
+      "html": "<div class=\"ds-glass-card\"><p>Card content here</p></div>",
+      "css": ".ds-glass-card { background: rgba(255,253,248,0.52); backdrop-filter: blur(48px) saturate(200%) brightness(1.04); -webkit-backdrop-filter: blur(48px) saturate(200%) brightness(1.04); border: 1px solid rgba(255,255,255,0.72); border-bottom: 1px solid rgba(255,255,255,0.38); border-radius: 16px; padding: 32px; box-shadow: 0 0 0 0.5px rgba(255,255,255,0.5) inset, 0 1px 0 rgba(255,255,255,0.6) inset, 0 -1px 0 rgba(0,0,0,0.04) inset, 0 4px 16px rgba(0,0,0,0.06), 0 16px 48px rgba(0,0,0,0.08), 0 0 0 0.5px rgba(196,154,40,0.12); transition: transform 0.3s cubic-bezier(0.25,0.46,0.45,0.94), box-shadow 0.3s; } .ds-glass-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(196,154,40,0.16); }"
+    },
+    {
+      "name": "Form Input",
+      "kind": "input",
+      "refersTo": "input-default",
+      "description": "Text inputs and selects in the RSVP form. Warm ivory, gold ring on focus.",
+      "html": "<input class=\"ds-input\" type=\"text\" placeholder=\"Your name\" />",
+      "css": ".ds-input { width: 100%; padding: 12px 16px; border: 1px solid rgba(196,154,40,0.2); border-radius: 12px; background: rgba(255,253,246,0.7); color: #5C3A2E; font-size: 14px; outline: none; transition: box-shadow 0.2s; } .ds-input:focus { box-shadow: 0 0 0 2px rgba(196,154,40,0.4); } .ds-input::placeholder { color: #C4B09A; }"
+    },
+    {
+      "name": "Navigation Bar",
+      "kind": "nav",
+      "refersTo": "button-ghost",
+      "description": "Fixed top nav with frosted ivory background, gold top-accent bar, lotus-diamond logo.",
+      "html": "<nav class=\"ds-nav\"><span class=\"ds-nav-logo\">N <span class=\"ds-nav-star\">✦</span> P</span><a class=\"ds-nav-link ds-nav-link--active\" href=\"#story\">The Way of Water</a><a class=\"ds-nav-link\" href=\"#rsvp\">RSVP</a></nav>",
+      "css": ".ds-nav { position: fixed; top: 0; left: 0; right: 0; z-index: 50; background: rgba(255,253,246,0.88); backdrop-filter: blur(28px) saturate(160%); -webkit-backdrop-filter: blur(28px) saturate(160%); border-bottom: 1px solid rgba(196,154,40,0.15); box-shadow: 0 1px 0 rgba(196,154,40,0.08), 0 4px 24px rgba(0,0,0,0.04); padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; } .ds-nav::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent 0%, #C49A28 30%, #E8C547 50%, #C49A28 70%, transparent 100%); opacity: 0.7; } .ds-nav-logo { font-size: 17px; font-weight: 300; letter-spacing: 0.12em; color: #5C3A2E; } .ds-nav-star { color: #C49A28; font-size: 11px; } .ds-nav-link { font-size: 12px; text-transform: uppercase; letter-spacing: 0.09em; color: #7C5A3A; text-decoration: none; padding-bottom: 2px; border-bottom: 1.5px solid transparent; transition: color 0.2s, border-color 0.2s; margin-left: 28px; } .ds-nav-link:hover { color: #C49A28; } .ds-nav-link--active { color: #C49A28; border-bottom-color: #C49A28; }"
+    },
+    {
+      "name": "Section Ornament",
+      "kind": "custom",
+      "refersTo": "card-glass",
+      "description": "Gold lotus-diamond SVG divider. Appears at the top of every content section before the heading. Non-negotiable rhythm anchor.",
+      "html": "<div class=\"ds-ornament\"><div class=\"ds-ornament-rule\"></div><svg width=\"32\" height=\"32\" viewBox=\"0 0 32 32\" fill=\"none\"><path d=\"M16 2 L30 16 L16 30 L2 16 Z\" fill=\"none\" stroke=\"#C49A28\" stroke-width=\"0.9\" opacity=\"0.7\"/><path d=\"M16 7 Q19 11 16 16 Q13 11 16 7Z\" fill=\"#C49A28\" opacity=\"0.6\"/><path d=\"M16 25 Q19 21 16 16 Q13 21 16 25Z\" fill=\"#C49A28\" opacity=\"0.6\"/><path d=\"M7 16 Q11 13 16 16 Q11 19 7 16Z\" fill=\"#C49A28\" opacity=\"0.5\"/><path d=\"M25 16 Q21 13 16 16 Q21 19 25 16Z\" fill=\"#C49A28\" opacity=\"0.5\"/><circle cx=\"16\" cy=\"16\" r=\"2.5\" fill=\"#C49A28\" opacity=\"0.8\"/></svg><div class=\"ds-ornament-rule\"></div></div>",
+      "css": ".ds-ornament { display: flex; align-items: center; justify-content: center; gap: 16px; margin-bottom: 24px; } .ds-ornament-rule { flex: 1; max-width: 120px; height: 1px; background: linear-gradient(to right, transparent, rgba(196,154,40,0.3)); } .ds-ornament-rule:last-child { background: linear-gradient(to left, transparent, rgba(196,154,40,0.3)); }"
+    },
+    {
+      "name": "Countdown Card",
+      "kind": "custom",
+      "refersTo": "card-glass",
+      "description": "Mini frosted-glass card in the hero for days/hours/minutes/seconds. Animated digit flip on change.",
+      "html": "<div class=\"ds-countdown-card\"><div class=\"ds-countdown-number\">165</div><div class=\"ds-countdown-label\">Days</div></div>",
+      "css": ".ds-countdown-card { min-width: 74px; background: rgba(255,255,255,0.07); backdrop-filter: blur(28px); -webkit-backdrop-filter: blur(28px); border: 1px solid rgba(196,154,40,0.28); border-radius: 18px; padding: 14px 6px 10px; text-align: center; } .ds-countdown-number { font-size: 38px; font-weight: 100; color: white; line-height: 1; letter-spacing: -0.02em; overflow: hidden; height: 1.1em; } .ds-countdown-label { font-size: 9px; color: rgba(196,154,40,0.65); letter-spacing: 0.22em; text-transform: uppercase; margin-top: 8px; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Water Temple",
+    "overview": "This is a site built around a single extraordinary image: two people exchanging vows on a floating mandap, surrounded by water, flowers, and firelight. Every design decision draws from that image — the warm gold of oil lamps on still water, the frosted glass of reflections, the slow ritual weight of ceremony. The system is intimate before it is impressive. It does not announce itself; it pulls you in.\n\nThe palette glows from within rather than dazzling from without. Surfaces are warm ivory — the colour of candlelight on white cloth — with gold used sparingly as a signal of importance: a name, a button, a divider. The jali diamond lattice sits beneath everything at near-invisibility, a cultural anchor that rewards close attention.\n\nThis system explicitly rejects all-white, cold editorial minimalism — the kind of luxury that signals restraint over warmth. The Indian identity — the lotus, the jali, the floating mandap — is structural, not decorative.",
+    "keyCharacteristics": [
+      "Warm ivory body with a near-invisible golden jali pattern",
+      "Gold is the single accent; used at ≤15% surface area, its rarity is the point",
+      "Frosted glass cards float content above the textured background",
+      "Typography is extralight at large sizes — names feel carved, not printed",
+      "Cinematic hero with full-bleed parallax; all other sections are essentially flat",
+      "Indian ornamental motifs (lotus, mandala, diamond) used authentically, never pastiche"
+    ],
+    "rules": [
+      { "name": "The One Voice Rule",         "body": "Gold is used on ≤15% of any given screen. Its restraint is the source of its power. When everything glows gold, nothing does.", "section": "colors" },
+      { "name": "The No Cold Rule",           "body": "There are no greys, blues, or neutral blacks in this system. Every colour is warm. A #666 text colour would read as intrusive; reach for #9C7A5A instead.", "section": "colors" },
+      { "name": "The Extralight Headline Rule","body": "Section headings are always weight 100. Never bold a section title. The lightness is what gives the words room to carry meaning.", "section": "typography" },
+      { "name": "The Flat-by-Default Rule",   "body": "Outside the hero, surfaces are flat at rest. Shadows appear only as response to hover or the glass-gold treatment.", "section": "elevation" }
+    ],
+    "dos": [
+      "Use #FFFDF6 (Warm Ivory) as the body background — never #FFFFFF",
+      "Keep section headings at font-weight 100",
+      "Use <SectionOrnament /> at the top of every content section before the heading",
+      "Apply Temple Gold (#C49A28) only where it matters — CTAs, active states, ornaments",
+      "Use the glass-gold card for any floating content panel",
+      "Honour Indian cultural identity structurally — the jali, lotus, and mandala are load-bearing",
+      "Respect prefers-reduced-motion on lotus rotation, particles, and cursor effects",
+      "Keep touch targets at minimum 44px on mobile",
+      "Write copy that rewards close reading — the wit is deliberate, match the tone"
+    ],
+    "donts": [
+      "Don't use all-white, cold editorial minimalism — this is the primary anti-reference",
+      "Don't add cool colours — no greys, blue-greys, or neutral blacks",
+      "Don't make the jali background pattern more prominent — 13% opacity is the ceiling",
+      "Don't bold section headings — weight 100 is correct and intentional",
+      "Don't use burgundy (#8B2252) as a primary accent — it is reserved for rare whisper moments",
+      "Don't add drop shadows to section backgrounds outside the hero and glass-gold cards",
+      "Don't introduce a new typeface without strong justification",
+      "Don't use generic wedding stock imagery or emoji-decorated UI",
+      "Don't apply the gold gradient button style to secondary actions"
+    ]
+  }
+}
