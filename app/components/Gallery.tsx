@@ -253,7 +253,7 @@ function PhotoCard({
   )
 }
 
-// Wipe-from-bottom reveal — clip-path slides up to reveal image
+// Wipe reveal — clip-path inset top-down, positioned absolute to fill grid cell
 function WipeReveal({
   children,
   delay = 0,
@@ -265,16 +265,16 @@ function WipeReveal({
 }) {
   return (
     <motion.div
-      style={{ height: '100%', borderRadius: 14 }}
+      style={{ position: 'absolute', inset: 0, borderRadius: 14, overflow: 'hidden' }}
       initial={reducedMotion
-        ? { opacity: 0, y: 12 }
-        : { clipPath: 'inset(0 0 100% 0 round 14px)', opacity: 0.7 }
+        ? { opacity: 0 }
+        : { clipPath: 'inset(0 0 100% 0 round 14px)' }
       }
       whileInView={reducedMotion
-        ? { opacity: 1, y: 0 }
-        : { clipPath: 'inset(0 0 0% 0 round 14px)', opacity: 1 }
+        ? { opacity: 1 }
+        : { clipPath: 'inset(0 0 0% 0 round 14px)' }
       }
-      viewport={{ once: true, margin: '-48px' }}
+      viewport={{ once: true, margin: '-32px' }}
       transition={{ duration: reducedMotion ? 0.4 : 1.15, ease: EASE, delay }}
     >
       {children}
@@ -368,7 +368,7 @@ export default function Gallery() {
                   style={{
                     gridColumn: `span ${cfg.colSpan}`,
                     gridRow: `span ${cfg.rowSpan}`,
-                    display: 'flex',
+                    position: 'relative',
                   }}
                 >
                   <WipeReveal delay={cfg.delay} reducedMotion={reducedMotion}>
