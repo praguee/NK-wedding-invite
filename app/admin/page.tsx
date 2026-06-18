@@ -77,22 +77,24 @@ export default function AdminPage() {
 
   if (!authed) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-600 to-blue-500 flex items-center justify-center p-4">
-        <div className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-sm">
-          <h1 className="text-2xl font-light text-center mb-8">Admin</h1>
+      <div className="min-h-screen flex items-center justify-center p-4" style={{ background: '#0D0600' }}>
+        <div className="glass-gold rounded-2xl p-8 w-full max-w-sm">
+          <h1 className="text-2xl font-light text-center mb-8" style={{ color: '#C49A28', letterSpacing: '0.08em' }}>N ✦ P</h1>
           <form onSubmit={login} className="space-y-4">
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-3 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-purple-400"
+              className="w-full px-4 py-3 rounded-xl text-sm focus:outline-none focus:ring-2 transition"
+              style={{ border: '1px solid rgba(196,154,40,0.2)', background: 'rgba(255,253,246,0.7)', color: '#5C3A2E', '--tw-ring-color': 'rgba(196,154,40,0.4)' } as React.CSSProperties}
               placeholder="Password"
               disabled={loginLoading}
             />
             <button
               type="submit"
               disabled={loginLoading}
-              className="w-full bg-purple-600 hover:bg-purple-700 disabled:bg-slate-300 text-white py-3 rounded-xl text-sm font-medium transition-colors"
+              className="w-full disabled:opacity-50 py-3 rounded-xl text-sm font-bold tracking-widest uppercase transition-opacity"
+              style={{ background: 'linear-gradient(135deg, #B8850A, #E8C547, #C49A28)', color: '#2A1200' }}
             >
               {loginLoading ? 'Checking…' : 'Login'}
             </button>

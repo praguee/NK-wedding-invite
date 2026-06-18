@@ -153,8 +153,8 @@
 }
 
 .airplaneSnapping {
-  transition: left 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
-              top  0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+  transition: left 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+              top  0.35s cubic-bezier(0.16, 1, 0.3, 1),
               transform 0.3s ease;
 }
 
@@ -197,6 +197,42 @@
 .instructionBarHidden {
   opacity: 0;
   transform: translateX(-50%) translateY(8px);
+}
+
+/* ─── Skip button ─── */
+.skipButton {
+  position: absolute;
+  bottom: 86px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 30;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.35);
+  transition: color 0.2s ease;
+  padding: 8px 16px;
+  white-space: nowrap;
+}
+
+.skipButton:hover {
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.skipButton:focus-visible {
+  outline: 1px solid rgba(196, 154, 40, 0.5);
+  outline-offset: 4px;
+  border-radius: 4px;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+@media (max-width: 480px) {
+  .skipButton {
+    bottom: 74px;
+  }
 }
 
 /* ─── Sarcastic message card ─── */

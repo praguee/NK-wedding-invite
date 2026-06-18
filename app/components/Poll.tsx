@@ -105,7 +105,7 @@ export default function Poll() {
               position: 'absolute', left: 0, top: 0, bottom: 0,
               width: `${percent}%`,
               background: side === 'bride' ? 'rgba(251,113,133,0.10)' : 'rgba(196,154,40,0.10)',
-              transition: 'width 0.8s cubic-bezier(0.34,1.56,0.64,1)',
+              transition: 'width 0.7s cubic-bezier(0.16,1,0.3,1)',
               borderRadius: 14,
             }}
           />
@@ -144,7 +144,7 @@ export default function Poll() {
                     width: `${percent}%`,
                     background: barColor,
                     borderRadius: 100,
-                    transition: 'width 0.8s cubic-bezier(0.34,1.56,0.64,1)',
+                    transition: 'width 0.7s cubic-bezier(0.16,1,0.3,1)',
                   }}
                 />
               </div>

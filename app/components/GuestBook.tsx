@@ -84,8 +84,8 @@ export default function GuestBook() {
           <div className="h-64 flex items-center justify-center" aria-label="Loading messages">
             <div className="flex gap-1.5" role="status">
               {[0,1,2].map(i => (
-                <div key={i} className="w-1.5 h-1.5 rounded-full animate-bounce"
-                  style={{ background: 'rgba(196,154,40,0.4)', animationDelay: `${i * 0.15}s` }} />
+                <div key={i} className="w-1.5 h-1.5 rounded-full motion-safe:animate-pulse"
+                  style={{ background: 'rgba(196,154,40,0.4)', animationDelay: `${i * 0.2}s` }} />
               ))}
             </div>
           </div>

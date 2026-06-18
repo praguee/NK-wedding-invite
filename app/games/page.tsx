@@ -148,7 +148,7 @@ function Poll({ onDone }: { onDone: () => void }) {
                   style={{ objectFit: 'cover', objectPosition: '50% 15%' }} />
               </div>
               <div className="flex-1 h-2 rounded-full overflow-hidden" style={{ background: 'rgba(196,154,40,0.12)' }}>
-                <div style={{ height: '100%', width: `${bp}%`, background: 'linear-gradient(to right,#e05080,#C43C5E)', borderRadius: 100, transition: 'width 0.8s cubic-bezier(0.34,1.56,0.64,1)' }} />
+                <div style={{ height: '100%', width: `${bp}%`, background: 'linear-gradient(to right,#e05080,#C43C5E)', borderRadius: 100, transition: 'width 0.7s cubic-bezier(0.16,1,0.3,1)' }} />
               </div>
               <span className="text-sm font-light w-10 text-right" style={{ color: '#C43C5E' }}>{bp}%</span>
             </div>
@@ -159,7 +159,7 @@ function Poll({ onDone }: { onDone: () => void }) {
                   style={{ objectFit: 'cover', objectPosition: '50% 8%' }} />
               </div>
               <div className="flex-1 h-2 rounded-full overflow-hidden" style={{ background: 'rgba(196,154,40,0.12)' }}>
-                <div style={{ height: '100%', width: `${gp}%`, background: 'linear-gradient(to right,#C49A28,#E8C547)', borderRadius: 100, transition: 'width 0.8s cubic-bezier(0.34,1.56,0.64,1)' }} />
+                <div style={{ height: '100%', width: `${gp}%`, background: 'linear-gradient(to right,#C49A28,#E8C547)', borderRadius: 100, transition: 'width 0.7s cubic-bezier(0.16,1,0.3,1)' }} />
               </div>
               <span className="text-sm font-light w-10 text-right" style={{ color: '#C49A28' }}>{gp}%</span>
             </div>
@@ -455,7 +455,7 @@ export default function GamesPage() {
           from { opacity: 0; transform: translateY(28px); }
           to   { opacity: 1; transform: translateY(0); }
         }
-        .games-enter { animation: gamesSlideUp 0.5s cubic-bezier(0.34,1.56,0.64,1); }
+        .games-enter { animation: gamesSlideUp 0.5s cubic-bezier(0.16,1,0.3,1); }
       `}</style>
 
       {/* Top bar — matches Navigation style */}

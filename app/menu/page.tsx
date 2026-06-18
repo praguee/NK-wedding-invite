@@ -74,8 +74,11 @@ export default function MenuPage() {
         <h1 className="text-4xl md:text-5xl font-extralight text-center mb-3 tracking-tight">
           The Menu
         </h1>
-        <p className="text-center text-sm mb-20" style={{ color: '#9C7A5A' }}>
+        <p className="text-center text-sm mb-6" style={{ color: '#9C7A5A' }}>
           December 4 · Abhishek Farms
+        </p>
+        <p className="text-center text-xs mb-20 mx-auto max-w-xs" style={{ color: 'rgba(156,122,90,0.6)', fontStyle: 'italic' }}>
+          Menu to be confirmed closer to the date — dishes below are indicative
         </p>
 
         <div className="space-y-20">

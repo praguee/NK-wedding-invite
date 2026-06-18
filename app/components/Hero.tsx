@@ -215,8 +215,12 @@ export default function Hero() {
         <div style={{ lineHeight: 1.15, paddingBottom: '0.1em' }}>
           <motion.h1
             variants={heroUp}
-            className="font-extralight tracking-tight text-gold-shimmer block"
-            style={{ fontSize: 'clamp(48px, 11vw, 92px)' }}
+            className="font-extralight tracking-tight block"
+            style={{
+              fontSize: 'clamp(48px, 11vw, 92px)',
+              color: '#C49A28',
+              textShadow: '0 0 48px rgba(196,154,40,0.28), 0 0 120px rgba(196,154,40,0.12)',
+            }}
           >
             {COUPLE.brideName}
           </motion.h1>
@@ -229,8 +233,12 @@ export default function Hero() {
           </motion.p>
           <motion.h1
             variants={heroUp}
-            className="font-extralight tracking-tight text-gold-shimmer block"
-            style={{ fontSize: 'clamp(48px, 11vw, 92px)' }}
+            className="font-extralight tracking-tight block"
+            style={{
+              fontSize: 'clamp(48px, 11vw, 92px)',
+              color: '#C49A28',
+              textShadow: '0 0 48px rgba(196,154,40,0.28), 0 0 120px rgba(196,154,40,0.12)',
+            }}
           >
             {COUPLE.groomName}
           </motion.h1>

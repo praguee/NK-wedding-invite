@@ -502,6 +502,15 @@ export default function IntroScreen({ onUnlock }: IntroScreenProps) {
       <div className={`${styles.instructionBar} ${!showInstruction ? styles.instructionBarHidden : ''}`}>
         ✈️&nbsp;&nbsp;Drag the plane from Birmingham to Mumbai
       </div>
+
+      {/* Skip link — subtle escape hatch for guests who can't drag */}
+      <button
+        onClick={triggerUnlock}
+        className={styles.skipButton}
+        aria-label="Skip intro and go to invitation"
+      >
+        Skip intro →
+      </button>
     </div>
   )
 }
