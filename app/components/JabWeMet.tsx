@@ -60,7 +60,7 @@ export default function JabWeMet() {
               ))}
               <StaggerItem>
                 <p className="text-sm italic mt-2" style={{ color: '#9C7A5A' }}>
-                  She says she didn&apos;t steal it. We&apos;re letting you decide. 🕵️
+                  She says she didn&apos;t steal it. We&apos;re letting you decide. <span aria-hidden="true">🕵️</span>
                 </p>
               </StaggerItem>
             </StaggerContainer>
@@ -116,7 +116,7 @@ export default function JabWeMet() {
                 </svg>
               ))}
               <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 p-8">
-                <span aria-hidden="true" style={{ fontSize: 40 }}>📸</span>
+                <span role="presentation" aria-hidden="true" style={{ fontSize: 40 }}>📸</span>
                 <p className="text-center text-sm italic" style={{ color: '#9C7A5A' }}>
                   Photos from when they met<br/>— coming soon
                 </p>

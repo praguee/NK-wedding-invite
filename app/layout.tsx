@@ -1,8 +1,16 @@
 import type { Metadata } from 'next'
+import { Cinzel } from 'next/font/google'
 import { Toaster } from 'react-hot-toast'
 import 'leaflet/dist/leaflet.css'
 import './globals.css'
 import CursorEffect from './components/CursorEffect'
+
+const cinzel = Cinzel({
+  subsets: ['latin'],
+  weight: ['400'],
+  variable: '--font-cinzel',
+  display: 'swap',
+})
 
 export const metadata: Metadata = {
   title: 'Nidhi & Parag Wedding | December 4, 2026',
@@ -21,7 +29,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="bg-white text-slate-900">
+      <body className={`bg-white text-slate-900 ${cinzel.variable}`}>
         <CursorEffect />
         {children}
         <Toaster position="bottom-center" toastOptions={{ duration: 4000 }} />

@@ -93,15 +93,15 @@ export default function Story() {
             <motion.div
               className="aspect-[4/5] rounded-2xl flex items-center justify-center relative overflow-hidden"
               style={{
-                background: 'linear-gradient(160deg, #e8d5f0 0%, #bfcfee 50%, #c8e8f0 100%)',
+                background: 'linear-gradient(160deg, #f0e8d8 0%, #e8d5c4 50%, #f5edd8 100%)',
                 boxShadow: '0 8px 40px rgba(196,154,40,0.15)',
               }}
               whileHover={{ scale: 1.01 }}
               transition={{ duration: 0.4 }}
             >
               <div className="text-center p-8">
-                <p className="text-5xl mb-4" aria-hidden="true">💧</p>
-                <p className="font-light text-sm italic leading-relaxed" style={{ color: '#6b7280' }}>
+                <p className="text-5xl mb-4" role="presentation" aria-hidden="true">💧</p>
+                <p className="font-light text-sm italic leading-relaxed" style={{ color: '#9C7A5A' }}>
                   Engagement &amp; pre-wedding<br />photos coming soon
                 </p>
               </div>
@@ -120,7 +120,7 @@ export default function Story() {
             <div className="glass-gold rounded-2xl px-5 py-4 text-center">
               <p className="text-xs tracking-widest uppercase mb-1" style={{ color: '#C49A28' }}>The Wedding</p>
               <p className="text-sm font-light" style={{ color: '#5C3A2E' }}>
-                A floating mandap · in the middle of a pool ✨
+                A floating mandap · in the middle of a pool <span aria-hidden="true">✨</span>
               </p>
             </div>
           </SlideIn>

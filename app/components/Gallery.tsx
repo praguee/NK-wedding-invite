@@ -160,7 +160,9 @@ function PhotoCard({
             }}
             transition={{ duration: 0.28, ease: EASE }}
           >
-            ↗
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+              <path d="M2 12L12 2M12 2H5M12 2V9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
           </motion.div>
         </div>
       </motion.div>

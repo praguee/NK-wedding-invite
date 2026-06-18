@@ -36,6 +36,13 @@ body {
   background-size: 72px 72px;
 }
 
+/* ── Display font — Cinzel for section headings ──────────────── */
+h2, h3 {
+  font-family: var(--font-cinzel), 'Georgia', serif;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+}
+
 /* ── Warm section backgrounds ─────────────────────────────────── */
 @layer base {
   /* Sections currently using bg-white → warm ivory (seamless with body) */

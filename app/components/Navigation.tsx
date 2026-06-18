@@ -79,19 +79,19 @@ export default function Navigation() {
             className="font-light tracking-[0.12em]"
             style={{ fontSize: 17, color: '#5C3A1E', letterSpacing: '0.12em' }}
           >
-            N <span style={{ color: '#C49A28', fontSize: 11 }}>✦</span> P
+            N <span aria-hidden="true" style={{ color: '#C49A28', fontSize: 11 }}>✦</span> P
           </span>
         </a>
 
         {/* Desktop links */}
         <div className="hidden md:flex gap-7 items-center">
           <Link href="/menu"
-            className="text-xs tracking-widest uppercase px-3 py-1.5 rounded-full transition-all font-medium"
+            className="text-xs tracking-widest uppercase px-3 py-1.5 rounded-full transition-all font-medium cursor-pointer"
             style={{ color: '#C49A28', background: 'rgba(196,154,40,0.1)', border: '1px solid rgba(196,154,40,0.25)' }}>
-            🍽 Menu
+            <span aria-hidden="true">🍽</span> Menu
           </Link>
           <Link href="/games"
-            className="text-xs tracking-widest uppercase px-3 py-1.5 rounded-full transition-all font-medium"
+            className="text-xs tracking-widest uppercase px-3 py-1.5 rounded-full transition-all font-medium cursor-pointer"
             style={{ color: '#C49A28', background: 'rgba(196,154,40,0.1)', border: '1px solid rgba(196,154,40,0.25)' }}>
             Trivia
           </Link>
@@ -146,7 +146,7 @@ export default function Navigation() {
             style={{ color: '#C49A28', background: 'rgba(196,154,40,0.05)', borderBottom: '1px solid rgba(196,154,40,0.1)', letterSpacing: '0.09em' }}
             onClick={() => setIsOpen(false)}
           >
-            🍽 Menu
+            <span aria-hidden="true">🍽</span> Menu
           </Link>
           <Link
             href="/games"

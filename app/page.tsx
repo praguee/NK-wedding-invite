@@ -6,6 +6,7 @@ import Navigation from './components/Navigation'
 import Hero from './components/Hero'
 import Story from './components/Story'
 import JabWeMet from './components/JabWeMet'
+import InviteDetails from './components/InviteDetails'
 import Gallery from './components/Gallery'
 import Timeline from './components/Timeline'
 import RSVPForm from './components/RSVPForm'
@@ -38,8 +39,9 @@ export default function Home() {
         <Hero />
         <FadeUp><Story /></FadeUp>
         <FadeUp delay={0.05}><JabWeMet /></FadeUp>
-        <FadeUp><Timeline /></FadeUp>
+        <FadeUp><InviteDetails /></FadeUp>
         <FadeUp delay={0.05}><Gallery /></FadeUp>
+        <FadeUp><Timeline /></FadeUp>
         <FadeUp delay={0.05}><RSVPForm /></FadeUp>
         <FadeUp><GuestBook /></FadeUp>
         <FadeUp delay={0.05}><Transportation /></FadeUp>
@@ -58,7 +60,7 @@ export default function Home() {
           backgroundSize: '200px 200px',
         }} />
         <div className="relative z-10">
-          <p className="text-gold-shimmer text-3xl font-extralight tracking-[0.2em] mb-2">N ✦ P</p>
+          <p className="text-3xl font-extralight tracking-[0.2em] mb-2" style={{ color: '#C49A28', textShadow: '0 0 32px rgba(196,154,40,0.55)' }}>N <span aria-hidden="true">✦</span> P</p>
           <p className="text-sm tracking-[0.15em] mb-1" style={{ color: 'rgba(196,154,40,0.7)' }}>
             Birmingham ✈ Mumbai · 04 · 12 · 2026
           </p>
