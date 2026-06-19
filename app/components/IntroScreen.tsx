@@ -215,10 +215,6 @@ export default function IntroScreen({ onUnlock }: IntroScreenProps) {
     e.preventDefault()
     e.stopPropagation()
     ;(e.target as HTMLElement).setPointerCapture(e.pointerId)
-    // Prevent map from panning or pinch-zooming while plane is grabbed
-    leafletRef.current?.dragging.disable()
-    leafletRef.current?.touchZoom.disable()
-    leafletRef.current?.scrollWheelZoom.disable()
     isDraggingRef.current = true
     setIsDragging(true)
     setShowHint(false)
@@ -245,9 +241,6 @@ export default function IntroScreen({ onUnlock }: IntroScreenProps) {
     if (!isDraggingRef.current) return
     isDraggingRef.current = false
     setIsDragging(false)
-    leafletRef.current?.dragging.enable()
-    leafletRef.current?.touchZoom.enable()
-    leafletRef.current?.scrollWheelZoom.enable()
 
     const map = leafletRef.current
     const current = planePxRef.current
