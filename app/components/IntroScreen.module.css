@@ -11,7 +11,7 @@
   overflow: hidden;
   touch-action: none;
   -webkit-tap-highlight-color: transparent;
-  background: #F5EDD8;
+  background: #010408;
   cursor: default;
 }
 
@@ -32,17 +32,15 @@
   width: 100%;
   height: 100%;
   z-index: 0;
-  background: #F5EDD8;
+  background: #010408;
 }
 
-/* Leaflet needs explicit size on its internal container */
 .mapContainer :global(.leaflet-container) {
   width: 100% !important;
   height: 100% !important;
-  background: #F0E6CE !important;
+  background: #010408 !important;
 }
 
-/* Hide Leaflet attribution and zoom controls */
 .mapContainer :global(.leaflet-control-attribution) {
   display: none !important;
 }
@@ -50,11 +48,15 @@
   display: none !important;
 }
 
-/* Warm ivory tint over the light map — softens greys to match site palette */
+/* Radial vignette — darkens edges, focuses center */
 .mapOverlay {
   position: absolute;
   inset: 0;
-  background: rgba(255, 248, 228, 0.22);
+  background: radial-gradient(
+    ellipse 80% 80% at 50% 50%,
+    transparent 40%,
+    rgba(1, 4, 8, 0.55) 100%
+  );
   z-index: 1;
   pointer-events: none;
 }
@@ -72,47 +74,60 @@
 
 .pulseRing {
   position: absolute;
-  width: 40px;
-  height: 40px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   border: 1px solid currentColor;
-  animation: pulse 2s ease-out infinite;
+  animation: pulse 2.4s ease-out infinite;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
 }
 
 @keyframes pulse {
-  0%   { transform: translate(-50%, -50%) scale(1);   opacity: 0.7; }
-  100% { transform: translate(-50%, -50%) scale(2.5); opacity: 0;   }
+  0%   { transform: translate(-50%, -50%) scale(1);   opacity: 0.6; }
+  100% { transform: translate(-50%, -50%) scale(2.8); opacity: 0;   }
 }
 
 .cityDot {
-  width: 10px;
-  height: 10px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
   position: relative;
   z-index: 2;
 }
 
+/* Dark glassmorphism city label */
 .cityLabel {
-  margin-bottom: 16px;
-  margin-top: -52px;
-  background: rgba(255, 253, 246, 0.92);
-  backdrop-filter: blur(48px) saturate(180%) brightness(1.02);
-  -webkit-backdrop-filter: blur(48px) saturate(180%) brightness(1.02);
-  border: 1px solid rgba(196, 154, 40, 0.28);
+  background: rgba(6, 8, 16, 0.78);
+  backdrop-filter: blur(32px) saturate(160%);
+  -webkit-backdrop-filter: blur(32px) saturate(160%);
+  border: 1px solid rgba(255, 253, 246, 0.09);
   border-radius: 100px;
   box-shadow:
-    0 0 0 0.5px rgba(255, 255, 255, 0.7) inset,
-    0 4px 16px rgba(140, 90, 40, 0.12);
-  padding: 6px 14px;
-  font-size: 12px;
+    0 0 0 0.5px rgba(255, 255, 255, 0.05) inset,
+    0 4px 16px rgba(0, 0, 0, 0.45);
+  padding: 5px 13px;
+  font-family: var(--font-dm-sans), system-ui, sans-serif;
+  font-size: 11px;
   font-weight: 400;
   line-height: 1;
-  letter-spacing: 0.04em;
-  color: #5C3A2E;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255, 253, 246, 0.75);
   white-space: nowrap;
+}
+
+.cityLabelName {
+  display: block;
+  font-family: var(--font-cormorant), Georgia, serif;
+  font-size: 15px;
+  font-weight: 300;
+  letter-spacing: 0.04em;
+  text-transform: none;
+  color: rgba(255, 253, 246, 0.92);
+  line-height: 1.2;
+  margin-bottom: 2px;
 }
 
 /* ─── Flight path SVG ─── */
@@ -130,25 +145,26 @@
   position: absolute;
   z-index: 20;
   width: 44px;
-  height: 44px;
+  height: 52px;
   cursor: grab;
   touch-action: none;
   transform: translate(-50%, -50%) rotate(45deg);
   transition: filter 0.15s ease;
   user-select: none;
   -webkit-user-select: none;
+  filter: drop-shadow(0 2px 8px rgba(196, 154, 40, 0.4));
 }
 
 @media (max-width: 768px) {
   .airplane {
     width: 52px;
-    height: 52px;
+    height: 62px;
   }
 }
 
 .airplaneDragging {
   cursor: grabbing;
-  filter: drop-shadow(0 0 14px rgba(196, 154, 40, 0.85));
+  filter: drop-shadow(0 0 18px rgba(196, 154, 40, 0.9)) drop-shadow(0 0 6px rgba(255,220,100,0.6));
 }
 
 .airplaneSnapping {
@@ -164,19 +180,24 @@
   left: 50%;
   transform: translateX(-50%);
   z-index: 30;
-  background: rgba(255, 253, 246, 0.90);
-  backdrop-filter: blur(48px) saturate(180%);
-  -webkit-backdrop-filter: blur(48px) saturate(180%);
-  border: 1px solid rgba(196, 154, 40, 0.28);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(6, 8, 16, 0.72);
+  backdrop-filter: blur(40px) saturate(160%);
+  -webkit-backdrop-filter: blur(40px) saturate(160%);
+  border: 1px solid rgba(196, 154, 40, 0.18);
   border-radius: 100px;
   box-shadow:
-    0 0 0 0.5px rgba(255, 255, 255, 0.7) inset,
-    0 8px 32px rgba(140, 90, 40, 0.12);
+    0 0 0 0.5px rgba(255, 255, 255, 0.04) inset,
+    0 8px 32px rgba(0, 0, 0, 0.5);
   padding: 10px 22px;
-  font-size: 13px;
+  font-family: var(--font-dm-sans), system-ui, sans-serif;
+  font-size: 12px;
   font-weight: 400;
-  letter-spacing: 0.05em;
-  color: #5C3A2E;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 253, 246, 0.55);
   white-space: nowrap;
   transition: opacity 0.4s ease, transform 0.4s ease;
   pointer-events: none;
@@ -186,7 +207,7 @@
 
 @media (max-width: 480px) {
   .instructionBar {
-    font-size: 12px;
+    font-size: 11px;
     padding: 9px 16px;
     bottom: 24px;
     white-space: normal;
@@ -203,37 +224,32 @@
 /* ─── Skip button ─── */
 .skipButton {
   position: absolute;
-  bottom: 86px;
-  left: 50%;
-  transform: translateX(-50%);
+  top: 24px;
+  right: 24px;
   z-index: 30;
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 11px;
+  font-family: var(--font-dm-sans), system-ui, sans-serif;
+  font-size: 10px;
   font-weight: 400;
-  letter-spacing: 0.1em;
-  color: rgba(92, 58, 46, 0.45);
-  transition: color 0.2s ease;
-  padding: 8px 16px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255, 253, 246, 0.28);
+  transition: color 0.25s ease;
+  padding: 8px 12px;
   white-space: nowrap;
 }
 
 .skipButton:hover {
-  color: rgba(92, 58, 46, 0.75);
+  color: rgba(255, 253, 246, 0.6);
 }
 
 .skipButton:focus-visible {
-  outline: 1px solid rgba(196, 154, 40, 0.6);
+  outline: 1px solid rgba(196, 154, 40, 0.5);
   outline-offset: 4px;
   border-radius: 6px;
-  color: rgba(92, 58, 46, 0.75);
-}
-
-@media (max-width: 480px) {
-  .skipButton {
-    bottom: 74px;
-  }
+  color: rgba(255, 253, 246, 0.6);
 }
 
 /* ─── Sarcastic message card ─── */
@@ -245,14 +261,14 @@
   z-index: 40;
   max-width: 380px;
   width: calc(100% - 48px);
-  background: rgba(255, 250, 240, 0.95);
-  backdrop-filter: blur(60px) saturate(200%);
-  -webkit-backdrop-filter: blur(60px) saturate(200%);
+  background: rgba(6, 8, 18, 0.88);
+  backdrop-filter: blur(60px) saturate(180%);
+  -webkit-backdrop-filter: blur(60px) saturate(180%);
   border-radius: 16px;
   overflow: hidden;
   box-shadow:
-    0 16px 48px rgba(140, 90, 40, 0.15),
-    0 0 0 0.5px rgba(255, 255, 255, 0.8) inset;
+    0 20px 60px rgba(0, 0, 0, 0.6),
+    0 0 0 0.5px rgba(255, 255, 255, 0.06) inset;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.3s ease, transform 0.3s ease;
@@ -271,9 +287,9 @@
   transform: translateX(-50%) translateY(0);
 }
 
-/* Wedding palette shimmer: gold → burgundy → gold */
+/* Gold → burgundy → gold shimmer */
 .messageCardPrismaticBorder {
-  height: 2px;
+  height: 1.5px;
   background: linear-gradient(90deg, #C49A28, #D4AA38, #8B2252, #C49A28, #D4AA38, #C49A28);
   background-size: 200% 100%;
   animation: shimmer 3s linear infinite;
@@ -285,17 +301,18 @@
 }
 
 .messageCardInner {
-  padding: 16px 20px;
-  border: 1px solid rgba(196, 154, 40, 0.18);
+  padding: 14px 20px;
+  border: 1px solid rgba(196, 154, 40, 0.10);
   border-top: none;
   border-radius: 0 0 16px 16px;
 }
 
 .messageText {
-  font-size: 14px;
+  font-family: var(--font-dm-sans), system-ui, sans-serif;
+  font-size: 13px;
   font-weight: 400;
-  color: #2A1200;
-  line-height: 1.5;
+  color: rgba(255, 253, 246, 0.82);
+  line-height: 1.55;
   letter-spacing: 0.01em;
 }
 
@@ -307,16 +324,16 @@
   transform: translateX(-50%) translateY(30px);
   z-index: 50;
   text-align: center;
-  background: rgba(255, 250, 240, 0.96);
+  background: rgba(6, 8, 18, 0.90);
   backdrop-filter: blur(60px) saturate(200%);
   -webkit-backdrop-filter: blur(60px) saturate(200%);
-  border: 1px solid rgba(196, 154, 40, 0.28);
-  border-radius: 16px;
+  border: 1px solid rgba(196, 154, 40, 0.22);
+  border-radius: 20px;
   box-shadow:
-    0 0 0 0.5px rgba(255, 255, 255, 0.8) inset,
-    0 20px 60px rgba(140, 90, 40, 0.18),
-    0 0 80px rgba(196, 154, 40, 0.10);
-  padding: 28px 40px;
+    0 0 0 0.5px rgba(255, 255, 255, 0.06) inset,
+    0 24px 80px rgba(0, 0, 0, 0.65),
+    0 0 100px rgba(196, 154, 40, 0.08);
+  padding: 28px 40px 24px;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.4s ease, transform 0.4s ease;
@@ -328,39 +345,36 @@
   transform: translateX(-50%) translateY(0);
 }
 
-.successEmoji {
-  font-size: 36px;
-  margin-bottom: 10px;
-  display: block;
-}
-
 .successTitle {
-  font-size: 26px;
-  font-weight: 200;
-  color: #2A1200;
+  font-family: var(--font-cormorant), Georgia, serif;
+  font-size: 28px;
+  font-weight: 300;
+  color: rgba(255, 253, 246, 0.95);
   letter-spacing: 0.02em;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
 
 .successSub {
-  font-size: 13px;
+  font-family: var(--font-dm-sans), system-ui, sans-serif;
+  font-size: 11px;
   font-weight: 400;
-  color: #9C7A5A;
-  letter-spacing: 0.06em;
+  color: rgba(196, 154, 40, 0.75);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
 }
 
 /* ─── Mumbai unlock burst ─── */
 .unlockBurst {
   position: absolute;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(196, 154, 40, 0.28) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(196, 154, 40, 0.22) 0%, rgba(196,154,40,0.05) 50%, transparent 70%);
   transform: translate(-50%, -50%) scale(0);
   pointer-events: none;
   z-index: 15;
-  animation: burst 0.7s ease-out forwards;
+  animation: burst 0.9s ease-out forwards;
 }
 
 @keyframes burst {
   0%   { width: 0px;    height: 0px;   opacity: 1; }
-  100% { width: 800px;  height: 800px; opacity: 0; }
+  100% { width: 900px;  height: 900px; opacity: 0; }
 }
