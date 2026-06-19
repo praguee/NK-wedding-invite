@@ -19,7 +19,8 @@
 }
 
 html {
-  scroll-behavior: smooth;
+  /* scroll-behavior handled by Lenis — CSS smooth scroll conflicts with it */
+  scroll-behavior: auto;
 }
 
 /* ── Warm ivory body with jali lattice + ambient colour blobs ── */

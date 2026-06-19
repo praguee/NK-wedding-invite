@@ -4,6 +4,7 @@ import { Toaster } from 'react-hot-toast'
 import 'leaflet/dist/leaflet.css'
 import './globals.css'
 import CursorEffect from './components/CursorEffect'
+import SmoothScroll from './components/SmoothScroll'
 
 const cormorant = Cormorant_Garamond({
   subsets: ['latin'],
@@ -39,7 +40,9 @@ export default function RootLayout({
     <html lang="en">
       <body className={`bg-white text-slate-900 ${cormorant.variable} ${dmSans.variable}`}>
         <CursorEffect />
-        {children}
+        <SmoothScroll>
+          {children}
+        </SmoothScroll>
         <Toaster position="bottom-center" toastOptions={{ duration: 4000 }} />
       </body>
     </html>
