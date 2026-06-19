@@ -264,9 +264,10 @@ export default function Navigation() {
                         whileHover={{ x: 14, color: '#C49A28' }}
                         transition={{ duration: 0.28, ease: 'easeOut' }}
                         style={{
-                          fontFamily: 'var(--font-cormorant)',
+                          fontFamily: 'var(--font-playfair), Georgia, serif',
                           fontSize: 'clamp(2.6rem, 5.5vw, 5.2rem)',
-                          fontWeight: 300,
+                          fontWeight: 400,
+                          fontStyle: 'italic',
                           lineHeight: 1.0,
                           color: 'rgba(246, 237, 218, 0.82)',
                           letterSpacing: '-0.01em',

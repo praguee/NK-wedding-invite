@@ -1,11 +1,12 @@
 import type { Metadata } from 'next'
-import { Cormorant_Garamond, DM_Sans } from 'next/font/google'
+import { Cormorant_Garamond, Playfair_Display, Inter } from 'next/font/google'
 import { Toaster } from 'react-hot-toast'
 import 'leaflet/dist/leaflet.css'
 import './globals.css'
 import CursorEffect from './components/CursorEffect'
 import SmoothScroll from './components/SmoothScroll'
 
+// Romantic script accent — used only for logo N ✦ P and special accents
 const cormorant = Cormorant_Garamond({
   subsets: ['latin'],
   weight: ['300', '400', '500'],
@@ -14,10 +15,20 @@ const cormorant = Cormorant_Garamond({
   display: 'swap',
 })
 
-const dmSans = DM_Sans({
+// Editorial serif — h2/h3 section headings + cinematic display text
+const playfair = Playfair_Display({
+  subsets: ['latin'],
+  weight: ['400', '500', '700', '900'],
+  style: ['normal', 'italic'],
+  variable: '--font-playfair',
+  display: 'swap',
+})
+
+// Clean neutral body — UI text, captions, labels (replaces DM Sans)
+const inter = Inter({
   subsets: ['latin'],
   weight: ['300', '400', '500'],
-  variable: '--font-dm-sans',
+  variable: '--font-dm-sans', // keep same CSS var — no cascading changes needed
   display: 'swap',
 })
 
@@ -38,7 +49,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`bg-white text-slate-900 ${cormorant.variable} ${dmSans.variable}`}>
+      <body className={`bg-white text-slate-900 ${cormorant.variable} ${playfair.variable} ${inter.variable}`}>
         <CursorEffect />
         <SmoothScroll>
           {children}

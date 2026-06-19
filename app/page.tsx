@@ -8,6 +8,7 @@ import Story from './components/Story'
 import JabWeMet from './components/JabWeMet'
 import InviteDetails from './components/InviteDetails'
 import Gallery from './components/Gallery'
+import CinematicBanner from './components/CinematicBanner'
 import Timeline from './components/Timeline'
 import RSVPForm from './components/RSVPForm'
 import GuestBook from './components/GuestBook'
@@ -43,6 +44,7 @@ export default function Home() {
         <JabWeMet />
         <InviteDetails />
         <Gallery />
+        <CinematicBanner />
         <Timeline />
         <RSVPForm />
         <GuestBook />
