@@ -93,6 +93,9 @@ export default function Home() {
 
   return (
     <>
+      {/* Solid dark fallback — covers everything while dynamic intro components load */}
+      <div style={{ position: 'fixed', inset: 0, zIndex: 98, background: '#010408' }} />
+
       {/* Blurred wedding content visible underneath the intro */}
       <div
         style={{
