@@ -101,15 +101,16 @@ export default function IntroScreen({ onUnlock }: IntroScreenProps) {
       el.style.width  = `${window.innerWidth}px`
       el.style.height = `${window.innerHeight}px`
 
+      // Map is a locked backdrop — all interaction disabled except plane dragging
       const map = L.map(el, {
-        zoomControl:      false,
-        scrollWheelZoom:  true,
-        dragging:         true,
-        touchZoom:        true,
-        doubleClickZoom:  false,
-        minZoom:          2,
-        maxZoom:          8,
-        worldCopyJump:    false,
+        zoomControl:        false,
+        scrollWheelZoom:    false,
+        dragging:           false,
+        touchZoom:          false,
+        doubleClickZoom:    false,
+        boxZoom:            false,
+        keyboard:           false,
+        tap:                false,
         attributionControl: false,
       })
 
@@ -340,37 +341,14 @@ export default function IntroScreen({ onUnlock }: IntroScreenProps) {
         <div className={styles.successSub}>Nidhi &amp; Parag &nbsp;·&nbsp; December 4, 2026</div>
       </div>
 
-      {/* Zoom controls */}
-      <div className={styles.zoomControls} aria-label="Map zoom">
-        <button
-          className={styles.zoomBtn}
-          onClick={() => leafletRef.current?.zoomIn()}
-          aria-label="Zoom in"
-        >
-          <svg viewBox="0 0 24 24" width={14} height={14} aria-hidden>
-            <path fill="white" d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6z"/>
-          </svg>
-        </button>
-        <div className={styles.zoomDivider} />
-        <button
-          className={styles.zoomBtn}
-          onClick={() => leafletRef.current?.zoomOut()}
-          aria-label="Zoom out"
-        >
-          <svg viewBox="0 0 24 24" width={14} height={14} aria-hidden>
-            <path fill="white" d="M19 13H5v-2h14z"/>
-          </svg>
-        </button>
-      </div>
-
-      {/* "make it fly" hint */}
-      <p
+      {/* "make it fly" hint pill */}
+      <div
         className={styles.flyHint}
         style={{ opacity: showHint ? 1 : 0 }}
         aria-hidden="true"
       >
         make it fly
-      </p>
+      </div>
 
       {/* Skip */}
       <button
