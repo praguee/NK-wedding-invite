@@ -18,15 +18,18 @@ import ContactFAQ from './components/ContactFAQ'
 import FloatingRSVPButton from './components/FloatingRSVPButton'
 
 const IntroScreen = dynamic(() => import('./components/IntroScreen'), { ssr: false })
+const EarthIntro  = dynamic(() => import('./components/EarthIntro'),  { ssr: false })
 
 export default function Home() {
   const [unlocked, setUnlocked] = useState(false)
+  const [earthDone, setEarthDone] = useState(false)
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
     setMounted(true)
     if (sessionStorage.getItem('invite_unlocked') === 'true') {
       setUnlocked(true)
+      setEarthDone(true)
     }
   }, [])
 
@@ -105,8 +108,15 @@ export default function Home() {
         {mainContent}
       </div>
 
-      {/* Intro screen on top */}
-      <IntroScreen onUnlock={() => setUnlocked(true)} />
+      {/* Earth globe animation — shown first, transitions to map */}
+      {!earthDone && (
+        <EarthIntro onComplete={() => setEarthDone(true)} />
+      )}
+
+      {/* Map intro — shown after earth animation completes */}
+      {earthDone && (
+        <IntroScreen onUnlock={() => setUnlocked(true)} />
+      )}
     </>
   )
 }
