@@ -96,9 +96,12 @@ export default function IntroScreen({ onUnlock }: IntroScreenProps) {
     import('leaflet').then(({ default: L }) => {
       if (cancelled || leafletRef.current) return
 
-      const map = L.map(mapDivRef.current!, {
-        center:           [36, 36],
-        zoom:             3,
+      // Give Leaflet explicit pixel dimensions so it measures correctly on every device
+      const el = mapDivRef.current!
+      el.style.width  = `${window.innerWidth}px`
+      el.style.height = `${window.innerHeight}px`
+
+      const map = L.map(el, {
         zoomControl:      false,
         scrollWheelZoom:  true,
         dragging:         true,
@@ -106,6 +109,7 @@ export default function IntroScreen({ onUnlock }: IntroScreenProps) {
         doubleClickZoom:  false,
         minZoom:          2,
         maxZoom:          8,
+        worldCopyJump:    false,
         attributionControl: false,
       })
 
@@ -121,19 +125,39 @@ export default function IntroScreen({ onUnlock }: IntroScreenProps) {
         { maxZoom: 19, subdomains: 'abcd' }
       ).addTo(map)
 
+      // Frame both cities — fitBounds ensures correct initial view on every screen size
+      map.fitBounds(
+        [[BIRMINGHAM.lat, BIRMINGHAM.lng], [MUMBAI.lat, MUMBAI.lng]],
+        { padding: [60, 80], animate: false }
+      )
+
       leafletRef.current = map
       map.on('move zoom zoomend moveend', syncPixels)
 
-      setTimeout(() => {
+      // Force Leaflet to re-measure after React paint, then mark ready
+      requestAnimationFrame(() => {
         if (cancelled) return
-        setMapReady(true)
+        map.invalidateSize()
         syncPixels()
+        setMapReady(true)
+        // Show hint immediately after map is ready — visible for 4s
+        setShowHint(true)
+        hintTimerRef.current = setTimeout(() => setShowHint(false), 4000)
+      })
 
-        hintTimerRef.current = setTimeout(() => {
-          setShowHint(true)
-          hintTimerRef.current = setTimeout(() => setShowHint(false), 3200)
-        }, 1600)
-      }, 400)
+      // Handle viewport resize (orientation change on mobile)
+      const onResize = () => {
+        if (cancelled) return
+        el.style.width  = `${window.innerWidth}px`
+        el.style.height = `${window.innerHeight}px`
+        map.invalidateSize()
+        syncPixels()
+      }
+      window.addEventListener('resize', onResize)
+      // Store cleanup on the ref so return() can reach it
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      ;(leafletRef as { current: any }).current._resizeCleanup = () =>
+        window.removeEventListener('resize', onResize)
     })
 
     return () => {
@@ -141,6 +165,7 @@ export default function IntroScreen({ onUnlock }: IntroScreenProps) {
       clearTimeout(hintTimerRef.current)
       clearTimeout(msgTimerRef.current)
       if (leafletRef.current) {
+        leafletRef.current._resizeCleanup?.()
         leafletRef.current.remove()
         leafletRef.current = null
       }
@@ -190,8 +215,10 @@ export default function IntroScreen({ onUnlock }: IntroScreenProps) {
     e.preventDefault()
     e.stopPropagation()
     ;(e.target as HTMLElement).setPointerCapture(e.pointerId)
-    // Prevent map from panning while plane is grabbed
+    // Prevent map from panning or pinch-zooming while plane is grabbed
     leafletRef.current?.dragging.disable()
+    leafletRef.current?.touchZoom.disable()
+    leafletRef.current?.scrollWheelZoom.disable()
     isDraggingRef.current = true
     setIsDragging(true)
     setShowHint(false)
@@ -219,6 +246,8 @@ export default function IntroScreen({ onUnlock }: IntroScreenProps) {
     isDraggingRef.current = false
     setIsDragging(false)
     leafletRef.current?.dragging.enable()
+    leafletRef.current?.touchZoom.enable()
+    leafletRef.current?.scrollWheelZoom.enable()
 
     const map = leafletRef.current
     const current = planePxRef.current
@@ -257,16 +286,7 @@ export default function IntroScreen({ onUnlock }: IntroScreenProps) {
       <div className={styles.mapVignette} aria-hidden="true" />
 
       {/* Origin dot — UK */}
-      {mapReady && (
-        <div
-          className={styles.originDot}
-          style={{ left: planePxRef.current.x > 0 ? undefined : undefined }}
-          aria-hidden="true"
-        >
-          {/* rendered via syncPixels; static dot at BIRMINGHAM */}
-          <BirminghamDot map={leafletRef.current} />
-        </div>
-      )}
+      {mapReady && <BirminghamDot map={leafletRef.current} />}
 
       {/* Destination pulse — India */}
       {mapReady && <MumbaiDot mumbaiPx={mumbaiPx} />}
