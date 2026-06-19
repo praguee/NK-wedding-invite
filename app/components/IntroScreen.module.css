@@ -68,7 +68,7 @@
   100% { transform: translate(-50%, -50%) scale(3.2); opacity: 0; }
 }
 
-/* ─── Draggable airplane ─── */
+/* ─── Draggable airplane — transform-only for GPU compositor smoothness ─── */
 .plane {
   position: absolute;
   z-index: 20;
@@ -78,26 +78,26 @@
   touch-action: none;
   user-select: none;
   -webkit-user-select: none;
+  will-change: transform;
   filter: drop-shadow(0 0 5px rgba(255,255,255,0.5))
           drop-shadow(0 2px 6px rgba(0,0,0,0.9));
-  transition: filter 0.15s ease;
+  transition: filter 0.15s ease, transform 0.05s linear;
 }
 @media (max-width: 768px) {
-  .plane { width: 46px; height: 46px; }
+  .plane { width: 52px; height: 52px; }
 }
 
 .planeDragging {
   cursor: grabbing;
-  filter: drop-shadow(0 0 12px rgba(255,255,255,0.9))
-          drop-shadow(0 0 4px rgba(255,255,255,0.5))
+  transition: filter 0.15s ease;  /* no transform transition during drag */
+  filter: drop-shadow(0 0 14px rgba(255,255,255,0.95))
+          drop-shadow(0 0 5px rgba(255,255,255,0.5))
           drop-shadow(0 2px 6px rgba(0,0,0,0.9));
 }
 
 .planeSnapping {
-  transition:
-    left   0.38s cubic-bezier(0.16, 1, 0.3, 1),
-    top    0.38s cubic-bezier(0.16, 1, 0.3, 1),
-    transform 0.3s ease;
+  transition: transform 0.42s cubic-bezier(0.16, 1, 0.3, 1),
+              filter 0.2s ease;
 }
 
 /* ─── Zoom controls ─── */

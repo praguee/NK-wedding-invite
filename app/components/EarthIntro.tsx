@@ -176,7 +176,7 @@ export default function EarthIntro({ onComplete }: EarthIntroProps) {
             letterSpacing: '0.28em', textTransform: 'uppercase' as const,
             color: 'rgba(196,154,40,0.75)', textShadow: '0 1px 12px rgba(0,0,0,0.5)',
           }}>
-            Birmingham · Mumbai · December 2026
+            Birmingham · Mumbai · 4 December 2026
           </p>
         </motion.div>
 

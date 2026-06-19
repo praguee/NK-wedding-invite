@@ -15,18 +15,18 @@ const MUMBAI     = { lat: 19.0760, lng: 72.8777 }
 const SNAP_PX = 90
 
 const GEO_ZONES: [number, number, number, number, string][] = [
-  [49, 85,  -10,   3,   "Back to the start. Destination is east."],
-  [36, 72,  -10,  22,   "Still in Europe. Much further east."],
-  [60, 85, -100, -10,   "That's the Arctic. Turn around."],
-  [45, 85,   22, 180,   "Too far north. Head south-east."],
-  [10, 42,   35,  62,   "Getting closer. Keep going east and south."],
-  [20, 36,   60,  73,   "Very close. One more push east."],
-  [26, 34,   74,  82,   "Almost. Drop about 1,400 km south."],
-  [ 5, 20,   73,  82,   "Overshot south. Come back north."],
-  [18, 55,   82, 145,   "Too far east. Come back west."],
-  [-20, 28,  90, 145,   "Past it. Head west."],
-  [-60, 18, -20,  55,   "Wrong continent. Try the other direction."],
-  [-60, 60, -180, -50,  "Wrong side of the planet."],
+  [49, 85,  -10,   3,   "That's where you started. You've gone in a circle."],
+  [36, 72,  -10,  22,   "A lovely tour of Europe. Wrong wedding though."],
+  [60, 85, -100, -10,   "Points for ambition. Minus several hundred for navigation."],
+  [45, 85,   22, 180,   "Russia is not on the guest list."],
+  [10, 42,   35,  62,   "Warmer. The Middle East says hi. Keep going."],
+  [20, 36,   60,  73,   "You can almost smell the vada pav from here."],
+  [26, 34,   74,  82,   "So close it hurts. Drop straight south about 1,400 km."],
+  [ 5, 20,   73,  82,   "India does not extend into the Indian Ocean. Come back up."],
+  [18, 55,   82, 145,   "You've left the subcontinent entirely. Bold move."],
+  [-20, 28,  90, 145,   "Southeast Asia is charming but it's not the venue."],
+  [-60, 18, -20,  55,   "Wrong wedding. Different continent. Different hemisphere."],
+  [-60, 60, -180, -50,  "You've crossed an entire ocean in the wrong direction. Impressive."],
 ]
 
 function pxDist(a: { x: number; y: number }, b: { x: number; y: number }) {
@@ -140,9 +140,9 @@ export default function IntroScreen({ onUnlock }: IntroScreenProps) {
         map.invalidateSize()
         syncPixels()
         setMapReady(true)
-        // Show hint immediately after map is ready — visible for 4s
+        // Show hint for 8s so guests have time to notice it
         setShowHint(true)
-        hintTimerRef.current = setTimeout(() => setShowHint(false), 4000)
+        hintTimerRef.current = setTimeout(() => setShowHint(false), 8000)
       })
 
       // Handle viewport resize (orientation change on mobile)
@@ -185,6 +185,10 @@ export default function IntroScreen({ onUnlock }: IntroScreenProps) {
     setTimeout(() => {
       syncPixels()
       setIsSnapping(false)
+      // Re-show hint after snap so guest knows to try again
+      clearTimeout(hintTimerRef.current)
+      setShowHint(true)
+      hintTimerRef.current = setTimeout(() => setShowHint(false), 5000)
     }, 360)
     if (msg) showMsg(msg)
   }, [syncPixels, showMsg])
@@ -266,7 +270,7 @@ export default function IntroScreen({ onUnlock }: IntroScreenProps) {
         }
       }
     }
-    snapToBirmingham()
+    snapToBirmingham("Creative attempt. The destination is in India, not wherever that was.")
   }, [mumbaiPx, snapToBirmingham, triggerUnlock])
 
   return (
@@ -284,14 +288,14 @@ export default function IntroScreen({ onUnlock }: IntroScreenProps) {
       {/* Destination pulse — India */}
       {mapReady && <MumbaiDot mumbaiPx={mumbaiPx} />}
 
-      {/* Draggable white airplane */}
+      {/* Draggable white airplane — transform-only positioning for GPU smoothness */}
       {mapReady && (
         <div
           className={`${styles.plane} ${isDragging ? styles.planeDragging : ''} ${isSnapping ? styles.planeSnapping : ''}`}
           style={{
-            left: planePx.x,
-            top:  planePx.y,
-            transform: `translate(-50%, -50%) rotate(${planeAngle}deg) ${isDragging ? 'scale(1.15)' : ''}`,
+            left: 0,
+            top:  0,
+            transform: `translate(${planePx.x}px, ${planePx.y}px) translate(-50%, -50%) rotate(${planeAngle}deg) ${isDragging ? 'scale(1.18)' : 'scale(1)'}`,
           }}
           onPointerDown={onPointerDown}
           onPointerMove={onPointerMove}
