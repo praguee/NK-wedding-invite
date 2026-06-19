@@ -110,7 +110,6 @@ export default function IntroScreen({ onUnlock }: IntroScreenProps) {
         doubleClickZoom:    false,
         boxZoom:            false,
         keyboard:           false,
-        tap:                false,
         attributionControl: false,
       })
 
