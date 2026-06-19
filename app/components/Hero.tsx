@@ -171,7 +171,7 @@ export default function Hero() {
           style={{
             objectFit: 'cover',
             objectPosition: 'center 20%',
-            filter: 'contrast(1.08) saturate(1.15) brightness(0.92)',
+            filter: 'contrast(1.10) saturate(1.20) brightness(0.82) sepia(0.06)',
           }}
         />
       </motion.div>
@@ -187,7 +187,7 @@ export default function Hero() {
       }} />
       <div style={{
         position: 'absolute', inset: 0, zIndex: 1, pointerEvents: 'none',
-        background: 'radial-gradient(ellipse 80% 40% at 50% 65%, rgba(196,120,40,0.12) 0%, transparent 70%)',
+        background: 'radial-gradient(ellipse 80% 40% at 50% 65%, rgba(196,120,40,0.22) 0%, transparent 70%)',
       }} />
       <div className="block md:hidden" style={{
         position: 'absolute', inset: 0, zIndex: 1, pointerEvents: 'none',
