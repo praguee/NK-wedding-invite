@@ -51,11 +51,11 @@ export default function Navigation() {
       className="fixed top-0 left-0 right-0 z-50"
       aria-label="Main navigation"
       style={{
-        background: 'rgba(255,253,246,0.88)',
-        backdropFilter: 'blur(28px) saturate(160%)',
-        WebkitBackdropFilter: 'blur(28px) saturate(160%)',
-        borderBottom: '1px solid rgba(196,154,40,0.15)',
-        boxShadow: '0 1px 0 rgba(196,154,40,0.08), 0 4px 24px rgba(0,0,0,0.04)',
+        background: 'rgba(255, 255, 255, 0.62)',
+        backdropFilter: 'blur(44px) saturate(170%) brightness(1.04)',
+        WebkitBackdropFilter: 'blur(44px) saturate(170%) brightness(1.04)',
+        borderBottom: '1px solid rgba(255, 255, 255, 0.22)',
+        boxShadow: 'inset 0 -1px 0 rgba(196,154,40,0.10), 0 4px 24px rgba(0,0,0,0.05)',
       }}
     >
       {/* Top gold accent bar */}

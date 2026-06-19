@@ -303,8 +303,8 @@ export default function Hero() {
                   <div style={{
                     minWidth: 'clamp(62px, 15vw, 86px)',
                     background: 'rgba(255,255,255,0.07)',
-                    backdropFilter: 'blur(28px)',
-                    WebkitBackdropFilter: 'blur(28px)',
+                    backdropFilter: 'blur(44px) saturate(160%)',
+                    WebkitBackdropFilter: 'blur(44px) saturate(160%)',
                     border: '1px solid rgba(196,154,40,0.28)',
                     borderRadius: 18,
                     paddingTop: 'clamp(10px, 2.5vw, 18px)',

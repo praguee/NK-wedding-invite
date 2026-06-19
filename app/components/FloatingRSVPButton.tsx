@@ -78,8 +78,8 @@ export default function FloatingRSVPButton() {
               bottom: 0, left: 0, right: 0,
               height: 80,
               background: 'linear-gradient(to top, rgba(255,253,246,0.72), transparent)',
-              backdropFilter: 'blur(12px)',
-              WebkitBackdropFilter: 'blur(12px)',
+              backdropFilter: 'blur(28px) saturate(140%)',
+              WebkitBackdropFilter: 'blur(28px) saturate(140%)',
               pointerEvents: 'none',
             }} />
 
