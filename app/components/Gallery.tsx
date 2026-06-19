@@ -97,14 +97,14 @@ const PHOTOS = [
 // Row 2:   (wish)    | diwali2(4,1) | airport(3,1)
 // Row 3:   mirror(3,1) | park(4,1) | christmas(5,1)
 const GRID_CONFIG = [
-  { colSpan: 5, rowSpan: 2, delay: 0.00 },
-  { colSpan: 4, rowSpan: 1, delay: 0.10 },
-  { colSpan: 3, rowSpan: 1, delay: 0.20 },
-  { colSpan: 4, rowSpan: 1, delay: 0.14 },
-  { colSpan: 3, rowSpan: 1, delay: 0.06 },
-  { colSpan: 3, rowSpan: 1, delay: 0.00 },
-  { colSpan: 4, rowSpan: 1, delay: 0.10 },
-  { colSpan: 5, rowSpan: 1, delay: 0.20 },
+  { colSpan: 5, rowSpan: 2, delay: 0.00, rotate: -1.4 },
+  { colSpan: 4, rowSpan: 1, delay: 0.10, rotate:  0.9 },
+  { colSpan: 3, rowSpan: 1, delay: 0.20, rotate: -0.6 },
+  { colSpan: 4, rowSpan: 1, delay: 0.14, rotate:  1.2 },
+  { colSpan: 3, rowSpan: 1, delay: 0.06, rotate: -1.0 },
+  { colSpan: 3, rowSpan: 1, delay: 0.00, rotate:  0.7 },
+  { colSpan: 4, rowSpan: 1, delay: 0.10, rotate: -0.8 },
+  { colSpan: 5, rowSpan: 1, delay: 0.20, rotate:  1.1 },
 ]
 
 const EASE = [0.16, 1, 0.3, 1] as const
@@ -300,8 +300,22 @@ export default function Gallery() {
   }, [lightbox])
 
   return (
-    <section id="gallery" className="py-20 bg-white">
-      <div className="max-w-6xl mx-auto px-6">
+    <section
+      id="gallery"
+      style={{
+        padding: '80px 0 90px',
+        background: 'linear-gradient(160deg, #0E0618 0%, #130920 55%, #0D0617 100%)',
+        position: 'relative',
+        overflow: 'hidden',
+      }}
+    >
+      {/* Ambient blobs behind the dark section */}
+      <div aria-hidden="true" style={{
+        position: 'absolute', inset: 0, pointerEvents: 'none',
+        background: 'radial-gradient(ellipse 60vw 40vh at 80% 15%, rgba(196,154,40,0.07) 0%, transparent 65%), radial-gradient(ellipse 50vw 50vh at 10% 85%, rgba(139,34,82,0.06) 0%, transparent 60%)',
+      }} />
+
+      <div className="max-w-6xl mx-auto px-6" style={{ position: 'relative', zIndex: 1 }}>
 
         {/* Header */}
         <div className="mb-12">
@@ -309,11 +323,16 @@ export default function Gallery() {
           <div className="flex items-end justify-between">
             <div>
               <TextReveal delay={0.05}>
-                <h2 className="text-4xl md:text-5xl lg:text-6xl font-extralight tracking-tight">Gallery</h2>
+                <h2
+                  className="text-4xl md:text-5xl lg:text-6xl font-extralight tracking-tight"
+                  style={{ color: 'rgba(246,237,218,0.90)' }}
+                >
+                  Gallery
+                </h2>
               </TextReveal>
               <motion.p
                 className="text-sm mt-1"
-                style={{ color: '#9C7A5A' }}
+                style={{ color: 'rgba(196,154,40,0.60)' }}
                 initial={{ opacity: 0, y: 6 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -325,7 +344,7 @@ export default function Gallery() {
             {!isMobile && (
               <motion.p
                 className="text-xs tracking-widest uppercase"
-                style={{ color: '#C4B09A', marginBottom: 4 }}
+                style={{ color: 'rgba(246,237,218,0.22)', marginBottom: 4 }}
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}
@@ -342,29 +361,41 @@ export default function Gallery() {
           <MobileGallery photos={PHOTOS} onOpen={(id) => setLightbox(id)} />
         )}
 
-        {/* Desktop: editorial asymmetric grid */}
+        {/* Desktop: scattered/tilted photo cards */}
         {!isMobile && (
           <div style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(12, 1fr)',
             gridAutoRows: '240px',
-            gap: 10,
+            gap: 14,
+            overflow: 'visible',
           }}>
             {PHOTOS.map((photo, i) => {
               const cfg = GRID_CONFIG[i]
               return (
-                <div
+                <motion.div
                   key={photo.id}
                   style={{
                     gridColumn: `span ${cfg.colSpan}`,
                     gridRow: `span ${cfg.rowSpan}`,
                     position: 'relative',
+                    rotate: reducedMotion ? 0 : cfg.rotate,
+                    zIndex: 1,
+                    boxShadow: '0 8px 32px rgba(0,0,0,0.55), 0 24px 64px rgba(0,0,0,0.35)',
+                    borderRadius: 6,
                   }}
+                  whileHover={{
+                    rotate: 0,
+                    scale: 1.025,
+                    zIndex: 10,
+                    boxShadow: '0 20px 60px rgba(0,0,0,0.70), 0 40px 80px rgba(0,0,0,0.45)',
+                  }}
+                  transition={{ duration: 0.42, ease: [0.34, 1.56, 0.64, 1] }}
                 >
                   <WipeReveal delay={cfg.delay} reducedMotion={reducedMotion}>
                     <PhotoCard photo={photo} onOpen={() => setLightbox(photo.id)} />
                   </WipeReveal>
-                </div>
+                </motion.div>
               )
             })}
           </div>
