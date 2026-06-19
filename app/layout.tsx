@@ -1,29 +1,22 @@
 import type { Metadata } from 'next'
-import { Cinzel, Cormorant_Garamond, Great_Vibes } from 'next/font/google'
+import { Cormorant_Garamond, DM_Sans } from 'next/font/google'
 import { Toaster } from 'react-hot-toast'
 import 'leaflet/dist/leaflet.css'
 import './globals.css'
 import CursorEffect from './components/CursorEffect'
 
-const cinzel = Cinzel({
-  subsets: ['latin'],
-  weight: ['400'],
-  variable: '--font-cinzel',
-  display: 'swap',
-})
-
 const cormorant = Cormorant_Garamond({
   subsets: ['latin'],
-  weight: ['300', '400', '500', '600'],
+  weight: ['300', '400', '500'],
   style: ['normal', 'italic'],
   variable: '--font-cormorant',
   display: 'swap',
 })
 
-const greatVibes = Great_Vibes({
+const dmSans = DM_Sans({
   subsets: ['latin'],
-  weight: ['400'],
-  variable: '--font-great-vibes',
+  weight: ['300', '400', '500'],
+  variable: '--font-dm-sans',
   display: 'swap',
 })
 
@@ -44,7 +37,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`bg-white text-slate-900 ${cinzel.variable} ${cormorant.variable} ${greatVibes.variable}`}>
+      <body className={`bg-white text-slate-900 ${cormorant.variable} ${dmSans.variable}`}>
         <CursorEffect />
         {children}
         <Toaster position="bottom-center" toastOptions={{ duration: 4000 }} />
