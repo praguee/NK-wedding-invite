@@ -8,38 +8,39 @@ interface IntroScreenProps {
   onUnlock: () => void
 }
 
-// Geographic region rendered — UK to Mumbai corridor
+// Map bounds — adjusted so Birmingham sits ~18% from left, Mumbai ~82% from right
+// giving a clear diagonal flight path with breathing room on both sides
 const MAP_BOUNDS = {
-  minLng: -22,
-  maxLng: 84,
-  minLat:   6,
-  maxLat:  63,
+  minLng: -25,
+  maxLng: 95,
+  minLat:   3,
+  maxLat:  65,
 }
 
 const BIRMINGHAM = { lat: 52.4862, lng: -1.8904, color: '#8B2252', radius: 72  }
 const MUMBAI     = { lat: 19.0760, lng: 72.8770, color: '#C49A28', radius: 100 }
 
-// No names, no locations — directional sarcasm only
+// Directional sarcasm — no city or person names
 const GEO_ZONES: [number, number, number, number, string][] = [
-  [49, 60,  -10, 3,    "Back to the start. Drag east."],
-  [36, 72,  -10, 25,   "Still in Europe. The destination is much further east."],
-  [60, 85, -80, -10,   "Ice and cold. Nothing here. Turn around."],
-  [45, 82,  25, 180,   "Too far north. Head south and east."],
-  [12, 42,  35, 65,    "Getting closer. Keep going east and south."],
-  [20, 36,  60, 74,    "Very close now. One more push east."],
-  [26, 34,  74, 82,    "Almost. Drop 1,400 km south."],
-  [ 5, 20,  73, 82,    "Overshot south. Come back north."],
-  [18, 55,  73, 145,   "Too far east. Come back west."],
-  [-10, 28, 90, 145,   "Past the destination. Head west."],
-  [30, 46, 128, 148,   "Far too east. Turn around."],
-  [-50, -10, 110, 180, "Way off course. Come back."],
-  [18, 38,  -5, 40,    "Wrong direction. Turn east."],
-  [-35, 18, -20, 55,   "Completely off route. Head north-east."],
-  [10, 85, -170, -50,  "Wrong continent. Try the other way."],
-  [-60, 15, -85, -30,  "Wrong side of the planet entirely."],
-  [-60, 60, -180, -100,"Open ocean. There's nothing here."],
-  [-40, 25, 40, 100,   "Over the ocean. The destination is north-east."],
-  [-60, 70, -60, -5,   "Over water. Keep flying east."],
+  [49, 60,  -10,  3,    "Back to the start. The destination is east."],
+  [36, 72,  -10, 25,    "Still in Europe. Much further east."],
+  [60, 85,  -80, -10,   "Ice and nothing. Turn around."],
+  [45, 82,   25, 180,   "Too far north. Head south and east."],
+  [12, 42,   35, 65,    "Getting closer. Keep flying east and south."],
+  [20, 36,   60, 74,    "Very close. One more push east."],
+  [26, 34,   74, 82,    "Almost. Drop 1,400 km south."],
+  [ 5, 20,   73, 82,    "Overshot south. Come back north."],
+  [18, 55,   73, 145,   "Too far east. Come back west."],
+  [-10, 28,  90, 145,   "Past it. Head west."],
+  [30, 46,  128, 148,   "Way too far east. Turn around."],
+  [-50, -10, 110, 180,  "Way off course. Come back."],
+  [18, 38,   -5,  40,   "Wrong direction. Turn east."],
+  [-35, 18,  -20,  55,  "Off route completely. Head north-east."],
+  [10, 85,  -170, -50,  "Wrong continent. Try the other way."],
+  [-60, 15,  -85, -30,  "Wrong side of the planet entirely."],
+  [-60, 60, -180, -100, "Open ocean. Nothing here."],
+  [-40, 25,   40, 100,  "Over the ocean. Destination is north-east."],
+  [-60, 70,  -60,  -5,  "Over water. Keep flying east."],
 ]
 
 function latLngToScreen(lat: number, lng: number, W: number, H: number) {
@@ -58,16 +59,31 @@ function dist(a: { x: number; y: number }, b: { x: number; y: number }) {
   return Math.sqrt((a.x - b.x) ** 2 + (a.y - b.y) ** 2)
 }
 
+// Realistic top-down commercial aircraft — with engine nacelles and cockpit glint
 function AircraftIcon() {
   return (
-    <svg viewBox="0 0 40 52" width="40" height="52" aria-hidden="true" fill="#C49A28">
-      <ellipse cx="20" cy="26" rx="3.5" ry="22" />
-      <path d="M16.5 6C16.5 2 17.5 0 20 0c2.5 0 3.5 2 3.5 6Z" />
-      <path d="M23 18 L39 30 L37 34 L23 24Z" />
-      <path d="M17 18 L1 30 L3 34 L17 24Z" />
-      <path d="M23 40 L33 46 L32 48.5 L23 44Z" />
-      <path d="M17 40 L7 46 L8 48.5 L17 44Z" />
-      <ellipse cx="20" cy="8" rx="1.8" ry="3" fill="rgba(255,220,120,0.35)" />
+    <svg viewBox="0 0 32 48" aria-hidden="true" style={{ width: '100%', height: '100%', display: 'block' }}>
+      {/* Fuselage */}
+      <path
+        d="M16 2C17.5 7 18.5 14 18.5 21L18.5 37C18.5 42 17.5 45.5 16 47.5C14.5 45.5 13.5 42 13.5 37L13.5 21C13.5 14 14.5 7 16 2Z"
+        fill="#C49A28"
+      />
+      {/* Right wing — swept back */}
+      <path d="M18.5 18L32 29L30.5 33L18.5 24Z" fill="#C49A28" />
+      {/* Left wing */}
+      <path d="M13.5 18L0 29L1.5 33L13.5 24Z" fill="#C49A28" />
+      {/* Right engine nacelle */}
+      <ellipse cx="26.5" cy="27" rx="2.8" ry="4.2" fill="#A07820" />
+      <ellipse cx="26.5" cy="24.8" rx="1.8" ry="1.2" fill="#C49A28" opacity="0.6" />
+      {/* Left engine nacelle */}
+      <ellipse cx="5.5" cy="27" rx="2.8" ry="4.2" fill="#A07820" />
+      <ellipse cx="5.5" cy="24.8" rx="1.8" ry="1.2" fill="#C49A28" opacity="0.6" />
+      {/* Right horizontal stabilizer */}
+      <path d="M18.5 37L27 42L26 44.5L18.5 40.5Z" fill="#C49A28" />
+      {/* Left horizontal stabilizer */}
+      <path d="M13.5 37L5 42L6 44.5L13.5 40.5Z" fill="#C49A28" />
+      {/* Cockpit window glint */}
+      <ellipse cx="16" cy="7" rx="1.6" ry="2.8" fill="rgba(255,240,160,0.45)" />
     </svg>
   )
 }
@@ -98,10 +114,12 @@ export default function IntroScreen({ onUnlock }: IntroScreenProps) {
   const birminghamPosRef = useRef({ x: 0, y: 0 })
   const mumbaiPosRef     = useRef({ x: 0, y: 0 })
 
+  // Draw the map — no ctx.filter (Safari/iOS 16 doesn't support it)
+  // CSS filter applied to the canvas element instead
   const drawMap = useCallback((img: HTMLImageElement) => {
     const canvas = canvasRef.current
     if (!canvas) return
-    const dpr = Math.min(window.devicePixelRatio ?? 1, 2)
+    const dpr = Math.min(window.devicePixelRatio || 1, 2)
     const W   = window.innerWidth
     const H   = window.innerHeight
 
@@ -114,24 +132,14 @@ export default function IntroScreen({ onUnlock }: IntroScreenProps) {
     if (!ctx) return
     ctx.scale(dpr, dpr)
 
-    // Source crop: texture is 2048×1024 equirectangular
+    // earth-map.jpg is 2048×1024 equirectangular, cloud-free NASA topo
     const TEX_W = 2048, TEX_H = 1024
     const srcX = (MAP_BOUNDS.minLng + 180) / 360 * TEX_W
     const srcW = (MAP_BOUNDS.maxLng - MAP_BOUNDS.minLng) / 360 * TEX_W
     const srcY = (90 - MAP_BOUNDS.maxLat) / 180 * TEX_H
     const srcH = (MAP_BOUNDS.maxLat - MAP_BOUNDS.minLat) / 180 * TEX_H
 
-    // Photo-realistic land + ocean colours
-    ctx.filter = 'contrast(1.08) saturate(1.18) brightness(0.82)'
     ctx.drawImage(img, srcX, srcY, srcW, srcH, 0, 0, W, H)
-    ctx.filter = 'none'
-
-    // Edge vignette
-    const vgn = ctx.createRadialGradient(W / 2, H / 2, H * 0.18, W / 2, H / 2, H * 0.95)
-    vgn.addColorStop(0, 'transparent')
-    vgn.addColorStop(1, 'rgba(1,4,8,0.65)')
-    ctx.fillStyle = vgn
-    ctx.fillRect(0, 0, W, H)
   }, [])
 
   const updatePositions = useCallback(() => {
@@ -149,21 +157,22 @@ export default function IntroScreen({ onUnlock }: IntroScreenProps) {
   useEffect(() => {
     const img = new window.Image()
     imgRef.current = img
-    img.src = '/images/earth-texture.jpg'
+    // Cloud-free NASA physical map texture
+    img.src = '/images/earth-map.jpg'
     img.onload = () => {
       drawMap(img)
       const { b } = updatePositions()
       setPlanePos(b)
       setPlanePosReady(true)
-      // Brief hint: auto-fades
+
       hintTimerRef.current = setTimeout(() => {
         setShowHint(true)
-        hintTimerRef.current = setTimeout(() => setShowHint(false), 3000)
-      }, 1200)
+        hintTimerRef.current = setTimeout(() => setShowHint(false), 3200)
+      }, 1400)
     }
 
     const onResize = () => {
-      if (imgRef.current) drawMap(imgRef.current)
+      if (imgRef.current?.complete) drawMap(imgRef.current)
       updatePositions()
     }
     window.addEventListener('resize', onResize)
@@ -241,7 +250,7 @@ export default function IntroScreen({ onUnlock }: IntroScreenProps) {
         return current
       }
       if (dist(current, bp) < BIRMINGHAM.radius) {
-        setTimeout(() => snapToBirmingham("Back to the start. Drag east."), 0)
+        setTimeout(() => snapToBirmingham("Back to the start. The destination is east."), 0)
         return current
       }
 
@@ -269,65 +278,49 @@ export default function IntroScreen({ onUnlock }: IntroScreenProps) {
 
     return (
       <svg
-        style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', zIndex: 2, pointerEvents: 'none' }}
+        style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', zIndex: 3, pointerEvents: 'none' }}
         aria-hidden="true"
       >
-        {/* Faint dashed route — barely visible, just a hint */}
-        <path d={d} stroke="rgba(196,154,40,0.18)" strokeWidth="1" strokeDasharray="4 9" fill="none" />
+        <path d={d} stroke="rgba(196,154,40,0.2)" strokeWidth="1" strokeDasharray="4 9" fill="none" />
       </svg>
     )
   }
 
   return (
     <div className={`${styles.overlay} ${isUnlocking ? styles.overlayFadingOut : ''}`}>
-      {/* Photorealistic flat map */}
-      <canvas ref={canvasRef} className={styles.mapCanvas} aria-hidden="true" />
+
+      {/* Cloud-free NASA topo map — CSS filter for cross-browser contrast/saturation */}
+      <canvas
+        ref={canvasRef}
+        className={styles.mapCanvas}
+        aria-hidden="true"
+      />
+
+      {/* Vignette overlay — CSS radial gradient, works everywhere */}
+      <div className={styles.mapVignette} aria-hidden="true" />
 
       {/* Faint route arc */}
       {renderArc()}
 
-      {/* Origin glow — Birmingham */}
+      {/* Origin dot — Birmingham */}
       {planePosReady && (
-        <div
-          style={{
-            position: 'absolute',
-            left: birminghamPos.x,
-            top: birminghamPos.y,
-            transform: 'translate(-50%,-50%)',
-            zIndex: 5,
-            pointerEvents: 'none',
-          }}
-        >
+        <div style={{ position: 'absolute', left: birminghamPos.x, top: birminghamPos.y,
+          transform: 'translate(-50%,-50%)', zIndex: 5, pointerEvents: 'none' }}>
           <div className={styles.pulseRing} style={{ color: BIRMINGHAM.color }} />
-          <div style={{
-            width: 6, height: 6, borderRadius: '50%',
-            background: BIRMINGHAM.color,
-            boxShadow: `0 0 10px ${BIRMINGHAM.color}CC`,
-            position: 'relative', zIndex: 2,
-          }} />
+          <div style={{ width: 6, height: 6, borderRadius: '50%', background: BIRMINGHAM.color,
+            boxShadow: `0 0 10px ${BIRMINGHAM.color}CC`, position: 'relative', zIndex: 2 }} />
         </div>
       )}
 
-      {/* Destination glow — Mumbai (slightly more visible, draws the eye) */}
+      {/* Destination glow — Mumbai (double pulse, brighter) */}
       {planePosReady && (
-        <div
-          style={{
-            position: 'absolute',
-            left: mumbaiPos.x,
-            top: mumbaiPos.y,
-            transform: 'translate(-50%,-50%)',
-            zIndex: 5,
-            pointerEvents: 'none',
-          }}
-        >
+        <div style={{ position: 'absolute', left: mumbaiPos.x, top: mumbaiPos.y,
+          transform: 'translate(-50%,-50%)', zIndex: 5, pointerEvents: 'none' }}>
           <div className={styles.pulseRing} style={{ color: MUMBAI.color }} />
           <div className={styles.pulseRing} style={{ color: MUMBAI.color, animationDelay: '1.2s' }} />
-          <div style={{
-            width: 8, height: 8, borderRadius: '50%',
-            background: MUMBAI.color,
-            boxShadow: `0 0 14px ${MUMBAI.color}DD, 0 0 28px ${MUMBAI.color}66`,
-            position: 'relative', zIndex: 2,
-          }} />
+          <div style={{ width: 8, height: 8, borderRadius: '50%', background: MUMBAI.color,
+            boxShadow: `0 0 14px ${MUMBAI.color}EE, 0 0 30px ${MUMBAI.color}55`,
+            position: 'relative', zIndex: 2 }} />
         </div>
       )}
 
@@ -338,7 +331,7 @@ export default function IntroScreen({ onUnlock }: IntroScreenProps) {
           style={{
             left: planePos.x,
             top: planePos.y,
-            transform: `translate(-50%, -50%) rotate(${planeAngle}deg) ${isDragging ? 'scale(1.15)' : ''}`,
+            transform: `translate(-50%, -50%) rotate(${planeAngle}deg) ${isDragging ? 'scale(1.12)' : ''}`,
           }}
           onPointerDown={onPointerDown}
           onPointerMove={onPointerMove}
@@ -376,13 +369,13 @@ export default function IntroScreen({ onUnlock }: IntroScreenProps) {
         <div className={styles.successSub}>Nidhi &amp; Parag &nbsp;·&nbsp; December 4, 2026</div>
       </div>
 
-      {/* Transient drag hint — auto-fades, never returns */}
+      {/* "make it fly" hint — same style as Skip, fades in briefly, gone after first drag */}
       <p
-        className={styles.dragHint}
+        className={styles.flyHint}
         style={{ opacity: showHint ? 1 : 0 }}
         aria-hidden="true"
       >
-        drag to fly
+        make it fly
       </p>
 
       {/* Skip */}
