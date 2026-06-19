@@ -87,29 +87,17 @@ export default function Home() {
     </>
   )
 
-  if (!mounted) return null
+  // Before mount state is known, show solid dark screen — prevents any flash of main content
+  if (!mounted) return (
+    <div style={{ position: 'fixed', inset: 0, background: '#010408', zIndex: 9999 }} />
+  )
 
   if (unlocked) return mainContent
 
   return (
     <>
-      {/* Solid dark fallback — covers everything while dynamic intro components load */}
+      {/* Solid dark floor — always present during intro, covers any paint gaps */}
       <div style={{ position: 'fixed', inset: 0, zIndex: 98, background: '#010408' }} />
-
-      {/* Blurred wedding content visible underneath the intro */}
-      <div
-        style={{
-          position: 'fixed',
-          inset: 0,
-          zIndex: -1,
-          filter: 'blur(24px) brightness(0.35)',
-          pointerEvents: 'none',
-          overflow: 'hidden',
-          transform: 'scale(1.05)',
-        }}
-      >
-        {mainContent}
-      </div>
 
       {/* Earth globe animation — shown first, transitions to map */}
       {!earthDone && (

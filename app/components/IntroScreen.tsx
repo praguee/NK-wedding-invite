@@ -46,9 +46,11 @@ function PlaneIcon() {
 }
 
 export default function IntroScreen({ onUnlock }: IntroScreenProps) {
-  const mapDivRef   = useRef<HTMLDivElement>(null)
+  const mapDivRef         = useRef<HTMLDivElement>(null)
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const leafletRef  = useRef<any>(null)
+  const leafletRef        = useRef<any>(null)
+  const grainDivRef       = useRef<HTMLDivElement>(null)
+  const particlesCanvasRef = useRef<HTMLCanvasElement>(null)
 
   // Pixel positions on screen (derived from Leaflet lat/lng → pixel)
   const [planePx, setPlanePx]   = useState({ x: -400, y: -400 })
@@ -74,6 +76,53 @@ export default function IntroScreen({ onUnlock }: IntroScreenProps) {
 
   const msgTimerRef  = useRef<ReturnType<typeof setTimeout>>()
   const hintTimerRef = useRef<ReturnType<typeof setTimeout>>()
+
+  // Film grain — SVG feTurbulence baked once into a data URI, shifted by CSS animation
+  useEffect(() => {
+    if (!grainDivRef.current) return
+    const svg = '<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300"><filter id="f"><feTurbulence type="fractalNoise" baseFrequency="0.82" numOctaves="4" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter><rect width="300" height="300" filter="url(#f)" opacity="0.5"/></svg>'
+    grainDivRef.current.style.backgroundImage = `url(data:image/svg+xml;base64,${btoa(svg)})`
+  }, [])
+
+  // Floating gold particles — canvas drawn after map is ready
+  useEffect(() => {
+    if (!mapReady) return
+    const canvas = particlesCanvasRef.current
+    if (!canvas) return
+    const ctx = canvas.getContext('2d')
+    if (!ctx) return
+    const W = window.innerWidth, H = window.innerHeight
+    canvas.width = W; canvas.height = H
+    const pts = Array.from({ length: 55 }, () => ({
+      x: Math.random() * W,
+      y: Math.random() * H,
+      r: Math.random() * 1.3 + 0.35,
+      vy: -(Math.random() * 0.28 + 0.07),
+      vx: (Math.random() - 0.5) * 0.09,
+      t: Math.random() * Math.PI * 2,
+      ts: Math.random() * 0.018 + 0.007,
+      life: Math.random(),
+      ls: Math.random() * 0.002 + 0.0008,
+    }))
+    let raf: number
+    function tick() {
+      raf = requestAnimationFrame(tick)
+      ctx!.clearRect(0, 0, W, H)
+      for (const p of pts) {
+        p.y += p.vy; p.x += p.vx
+        p.t += p.ts; p.life += p.ls
+        if (p.y < -4) { p.y = H + 4; p.x = Math.random() * W; p.life = 0 }
+        const a = Math.sin(p.life * Math.PI) * (0.55 + 0.45 * Math.sin(p.t)) * 0.42
+        if (a <= 0.01) continue
+        ctx!.beginPath()
+        ctx!.arc(p.x, p.y, p.r, 0, Math.PI * 2)
+        ctx!.fillStyle = `rgba(196,154,40,${a})`
+        ctx!.fill()
+      }
+    }
+    tick()
+    return () => cancelAnimationFrame(raf)
+  }, [mapReady])
 
   // Sync all screen-pixel positions from current Leaflet map state
   const syncPixels = useCallback(() => {
@@ -279,8 +328,23 @@ export default function IntroScreen({ onUnlock }: IntroScreenProps) {
       {/* Leaflet map — ESRI satellite + CartoDB labels */}
       <div ref={mapDivRef} className={styles.leafletMap} />
 
-      {/* Dark vignette over the map */}
+      {/* Deep warm cinematic vignette */}
       <div className={styles.mapVignette} aria-hidden="true" />
+
+      {/* Film grain — luxury texture overlay */}
+      <div ref={grainDivRef} className={styles.grainOverlay} aria-hidden="true" />
+
+      {/* Floating gold particles */}
+      <canvas ref={particlesCanvasRef} className={styles.particlesCanvas} aria-hidden="true" />
+
+      {/* Editorial title — top centre */}
+      <div className={styles.introTitle} aria-hidden="true">
+        <div className={styles.introTitleMain}>
+          N&nbsp;<span style={{ color: '#C49A28', fontSize: '0.52em', verticalAlign: 'middle' }}>✦</span>&nbsp;P
+        </div>
+        <div className={styles.introTitleSub}>Birmingham · Mumbai · 4 December 2026</div>
+        <span className={styles.introTitleRule} />
+      </div>
 
       {/* Origin dot — UK */}
       {mapReady && <BirminghamDot map={leafletRef.current} />}
@@ -360,6 +424,21 @@ export default function IntroScreen({ onUnlock }: IntroScreenProps) {
 
 // ── Sub-components for dots (client-side only, no SSR needed) ──
 
+const CITY_LABEL_STYLE: React.CSSProperties = {
+  fontFamily: 'var(--font-cormorant), Georgia, serif',
+  fontSize: 11, fontWeight: 300,
+  letterSpacing: '0.18em', textTransform: 'uppercase',
+  textShadow: '0 1px 8px rgba(0,0,0,0.95)',
+  lineHeight: 1.2,
+}
+const CITY_SUB_STYLE: React.CSSProperties = {
+  fontFamily: 'var(--font-dm-sans), system-ui, sans-serif',
+  fontSize: 8, fontWeight: 400,
+  letterSpacing: '0.14em', textTransform: 'uppercase',
+  marginTop: 2,
+  textShadow: '0 1px 6px rgba(0,0,0,0.95)',
+}
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function BirminghamDot({ map }: { map: any }) {
   const [px, setPx] = useState({ x: -100, y: -100 })
@@ -377,10 +456,16 @@ function BirminghamDot({ map }: { map: any }) {
   return (
     <div style={{ position: 'absolute', left: px.x, top: px.y,
       transform: 'translate(-50%,-50%)', zIndex: 6, pointerEvents: 'none' }}>
+      {/* Label above dot */}
+      <div style={{ position: 'absolute', bottom: 14, left: '50%',
+        transform: 'translateX(-50%)', textAlign: 'center', whiteSpace: 'nowrap' }}>
+        <div style={{ ...CITY_LABEL_STYLE, color: 'rgba(255,253,246,0.70)' }}>Birmingham</div>
+        <div style={{ ...CITY_SUB_STYLE, color: 'rgba(139,34,82,0.80)' }}>UK</div>
+      </div>
       <div style={{
         width: 8, height: 8, borderRadius: '50%',
         background: '#8B2252',
-        boxShadow: '0 0 10px #8B225299, 0 0 3px rgba(0,0,0,0.8)',
+        boxShadow: '0 0 12px #8B225299, 0 0 3px rgba(0,0,0,0.8)',
         position: 'relative', zIndex: 2,
       }} />
     </div>
@@ -399,6 +484,12 @@ function MumbaiDot({ mumbaiPx }: { mumbaiPx: { x: number; y: number } }) {
         boxShadow: '0 0 16px #C49A28CC, 0 0 32px #C49A2844',
         position: 'relative', zIndex: 2,
       }} />
+      {/* Label below dot */}
+      <div style={{ position: 'absolute', top: 14, left: '50%',
+        transform: 'translateX(-50%)', textAlign: 'center', whiteSpace: 'nowrap' }}>
+        <div style={{ ...CITY_LABEL_STYLE, color: 'rgba(255,253,246,0.70)' }}>Mumbai</div>
+        <div style={{ ...CITY_SUB_STYLE, color: 'rgba(196,154,40,0.80)' }}>India</div>
+      </div>
     </div>
   )
 }
