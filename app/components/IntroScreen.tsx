@@ -337,15 +337,6 @@ export default function IntroScreen({ onUnlock }: IntroScreenProps) {
       {/* Floating gold particles */}
       <canvas ref={particlesCanvasRef} className={styles.particlesCanvas} aria-hidden="true" />
 
-      {/* Editorial title — top centre */}
-      <div className={styles.introTitle} aria-hidden="true">
-        <div className={styles.introTitleMain}>
-          N&nbsp;<span style={{ color: '#C49A28', fontSize: '0.52em', verticalAlign: 'middle' }}>✦</span>&nbsp;P
-        </div>
-        <div className={styles.introTitleSub}>Birmingham · Mumbai · 4 December 2026</div>
-        <span className={styles.introTitleRule} />
-      </div>
-
       {/* Origin dot — UK */}
       {mapReady && <BirminghamDot map={leafletRef.current} />}
 
