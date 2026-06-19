@@ -1,11 +1,8 @@
 /* ─── Overlay ─── */
 .overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  height: 100vh;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
   height: 100dvh;
   z-index: 9999;
   overflow: hidden;
@@ -18,92 +15,128 @@
 .overlayFadingOut {
   animation: overlayFadeOut 0.8s ease-out forwards;
 }
-
 @keyframes overlayFadeOut {
   from { opacity: 1; }
   to   { opacity: 0; pointer-events: none; }
 }
 
-/* ─── Canvas map — CSS filter for cross-browser saturation/contrast ─── */
-/* ctx.filter not supported on Safari iOS 16; CSS filter IS supported everywhere */
-.mapCanvas {
+/* ─── Leaflet satellite map ─── */
+.leafletMap {
   position: absolute;
-  top: 0;
-  left: 0;
-  display: block;
+  inset: 0;
   z-index: 0;
-  filter: contrast(1.15) saturate(1.3) brightness(0.78);
+  /* Slight cinematic darkening — doesn't affect overlaid elements */
+  filter: brightness(0.88) saturate(1.12);
 }
 
-/* ─── Vignette — CSS radial gradient overlay, no canvas drawing ─── */
+/* Override Leaflet defaults inside the map */
+.leafletMap :global(.leaflet-container) {
+  width: 100%;
+  height: 100%;
+  background: #010408;
+  cursor: default !important;
+}
+
+/* ─── Vignette — CSS radial gradient, works everywhere ─── */
 .mapVignette {
   position: absolute;
   inset: 0;
   z-index: 1;
   pointer-events: none;
   background: radial-gradient(
-    ellipse 90% 90% at 50% 50%,
-    transparent 28%,
-    rgba(1, 4, 8, 0.55) 70%,
-    rgba(1, 4, 8, 0.88) 100%
+    ellipse 95% 95% at 50% 50%,
+    transparent 30%,
+    rgba(1, 4, 8, 0.45) 65%,
+    rgba(1, 4, 8, 0.82) 100%
   );
 }
 
-/* ─── City dots ─── */
+/* ─── City pulse ring ─── */
 .pulseRing {
   position: absolute;
-  width: 34px;
-  height: 34px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   border: 1px solid currentColor;
-  animation: pulse 2.6s ease-out infinite;
-  top: 50%;
-  left: 50%;
+  animation: pulse 2.8s ease-out infinite;
+  top: 50%; left: 50%;
   transform: translate(-50%, -50%);
+  pointer-events: none;
 }
-
 @keyframes pulse {
-  0%   { transform: translate(-50%, -50%) scale(1);   opacity: 0.55; }
-  100% { transform: translate(-50%, -50%) scale(3);   opacity: 0;    }
+  0%   { transform: translate(-50%, -50%) scale(1); opacity: 0.6; }
+  100% { transform: translate(-50%, -50%) scale(3.2); opacity: 0; }
 }
 
-/* ─── Airplane ─── */
-.airplane {
+/* ─── Draggable airplane ─── */
+.plane {
   position: absolute;
   z-index: 20;
-  width: 44px;
-  height: 66px;
+  width: 36px;
+  height: 36px;
   cursor: grab;
   touch-action: none;
-  transform: translate(-50%, -50%) rotate(45deg);
   user-select: none;
   -webkit-user-select: none;
-  filter: drop-shadow(0 0 6px rgba(196, 154, 40, 0.6))
-          drop-shadow(0 2px 4px rgba(0, 0, 0, 0.85));
+  filter: drop-shadow(0 0 5px rgba(255,255,255,0.5))
+          drop-shadow(0 2px 6px rgba(0,0,0,0.9));
   transition: filter 0.15s ease;
 }
-
 @media (max-width: 768px) {
-  .airplane {
-    width: 52px;
-    height: 78px;
-  }
+  .plane { width: 46px; height: 46px; }
 }
 
-.airplaneDragging {
+.planeDragging {
   cursor: grabbing;
-  filter: drop-shadow(0 0 18px rgba(196, 154, 40, 0.95))
-          drop-shadow(0 0 6px rgba(255, 220, 100, 0.6))
-          drop-shadow(0 2px 4px rgba(0, 0, 0, 0.85));
+  filter: drop-shadow(0 0 12px rgba(255,255,255,0.9))
+          drop-shadow(0 0 4px rgba(255,255,255,0.5))
+          drop-shadow(0 2px 6px rgba(0,0,0,0.9));
 }
 
-.airplaneSnapping {
-  transition: left 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-              top  0.35s cubic-bezier(0.16, 1, 0.3, 1),
-              transform 0.3s ease;
+.planeSnapping {
+  transition:
+    left   0.38s cubic-bezier(0.16, 1, 0.3, 1),
+    top    0.38s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.3s ease;
 }
 
-/* ─── "make it fly" hint — same typographic style as Skip ─── */
+/* ─── Zoom controls ─── */
+.zoomControls {
+  position: absolute;
+  bottom: 80px;
+  right: 20px;
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  background: rgba(6, 8, 18, 0.82);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.zoomBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: rgba(255, 255, 255, 0.55);
+  transition: background 0.2s, color 0.2s;
+  min-width: 44px;
+  min-height: 44px;
+}
+.zoomBtn:hover { background: rgba(255,255,255,0.08); color: white; }
+.zoomDivider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.1);
+  margin: 0 6px;
+}
+
+/* ─── "make it fly" hint — same style as Skip ─── */
 .flyHint {
   position: absolute;
   bottom: 28px;
@@ -113,19 +146,19 @@
   font-family: var(--font-dm-sans), system-ui, sans-serif;
   font-size: 10px;
   font-weight: 400;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: rgba(196, 154, 40, 0.38);
+  color: rgba(196, 154, 40, 0.40);
   pointer-events: none;
   transition: opacity 0.7s ease;
   white-space: nowrap;
 }
 
-/* ─── Skip button — top-right, same style as fly hint ─── */
+/* ─── Skip button ─── */
 .skipButton {
   position: absolute;
-  top: 24px;
-  right: 24px;
+  top: 22px;
+  right: 20px;
   z-index: 30;
   background: none;
   border: none;
@@ -136,7 +169,7 @@
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: rgba(255, 253, 246, 0.22);
-  transition: color 0.25s ease;
+  transition: color 0.25s;
   padding: 8px 12px;
   min-width: 44px;
   min-height: 44px;
@@ -144,20 +177,18 @@
   align-items: center;
   justify-content: center;
 }
-
-.skipButton:hover  { color: rgba(255, 253, 246, 0.6); }
-
+.skipButton:hover { color: rgba(255, 253, 246, 0.65); }
 .skipButton:focus-visible {
   outline: 1px solid rgba(196, 154, 40, 0.5);
   outline-offset: 4px;
   border-radius: 6px;
-  color: rgba(255, 253, 246, 0.6);
+  color: rgba(255, 253, 246, 0.65);
 }
 
 /* ─── Sarcastic message card ─── */
 .messageCard {
   position: absolute;
-  bottom: 72px;
+  bottom: 76px;
   left: 50%;
   transform: translateX(-50%) translateY(20px);
   z-index: 40;
@@ -168,53 +199,40 @@
   -webkit-backdrop-filter: blur(60px) saturate(180%);
   border-radius: 14px;
   overflow: hidden;
-  box-shadow:
-    0 20px 60px rgba(0, 0, 0, 0.6),
-    0 0 0 0.5px rgba(255, 255, 255, 0.06) inset;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.65), 0 0 0 0.5px rgba(255,255,255,0.06) inset;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.3s ease, transform 0.3s ease;
 }
-
 @media (max-width: 480px) {
-  .messageCard {
-    bottom: 60px;
-    max-width: calc(100vw - 32px);
-    width: calc(100vw - 32px);
-  }
+  .messageCard { bottom: 64px; width: calc(100vw - 32px); max-width: none; }
 }
-
 .messageCardVisible {
   opacity: 1;
   transform: translateX(-50%) translateY(0);
 }
-
-.messageCardPrismaticBorder {
+.messageCardBar {
   height: 1.5px;
-  background: linear-gradient(90deg, #C49A28, #D4AA38, #8B2252, #C49A28, #D4AA38, #C49A28);
+  background: linear-gradient(90deg, #C49A28, #D4AA38, #8B2252, #C49A28, #D4AA38);
   background-size: 200% 100%;
   animation: shimmer 3s linear infinite;
 }
-
 @keyframes shimmer {
-  0%   { background-position: 0% 0%;   }
+  0%   { background-position: 0% 0%; }
   100% { background-position: 200% 0%; }
 }
-
-.messageCardInner {
+.messageCardBody {
   padding: 13px 18px;
   border: 1px solid rgba(196, 154, 40, 0.10);
   border-top: none;
   border-radius: 0 0 14px 14px;
 }
-
 .messageText {
   font-family: var(--font-dm-sans), system-ui, sans-serif;
   font-size: 13px;
   font-weight: 400;
   color: rgba(255, 253, 246, 0.82);
   line-height: 1.55;
-  letter-spacing: 0.01em;
 }
 
 /* ─── Success card ─── */
@@ -231,21 +249,19 @@
   border: 1px solid rgba(196, 154, 40, 0.22);
   border-radius: 20px;
   box-shadow:
-    0 0 0 0.5px rgba(255, 255, 255, 0.06) inset,
-    0 24px 80px rgba(0, 0, 0, 0.65),
-    0 0 100px rgba(196, 154, 40, 0.08);
+    0 0 0 0.5px rgba(255,255,255,0.06) inset,
+    0 24px 80px rgba(0,0,0,0.65),
+    0 0 100px rgba(196,154,40,0.08);
   padding: 28px 40px 24px;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.4s ease, transform 0.4s ease;
   min-width: 280px;
 }
-
 .successCardVisible {
   opacity: 1;
   transform: translateX(-50%) translateY(0);
 }
-
 .successTitle {
   font-family: var(--font-cormorant), Georgia, serif;
   font-size: 28px;
@@ -254,7 +270,6 @@
   letter-spacing: 0.02em;
   margin-bottom: 6px;
 }
-
 .successSub {
   font-family: var(--font-dm-sans), system-ui, sans-serif;
   font-size: 11px;
@@ -268,13 +283,12 @@
 .unlockBurst {
   position: absolute;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(196, 154, 40, 0.22) 0%, rgba(196,154,40,0.05) 50%, transparent 70%);
+  background: radial-gradient(circle, rgba(196,154,40,0.22) 0%, rgba(196,154,40,0.05) 50%, transparent 70%);
   transform: translate(-50%, -50%) scale(0);
   pointer-events: none;
   z-index: 15;
   animation: burst 0.9s ease-out forwards;
 }
-
 @keyframes burst {
   0%   { width: 0;     height: 0;     opacity: 1; }
   100% { width: 900px; height: 900px; opacity: 0; }
