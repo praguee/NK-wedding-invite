@@ -23,7 +23,7 @@ export default function Icon() {
       }}
     >
       <span>N</span>
-      <span style={{ fontSize: 7, opacity: 0.8 }}>✦</span>
+      <span style={{ fontSize: 7, opacity: 0.8 }}>*</span>
       <span>P</span>
     </div>,
     { ...size }
