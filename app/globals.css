@@ -21,6 +21,8 @@
 html {
   /* scroll-behavior handled by Lenis — CSS smooth scroll conflicts with it */
   scroll-behavior: auto;
+  /* Dark background — prevents gray flash on iOS Safari under status bar */
+  background-color: #010408;
 }
 
 /* ── Warm ivory body with jali lattice + ambient colour blobs ── */
