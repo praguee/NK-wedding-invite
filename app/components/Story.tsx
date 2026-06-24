@@ -82,13 +82,13 @@ export default function Story() {
           padding: 'clamp(24px, 4vw, 56px)',
           zIndex: 2,
         }}>
-          {/* Heading — slides up from behind the overflow clip */}
-          <div style={{ overflow: 'hidden', marginBottom: 'clamp(10px, 1.6vh, 18px)' }}>
+          {/* Heading — fades up into view */}
+          <div style={{ marginBottom: 'clamp(10px, 1.6vh, 18px)' }}>
             <motion.h2
               id="story-heading"
-              initial={{ y: '105%' }}
-              whileInView={{ y: '0%' }}
-              viewport={{ once: true }}
+              initial={{ opacity: 0, y: 28 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '0px 0px -60px 0px' }}
               transition={{ duration: 0.78, ease: EASE }}
               style={{
                 fontFamily: 'var(--font-playfair), "Playfair Display", Georgia, serif',

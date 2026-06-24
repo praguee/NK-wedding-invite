@@ -6,6 +6,7 @@ import Image from 'next/image'
 import { COUPLE, EVENT } from '@/lib/constants'
 import SectionOrnament from './SectionOrnament'
 import LotusDecoration from './LotusDecoration'
+import { useMediaQuery } from '@/app/hooks/useMediaQuery'
 
 const CHAR_EASE = [0.16, 1, 0.3, 1] as const
 
@@ -146,6 +147,7 @@ export default function Hero() {
   const [timeLeft, setTimeLeft] = useState<TimeLeft>(getTimeLeft())
   const { scrollY } = useScroll()
   const imageY = useTransform(scrollY, [0, 700], ['0%', '20%'])
+  const isMobile = useMediaQuery('(max-width: 767px)')
 
   useEffect(() => {
     const interval = setInterval(() => setTimeLeft(getTimeLeft()), 1000)
@@ -170,7 +172,7 @@ export default function Hero() {
           sizes="100vw"
           style={{
             objectFit: 'cover',
-            objectPosition: 'center 38%',
+            objectPosition: isMobile ? '60% 38%' : 'center 38%',
             filter: 'contrast(1.10) saturate(1.20) brightness(0.82) sepia(0.06)',
           }}
         />
