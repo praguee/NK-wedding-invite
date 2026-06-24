@@ -3,7 +3,6 @@ import { Cormorant_Garamond, Playfair_Display, Inter } from 'next/font/google'
 import { Toaster } from 'react-hot-toast'
 import 'leaflet/dist/leaflet.css'
 import './globals.css'
-import CursorEffect from './components/CursorEffect'
 import SmoothScroll from './components/SmoothScroll'
 
 // Romantic script accent — used only for logo N ✦ P and special accents
@@ -50,7 +49,6 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`bg-white text-slate-900 ${cormorant.variable} ${playfair.variable} ${inter.variable}`}>
-        <CursorEffect />
         <SmoothScroll>
           {children}
         </SmoothScroll>

@@ -13,7 +13,6 @@ import RSVPForm from './components/RSVPForm'
 import GuestBook from './components/GuestBook'
 import Transportation from './components/Transportation'
 import Addresses from './components/Addresses'
-import Accommodations from './components/Accommodations'
 import ContactFAQ from './components/ContactFAQ'
 import FloatingRSVPButton from './components/FloatingRSVPButton'
 
@@ -48,7 +47,6 @@ export default function Home() {
         <GuestBook />
         <Transportation />
         <Addresses />
-        <Accommodations />
         <ContactFAQ />
       </main>
 
