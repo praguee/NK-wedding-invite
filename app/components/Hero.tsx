@@ -62,9 +62,10 @@ export default function Hero() {
     >
 
       {/* ── Parallax hero image ── */}
+      {/* scaleX:-1 on the wrapper so objectPosition calculates on the untransformed image first */}
       <motion.div
         className="absolute inset-0"
-        style={{ y: imageY, scale: 1.05 }}
+        style={{ y: imageY, scale: 1.05, scaleX: -1 }}
       >
         <Image
           src="/images/hero-cover.jpg"
@@ -74,9 +75,8 @@ export default function Hero() {
           sizes="100vw"
           style={{
             objectFit: 'cover',
-            objectPosition: isMobile ? '40% 38%' : 'center 38%',
+            objectPosition: isMobile ? '55% 40%' : 'center 55%',
             filter: 'contrast(1.10) saturate(1.20) brightness(0.82) sepia(0.06)',
-            transform: 'scaleX(-1)',
           }}
         />
       </motion.div>
