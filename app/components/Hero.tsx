@@ -4,9 +4,15 @@ import { useEffect, useState, type CSSProperties } from 'react'
 import { motion, AnimatePresence, useScroll, useTransform, useReducedMotion } from 'framer-motion'
 import Image from 'next/image'
 import { COUPLE, EVENT } from '@/lib/constants'
-import SectionOrnament from './SectionOrnament'
-import LotusDecoration from './LotusDecoration'
 import { useMediaQuery } from '@/app/hooks/useMediaQuery'
+
+const SCAN_STATUS = [
+  'SIGNAL NOT FOUND',
+  'SCANNING ENVIRONMENT...',
+  'COORDINATES ENCRYPTED',
+  'DECODING STREAM...',
+  'CONNECTION REFUSED',
+]
 
 const CHAR_EASE = [0.16, 1, 0.3, 1] as const
 
@@ -92,48 +98,6 @@ const PARTICLES = [
   { left: '48%', delay: '4.1s',  dur: '10s', size: 2 },
 ]
 
-function Mandala() {
-  return (
-    <svg
-      viewBox="0 0 400 400"
-      xmlns="http://www.w3.org/2000/svg"
-      aria-hidden="true"
-      style={{
-        position: 'absolute',
-        width: 'min(480px, 90vw)',
-        height: 'min(480px, 90vw)',
-        bottom: '-60px',
-        left: '50%',
-        transform: 'translateX(-50%)',
-        opacity: 0.07,
-        pointerEvents: 'none',
-      }}
-    >
-      <g transform="translate(200,200)">
-        {Array.from({ length: 16 }).map((_, i) => (
-          <path key={`op${i}`} d="M0,-180 Q18,-155 0,-130 Q-18,-155 0,-180Z" fill="white" transform={`rotate(${i*22.5})`} />
-        ))}
-        <circle r="155" fill="none" stroke="white" strokeWidth="0.8" opacity="0.6"/>
-        {Array.from({ length: 12 }).map((_, i) => (
-          <path key={`mp${i}`} d="M0,-120 Q14,-100 0,-80 Q-14,-100 0,-120Z" fill="white" transform={`rotate(${i*30})`} />
-        ))}
-        <circle r="100" fill="none" stroke="white" strokeWidth="0.7" opacity="0.5"/>
-        {Array.from({ length: 8 }).map((_, i) => (
-          <path key={`id${i}`} d="M0,-68 L8,-54 L0,-40 L-8,-54 Z" fill="white" transform={`rotate(${i*45})`} />
-        ))}
-        <circle r="62" fill="none" stroke="white" strokeWidth="0.6" opacity="0.45"/>
-        {Array.from({ length: 8 }).map((_, i) => (
-          <path key={`il${i}`} d="M0,-38 Q10,-25 0,-15 Q-10,-25 0,-38Z" fill="white" transform={`rotate(${i*45})`} />
-        ))}
-        <circle r="28" fill="none" stroke="white" strokeWidth="0.8" opacity="0.6"/>
-        <circle r="14" fill="white" opacity="0.4"/>
-        <circle r="7"  fill="white" opacity="0.6"/>
-        <circle r="3"  fill="white" opacity="0.9"/>
-      </g>
-    </svg>
-  )
-}
-
 const EASE = [0.25, 0.46, 0.45, 0.94] as const
 
 const heroContainer = {
@@ -141,10 +105,11 @@ const heroContainer = {
   show: { transition: { staggerChildren: 0.16, delayChildren: 0.25 } },
 }
 const heroUp   = { hidden: { opacity: 0, y: 36 }, show: { opacity: 1, y: 0,  transition: { duration: 0.85, ease: EASE } } }
-const heroFade = { hidden: { opacity: 0 },         show: { opacity: 1,        transition: { duration: 0.9,  ease: EASE } } }
 
 export default function Hero() {
   const [timeLeft, setTimeLeft] = useState<TimeLeft>(getTimeLeft())
+  const [phase, setPhase] = useState<'scan' | 'reveal'>('scan')
+  const [scanIdx, setScanIdx] = useState(0)
   const { scrollY } = useScroll()
   const imageY = useTransform(scrollY, [0, 700], ['0%', '20%'])
   const isMobile = useMediaQuery('(max-width: 767px)')
@@ -152,6 +117,16 @@ export default function Hero() {
   useEffect(() => {
     const interval = setInterval(() => setTimeLeft(getTimeLeft()), 1000)
     return () => clearInterval(interval)
+  }, [])
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      setPhase(p => {
+        if (p === 'scan') { setScanIdx(i => (i + 1) % SCAN_STATUS.length); return 'reveal' }
+        return 'scan'
+      })
+    }, 2200)
+    return () => clearInterval(id)
   }, [])
 
   const isWeddingDay = Object.values(timeLeft).every((v) => v === 0)
@@ -196,8 +171,97 @@ export default function Hero() {
         background: 'linear-gradient(to top, rgba(5,2,15,.78), rgba(5,2,15,.35), transparent)',
       }} />
 
+      {/* ── Cinematic 404 scan overlay — loops every 2.2s ── */}
+      <AnimatePresence>
+        {phase === 'scan' && (
+          <motion.div
+            key="scan-overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.55, ease: 'easeInOut' }}
+            aria-hidden="true"
+            style={{
+              position: 'absolute', inset: 0, zIndex: 10,
+              background: 'rgba(3,1,12,0.88)',
+              pointerEvents: 'none',
+              display: 'flex', flexDirection: 'column',
+              alignItems: 'center', justifyContent: 'center',
+            }}
+          >
+            {/* Scanlines */}
+            <div style={{
+              position: 'absolute', inset: 0,
+              backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,0,0,0.06) 3px, rgba(0,0,0,0.06) 4px)',
+            }} />
+
+            {/* Sweeping scan beam */}
+            <motion.div
+              aria-hidden="true"
+              style={{
+                position: 'absolute', left: 0, right: 0, height: 1,
+                background: 'linear-gradient(90deg, transparent 0%, rgba(196,154,40,0.18) 20%, rgba(196,154,40,0.45) 50%, rgba(196,154,40,0.18) 80%, transparent 100%)',
+              }}
+              animate={{ top: ['8%', '92%'] }}
+              transition={{ duration: 2.0, ease: 'linear', repeat: Infinity }}
+            />
+
+            {/* Error text */}
+            <div style={{ position: 'relative', zIndex: 1, textAlign: 'center', padding: '0 32px' }}>
+              <motion.p
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.1 }}
+                style={{
+                  fontFamily: '"Courier New", Courier, monospace',
+                  fontSize: 'clamp(9px, 2.2vw, 11px)',
+                  letterSpacing: '0.28em',
+                  color: 'rgba(196,154,40,0.40)',
+                  marginBottom: 16,
+                }}
+              >
+                {'// NK_WEDDING.SYS'}
+              </motion.p>
+
+              <motion.p
+                initial={{ opacity: 0, scale: 0.94 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.12, duration: 0.38 }}
+                style={{
+                  fontFamily: '"Courier New", Courier, monospace',
+                  fontSize: 'clamp(64px, 16vw, 100px)',
+                  fontWeight: 700,
+                  color: 'rgba(255,255,255,0.90)',
+                  lineHeight: 0.95,
+                  letterSpacing: '-0.02em',
+                  textShadow: '0 0 80px rgba(196,154,40,0.15)',
+                }}
+              >
+                404
+              </motion.p>
+
+              <motion.p
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.28 }}
+                style={{
+                  fontFamily: '"Courier New", Courier, monospace',
+                  fontSize: 'clamp(9px, 2.2vw, 11px)',
+                  letterSpacing: '0.28em',
+                  color: 'rgba(255,255,255,0.30)',
+                  marginTop: 14,
+                  textTransform: 'uppercase',
+                }}
+              >
+                {SCAN_STATUS[scanIdx]}
+              </motion.p>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* ── Floating gold particles ── */}
-      <div style={{ position: 'absolute', inset: 0, zIndex: 2, pointerEvents: 'none', overflow: 'hidden' }}>
+      <div style={{ position: 'absolute', inset: 0, zIndex: 11, pointerEvents: 'none', overflow: 'hidden' }}>
         {PARTICLES.map((p, i) => (
           <div
             key={i}
@@ -212,23 +276,14 @@ export default function Hero() {
         ))}
       </div>
 
-      {/* ── Mandala watermark ── */}
-      <div style={{ position: 'absolute', inset: 0, zIndex: 2, pointerEvents: 'none', overflow: 'hidden' }}>
-        <Mandala />
-      </div>
-
       {/* ── Hero text — staggered entrance ── */}
       <motion.div
         variants={heroContainer}
         initial="hidden"
         animate="show"
         className="relative text-white text-center px-6 max-w-2xl w-full"
-        style={{ zIndex: 3 }}
+        style={{ zIndex: 4 }}
       >
-        <motion.div variants={heroFade}>
-          <SectionOrnament light />
-        </motion.div>
-
         <motion.p
           variants={heroUp}
           className="text-xs uppercase tracking-[0.4em] mb-6 font-light"
@@ -365,9 +420,6 @@ export default function Hero() {
           </motion.a>
         </motion.div>
       </motion.div>
-
-      <LotusDecoration position="top-left"  size={130} opacity={0.08} />
-      <LotusDecoration position="top-right" size={130} opacity={0.08} />
 
       {/* ── Gradient bridge: hero fades into the ivory Story section ── */}
       <div
