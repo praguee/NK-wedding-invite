@@ -3,8 +3,20 @@
 import { useEffect, useState } from 'react'
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion'
 import Image from 'next/image'
-import { COUPLE } from '@/lib/constants'
+import { COUPLE, EVENT } from '@/lib/constants'
 import { useMediaQuery } from '@/app/hooks/useMediaQuery'
+
+interface TimeLeft { days: number; hours: number; minutes: number; seconds: number }
+function getTimeLeft(): TimeLeft {
+  const diff = EVENT.weddingDate.getTime() - Date.now()
+  if (diff <= 0) return { days: 0, hours: 0, minutes: 0, seconds: 0 }
+  return {
+    days:    Math.floor(diff / (1000 * 60 * 60 * 24)),
+    hours:   Math.floor((diff / (1000 * 60 * 60)) % 24),
+    minutes: Math.floor((diff / (1000 * 60)) % 60),
+    seconds: Math.floor((diff / 1000) % 60),
+  }
+}
 
 const EASE = [0.25, 0.46, 0.45, 0.94] as const
 const WIPE_EASE = [0.76, 0, 0.24, 1] as const
@@ -28,12 +40,18 @@ const MARQUEE_TEXT = `N × K  ·  December 4, 2026  ·  Thane, India  ·  Floati
 
 export default function Hero() {
   const [batmanPhase, setBatmanPhase] = useState(true)
+  const [timeLeft, setTimeLeft] = useState<TimeLeft>(getTimeLeft())
   const { scrollY } = useScroll()
   const imageY = useTransform(scrollY, [0, 700], ['0%', '20%'])
   const isMobile = useMediaQuery('(max-width: 767px)')
 
   useEffect(() => {
     const id = setInterval(() => setBatmanPhase(b => !b), 4800)
+    return () => clearInterval(id)
+  }, [])
+
+  useEffect(() => {
+    const id = setInterval(() => setTimeLeft(getTimeLeft()), 1000)
     return () => clearInterval(id)
   }, [])
 
@@ -227,12 +245,36 @@ export default function Hero() {
           <span style={{
             fontFamily: '"Courier New", Courier, monospace',
             fontSize: 'clamp(8px, 1.4vw, 10px)',
-            letterSpacing: '0.26em',
-            color: 'rgba(255,255,255,0.35)',
+            letterSpacing: '0.20em',
+            color: 'rgba(255,255,255,0.30)',
             textTransform: 'uppercase',
             display: 'block',
           }}>
-            04.12.2026 · Thane
+            04.12.2026
+          </span>
+          {/* Compact countdown replacing "Thane" */}
+          <span style={{
+            fontFamily: '"Courier New", Courier, monospace',
+            fontSize: 'clamp(8px, 1.4vw, 10px)',
+            letterSpacing: '0.16em',
+            color: 'rgba(196,154,40,0.65)',
+            display: 'flex',
+            gap: 'clamp(6px, 1.2vw, 10px)',
+            alignItems: 'baseline',
+          }}>
+            {[
+              { v: timeLeft.days,    l: 'd' },
+              { v: timeLeft.hours,   l: 'h' },
+              { v: timeLeft.minutes, l: 'm' },
+              { v: timeLeft.seconds, l: 's' },
+            ].map(({ v, l }) => (
+              <span key={l} style={{ display: 'inline-flex', alignItems: 'baseline', gap: 1 }}>
+                <span style={{ color: 'rgba(255,255,255,0.70)', fontWeight: 600 }}>
+                  {String(v).padStart(2, '0')}
+                </span>
+                <span style={{ color: 'rgba(196,154,40,0.50)', fontSize: '0.75em' }}>{l}</span>
+              </span>
+            ))}
           </span>
         </motion.div>
 
@@ -245,24 +287,36 @@ export default function Hero() {
         >
           <motion.a
             href="#rsvp"
-            whileHover={{ scale: 1.06 }}
-            whileFocus={{ scale: 1.06 }}
-            whileTap={{ scale: 0.96 }}
+            whileHover={{ scale: 1.05, filter: 'brightness(1.08)' }}
+            whileFocus={{ scale: 1.05 }}
+            whileTap={{ scale: 0.97 }}
             transition={{ type: 'spring', stiffness: 380, damping: 18 }}
             className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[rgba(196,154,40,0.8)]"
             style={{
               display: 'inline-block',
-              background: 'linear-gradient(135deg, #B8850A, #E8C547, #C49A28)',
-              color: '#2A1200',
+              /* Apple Liquid Glass — dark-on-hero variant */
+              background: 'rgba(255, 255, 255, 0.10)',
+              backdropFilter: 'blur(44px) saturate(200%) brightness(1.10)',
+              WebkitBackdropFilter: 'blur(44px) saturate(200%) brightness(1.10)',
+              border: '1px solid rgba(255, 255, 255, 0.30)',
+              borderBottomColor: 'rgba(255, 255, 255, 0.10)',
+              boxShadow: [
+                'inset 0 1px 0 rgba(255,255,255,0.65)',
+                'inset 0 0 0 0.5px rgba(255,255,255,0.18)',
+                'inset 0 -1px 0 rgba(0,0,0,0.07)',
+                '0 4px 20px rgba(0,0,0,0.14)',
+                '0 0 0 0.5px rgba(196,154,40,0.14)',
+              ].join(', '),
+              color: 'rgba(255,255,255,0.92)',
               padding: '11px 28px',
               borderRadius: 100,
-              fontWeight: 700,
+              fontWeight: 600,
               fontSize: 'clamp(9px, 1.6vw, 11px)',
               letterSpacing: '0.14em',
               textDecoration: 'none',
-              boxShadow: '0 6px 24px rgba(196,154,40,0.40), 0 1px 0 rgba(255,255,255,0.25) inset',
               textTransform: 'uppercase' as const,
               whiteSpace: 'nowrap',
+              cursor: 'pointer',
             }}
           >
             RSVP Now
@@ -303,18 +357,6 @@ export default function Hero() {
         </motion.div>
       </div>
 
-      {/* ── Gradient bridge: hero fades into Story section ── */}
-      <div
-        aria-hidden="true"
-        style={{
-          position: 'absolute',
-          bottom: 0, left: 0, right: 0,
-          height: 180,
-          background: 'linear-gradient(to bottom, transparent 0%, rgba(255,253,246,0.55) 60%, #FFFDF6 100%)',
-          zIndex: 5,
-          pointerEvents: 'none',
-        }}
-      />
 
       <div id="hero-sentinel" aria-hidden="true" />
     </section>
