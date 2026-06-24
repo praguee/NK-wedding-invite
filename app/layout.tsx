@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { Cormorant_Garamond, Playfair_Display, Inter } from 'next/font/google'
 import { Toaster } from 'react-hot-toast'
 import 'leaflet/dist/leaflet.css'
@@ -30,6 +30,13 @@ const inter = Inter({
   variable: '--font-dm-sans', // keep same CSS var — no cascading changes needed
   display: 'swap',
 })
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  viewportFit: 'cover',
+  themeColor: '#010408',
+}
 
 export const metadata: Metadata = {
   title: 'Nidhi & Parag Wedding | December 4, 2026',

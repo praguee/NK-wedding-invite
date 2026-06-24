@@ -14,7 +14,6 @@ import GuestBook from './components/GuestBook'
 import Transportation from './components/Transportation'
 import Addresses from './components/Addresses'
 import ContactFAQ from './components/ContactFAQ'
-import FloatingRSVPButton from './components/FloatingRSVPButton'
 
 const IntroScreen = dynamic(() => import('./components/IntroScreen'), { ssr: false })
 const EarthIntro  = dynamic(() => import('./components/EarthIntro'),  { ssr: false })
@@ -35,7 +34,6 @@ export default function Home() {
   const mainContent = (
     <>
       <Navigation />
-      <FloatingRSVPButton />
       <main id="main-content">
         <Hero />
         <Story />
