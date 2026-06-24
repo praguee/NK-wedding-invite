@@ -318,7 +318,7 @@ export default function Gallery() {
       <div className="max-w-6xl mx-auto px-6" style={{ position: 'relative', zIndex: 1 }}>
 
         {/* Header */}
-        <div className="mb-12">
+        <div className={isMobile ? 'mb-8' : 'mb-12'}>
           <SectionOrnament />
           <div className="flex items-end justify-between">
             <div>
@@ -355,11 +355,6 @@ export default function Gallery() {
             )}
           </div>
         </div>
-
-        {/* Mobile: swipe carousel */}
-        {isMobile && (
-          <MobileGallery photos={PHOTOS} onOpen={(id) => setLightbox(id)} />
-        )}
 
         {/* Desktop: scattered/tilted photo cards */}
         {!isMobile && (
@@ -401,6 +396,11 @@ export default function Gallery() {
           </div>
         )}
       </div>
+
+      {/* Mobile: swipe carousel — outside padded container for full viewport width */}
+      {isMobile && (
+        <MobileGallery photos={PHOTOS} onOpen={(id) => setLightbox(id)} />
+      )}
 
       {/* ── Lightbox ── */}
       <AnimatePresence>
