@@ -74,7 +74,7 @@ export default function Hero() {
           sizes="100vw"
           style={{
             objectFit: 'cover',
-            objectPosition: 'center 0%',
+            objectPosition: isMobile ? '38% 0%' : 'center 0%',
             filter: 'contrast(1.10) saturate(1.20) brightness(0.82) sepia(0.06)',
           }}
         />
@@ -154,7 +154,7 @@ export default function Hero() {
                 sizes="100vw"
                 style={{
                   objectFit: 'cover',
-                  objectPosition: isMobile ? '50% 28%' : 'center 28%',
+                  objectPosition: isMobile ? '38% 28%' : 'center 28%',
                   filter: 'contrast(1.12) saturate(0.70) brightness(0.76)',
                 }}
               />
