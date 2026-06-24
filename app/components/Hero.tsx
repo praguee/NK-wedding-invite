@@ -1,79 +1,13 @@
 'use client'
 
-import { useEffect, useState, type CSSProperties } from 'react'
-import { motion, AnimatePresence, useScroll, useTransform, useReducedMotion } from 'framer-motion'
+import { useEffect, useState } from 'react'
+import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion'
 import Image from 'next/image'
-import { COUPLE, EVENT } from '@/lib/constants'
+import { COUPLE } from '@/lib/constants'
 import { useMediaQuery } from '@/app/hooks/useMediaQuery'
 
-const CHAR_EASE = [0.16, 1, 0.3, 1] as const
-
-// Each letter tumbles in from below with a 3D flip — theatrical, distinctive
-function SplitText({
-  text,
-  delay = 0,
-  style,
-}: {
-  text: string
-  delay?: number
-  style?: CSSProperties
-}) {
-  const reduce = useReducedMotion()
-  if (reduce) return <span style={style}>{text}</span>
-  return (
-    <span style={{ perspective: 900, display: 'inline-block' }}>
-      {Array.from(text).map((char, i) => (
-        <motion.span
-          key={i}
-          initial={{ opacity: 0, y: 52, rotateX: -70 }}
-          animate={{ opacity: 1, y: 0, rotateX: 0 }}
-          transition={{
-            duration: 0.68,
-            ease: CHAR_EASE,
-            delay: delay + i * 0.06,
-          }}
-          style={{ display: 'inline-block', transformOrigin: 'bottom center' }}
-        >
-          {char === ' ' ? ' ' : char}
-        </motion.span>
-      ))}
-    </span>
-  )
-}
-
-interface TimeLeft {
-  days: number; hours: number; minutes: number; seconds: number
-}
-
-function getTimeLeft(): TimeLeft {
-  const diff = EVENT.weddingDate.getTime() - Date.now()
-  if (diff <= 0) return { days: 0, hours: 0, minutes: 0, seconds: 0 }
-  return {
-    days:    Math.floor(diff / (1000 * 60 * 60 * 24)),
-    hours:   Math.floor((diff / (1000 * 60 * 60)) % 24),
-    minutes: Math.floor((diff / (1000 * 60)) % 60),
-    seconds: Math.floor((diff / 1000) % 60),
-  }
-}
-
-function AnimatedDigit({ value }: { value: number }) {
-  return (
-    <div style={{ position: 'relative', overflow: 'hidden', height: '1.1em' }}>
-      <AnimatePresence mode="popLayout" initial={false}>
-        <motion.span
-          key={value}
-          initial={{ y: '-110%' }}
-          animate={{ y: 0 }}
-          exit={{ y: '110%' }}
-          transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
-          style={{ display: 'block', textAlign: 'center' }}
-        >
-          {String(value).padStart(2, '0')}
-        </motion.span>
-      </AnimatePresence>
-    </div>
-  )
-}
+const EASE = [0.25, 0.46, 0.45, 0.94] as const
+const WIPE_EASE = [0.76, 0, 0.24, 1] as const
 
 const PARTICLES = [
   { left: '6%',  delay: '0s',    dur: '8s',  size: 3 },
@@ -90,44 +24,33 @@ const PARTICLES = [
   { left: '48%', delay: '4.1s',  dur: '10s', size: 2 },
 ]
 
-const EASE = [0.25, 0.46, 0.45, 0.94] as const
-
-const heroContainer = {
-  hidden: {},
-  show: { transition: { staggerChildren: 0.16, delayChildren: 0.25 } },
-}
-const heroUp   = { hidden: { opacity: 0, y: 36 }, show: { opacity: 1, y: 0,  transition: { duration: 0.85, ease: EASE } } }
+const MARQUEE_TEXT = `N × K  ·  December 4, 2026  ·  Thane, India  ·  Floating Mandap  ·  Abhishek Farms  ·  You Are Invited  ·  `
 
 export default function Hero() {
-  const [timeLeft, setTimeLeft] = useState<TimeLeft>(getTimeLeft())
   const [batmanPhase, setBatmanPhase] = useState(true)
   const { scrollY } = useScroll()
   const imageY = useTransform(scrollY, [0, 700], ['0%', '20%'])
   const isMobile = useMediaQuery('(max-width: 767px)')
 
   useEffect(() => {
-    const interval = setInterval(() => setTimeLeft(getTimeLeft()), 1000)
-    return () => clearInterval(interval)
-  }, [])
-
-  useEffect(() => {
-    const id = setInterval(() => setBatmanPhase(b => !b), 4000)
+    const id = setInterval(() => setBatmanPhase(b => !b), 4800)
     return () => clearInterval(id)
   }, [])
 
-  const isWeddingDay = Object.values(timeLeft).every((v) => v === 0)
-
   return (
-    <section className="min-h-[100svh] md:min-h-screen relative flex flex-col items-center justify-end pb-16 pt-24 overflow-hidden animate-fade-in">
+    <section
+      className="min-h-[100svh] md:min-h-screen relative overflow-hidden animate-fade-in"
+      aria-label="Hero"
+    >
 
-      {/* ── Parallax hero image — Next.js Image for cross-browser consistency ── */}
+      {/* ── Parallax hero image ── */}
       <motion.div
         className="absolute inset-0"
         style={{ y: imageY, scale: 1.05 }}
       >
         <Image
           src="/images/hero-cover.jpg"
-          alt=""
+          alt={`${COUPLE.brideName} and ${COUPLE.groomName}`}
           fill
           priority
           sizes="100vw"
@@ -140,24 +63,20 @@ export default function Hero() {
       </motion.div>
 
       {/* ── Cinematic gradient layers ── */}
-      <div style={{
+      <div aria-hidden="true" style={{
         position: 'absolute', inset: 0, zIndex: 1, pointerEvents: 'none',
         background: 'linear-gradient(to bottom, rgba(10,4,25,0.18) 0%, rgba(10,4,25,0.02) 35%, transparent 55%)',
       }} />
-      <div style={{
+      <div aria-hidden="true" style={{
         position: 'absolute', inset: 0, zIndex: 1, pointerEvents: 'none',
-        background: 'linear-gradient(to top, rgba(5,2,15,0.97) 0%, rgba(10,4,25,0.88) 25%, rgba(15,6,35,0.55) 50%, transparent 75%)',
+        background: 'linear-gradient(to top, rgba(5,2,15,0.92) 0%, rgba(10,4,25,0.72) 18%, rgba(15,6,35,0.30) 42%, transparent 68%)',
       }} />
-      <div style={{
+      <div aria-hidden="true" style={{
         position: 'absolute', inset: 0, zIndex: 1, pointerEvents: 'none',
-        background: 'radial-gradient(ellipse 80% 40% at 50% 65%, rgba(196,120,40,0.22) 0%, transparent 70%)',
-      }} />
-      <div className="block md:hidden" style={{
-        position: 'absolute', inset: 0, zIndex: 1, pointerEvents: 'none',
-        background: 'linear-gradient(to top, rgba(5,2,15,.78), rgba(5,2,15,.35), transparent)',
+        background: 'radial-gradient(ellipse 80% 40% at 50% 65%, rgba(196,120,40,0.18) 0%, transparent 70%)',
       }} />
 
-      {/* ── Slide counter (01 / 02) — top-right, always visible ── */}
+      {/* ── Slide counter (01 / 02) — top-right ── */}
       <div aria-hidden="true" style={{
         position: 'absolute', top: 28, right: 28, zIndex: 20,
         display: 'flex', alignItems: 'center', gap: 10,
@@ -169,50 +88,45 @@ export default function Hero() {
             initial={{ clipPath: 'inset(0 0 100% 0)', y: 6 }}
             animate={{ clipPath: 'inset(0 0 0% 0)', y: 0 }}
             exit={{ clipPath: 'inset(100% 0 0 0)', y: -6 }}
-            transition={{ duration: 0.45, ease: [0.76, 0, 0.24, 1] }}
+            transition={{ duration: 0.45, ease: WIPE_EASE }}
             style={{
               fontFamily: '"Courier New", Courier, monospace',
-              fontSize: 'clamp(10px, 1.4vw, 13px)',
+              fontSize: 'clamp(10px, 1.4vw, 12px)',
               fontWeight: 700,
               letterSpacing: '0.18em',
-              color: 'rgba(196,154,40,0.55)',
+              color: 'rgba(196,154,40,0.60)',
             }}
           >
             {batmanPhase ? '01' : '02'}
           </motion.span>
         </AnimatePresence>
-        <span style={{
-          width: 24, height: 1,
-          background: 'rgba(196,154,40,0.30)',
-          display: 'inline-block',
-        }} />
+        <span style={{ width: 22, height: 1, background: 'rgba(196,154,40,0.28)', display: 'inline-block' }} />
         <span style={{
           fontFamily: '"Courier New", Courier, monospace',
-          fontSize: 'clamp(10px, 1.4vw, 13px)',
+          fontSize: 'clamp(10px, 1.4vw, 12px)',
           letterSpacing: '0.18em',
           color: 'rgba(255,255,255,0.18)',
         }}>02</span>
       </div>
 
-      {/* ── Batman wipe-in panel — workoholics clip-path reveal ── */}
-      {/* Mobile: vertical top↓bottom wipe (portrait screens, avoids left-cut subject) */}
-      {/* Desktop: horizontal left→right wipe */}
+      {/* ── Batman wipe panel ── */}
+      {/* Mobile: vertical top↓bottom wipe   Desktop: horizontal left→right wipe */}
       <AnimatePresence>
         {batmanPhase && (
           <motion.div
-            key={`batman-phase-${isMobile ? 'mobile' : 'desktop'}`}
+            key={`batman-${isMobile ? 'm' : 'd'}`}
             initial={{ clipPath: isMobile ? 'inset(0 0 100% 0)' : 'inset(0 100% 0 0)' }}
             animate={{ clipPath: 'inset(0 0 0% 0)' }}
             exit={{ clipPath: isMobile ? 'inset(100% 0 0 0)' : 'inset(0 0 0 100%)' }}
-            transition={{ duration: 0.88, ease: [0.76, 0, 0.24, 1] }}
+            transition={{ duration: 0.88, ease: WIPE_EASE }}
             aria-hidden="true"
             style={{ position: 'absolute', inset: 0, zIndex: 10, pointerEvents: 'none' }}
           >
-            {/* Ken Burns: slow zoom-in + subtle drift */}
+            {/* Ken Burns */}
             <motion.div
               initial={{ scale: 1.0, x: 0 }}
               animate={{ scale: 1.06, x: -8 }}
-              transition={{ duration: 5.5, ease: 'linear' }}
+              transition={{ duration: 5.8, ease: 'linear' }}
               style={{ position: 'absolute', inset: 0 }}
             >
               <Image
@@ -223,46 +137,44 @@ export default function Hero() {
                 style={{
                   objectFit: 'cover',
                   objectPosition: isMobile ? '52% 28%' : 'center 28%',
-                  filter: 'contrast(1.12) saturate(0.72) brightness(0.78)',
+                  filter: 'contrast(1.12) saturate(0.70) brightness(0.76)',
                 }}
               />
             </motion.div>
 
-            {/* Deep vignette */}
+            {/* Vignette */}
             <div style={{
               position: 'absolute', inset: 0,
-              background: 'linear-gradient(to bottom, rgba(3,1,10,0.28) 0%, transparent 38%, rgba(3,1,10,0.72) 80%, rgba(3,1,10,0.95) 100%)',
+              background: 'linear-gradient(to bottom, rgba(3,1,10,0.28) 0%, transparent 38%, rgba(3,1,10,0.70) 78%, rgba(3,1,10,0.94) 100%)',
             }} />
 
-            {/* Location label — clips up into view after wipe lands */}
+            {/* Gotham label — clips up after wipe lands */}
             <motion.div
               initial={{ clipPath: 'inset(0 0 100% 0)' }}
               animate={{ clipPath: 'inset(0 0 0% 0)' }}
-              transition={{ delay: 0.7, duration: 0.5, ease: [0.76, 0, 0.24, 1] }}
+              transition={{ delay: 0.72, duration: 0.48, ease: WIPE_EASE }}
               style={{
-                position: 'absolute', bottom: 44, left: 0, right: 0,
-                display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6,
+                position: 'absolute',
+                bottom: 52,
+                left: 0, right: 0,
+                display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 5,
               }}
             >
               <span style={{
                 fontFamily: '"Courier New", Courier, monospace',
                 fontSize: 'clamp(8px, 1.6vw, 10px)',
-                letterSpacing: '0.36em',
-                color: 'rgba(196,154,40,0.45)',
+                letterSpacing: '0.38em',
+                color: 'rgba(196,154,40,0.55)',
                 textTransform: 'uppercase',
               }}>
                 Gotham City
               </span>
-              <span style={{
-                width: 1, height: 18,
-                background: 'rgba(196,154,40,0.25)',
-                display: 'block',
-              }} />
+              <span aria-hidden="true" style={{ width: 1, height: 16, background: 'rgba(196,154,40,0.22)', display: 'block' }} />
               <span style={{
                 fontFamily: '"Courier New", Courier, monospace',
-                fontSize: 'clamp(7px, 1.3vw, 9px)',
-                letterSpacing: '0.28em',
-                color: 'rgba(255,255,255,0.20)',
+                fontSize: 'clamp(7px, 1.2vw, 9px)',
+                letterSpacing: '0.26em',
+                color: 'rgba(255,255,255,0.22)',
                 textTransform: 'uppercase',
               }}>
                 same energy · less cape
@@ -272,55 +184,11 @@ export default function Hero() {
         )}
       </AnimatePresence>
 
-      {/* ── Marquee strip — fires during transition ── */}
-      <AnimatePresence>
-        {!batmanPhase && (
-          <motion.div
-            key="marquee"
-            initial={{ clipPath: 'inset(0 0 100% 0)' }}
-            animate={{ clipPath: 'inset(0 0 0% 0)' }}
-            exit={{ clipPath: 'inset(100% 0 0 0)' }}
-            transition={{ duration: 0.42, ease: [0.76, 0, 0.24, 1] }}
-            aria-hidden="true"
-            style={{
-              position: 'absolute', bottom: 0, left: 0, right: 0,
-              zIndex: 12, pointerEvents: 'none',
-              height: 28,
-              background: 'rgba(196,154,40,0.06)',
-              borderTop: '1px solid rgba(196,154,40,0.14)',
-              overflow: 'hidden',
-              display: 'flex', alignItems: 'center',
-            }}
-          >
-            {/* Infinite scrolling text */}
-            <motion.div
-              animate={{ x: ['0%', '-50%'] }}
-              transition={{ duration: 18, ease: 'linear', repeat: Infinity }}
-              style={{ display: 'flex', whiteSpace: 'nowrap', gap: 0 }}
-            >
-              {[...Array(2)].map((_, i) => (
-                <span key={i} style={{
-                  fontFamily: '"Courier New", Courier, monospace',
-                  fontSize: 9,
-                  letterSpacing: '0.28em',
-                  color: 'rgba(196,154,40,0.40)',
-                  textTransform: 'uppercase',
-                  paddingRight: 60,
-                }}>
-                  N × K &nbsp;&nbsp;·&nbsp;&nbsp; December 4, 2026 &nbsp;&nbsp;·&nbsp;&nbsp; Thane, India &nbsp;&nbsp;·&nbsp;&nbsp; Floating Mandap &nbsp;&nbsp;·&nbsp;&nbsp; Abhishek Farms &nbsp;&nbsp;·&nbsp;&nbsp; You Are Invited &nbsp;&nbsp;·&nbsp;&nbsp;
-                </span>
-              ))}
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
       {/* ── Floating gold particles ── */}
-      <div style={{ position: 'absolute', inset: 0, zIndex: 11, pointerEvents: 'none', overflow: 'hidden' }}>
+      <div aria-hidden="true" style={{ position: 'absolute', inset: 0, zIndex: 11, pointerEvents: 'none', overflow: 'hidden' }}>
         {PARTICLES.map((p, i) => (
           <div
             key={i}
-            aria-hidden="true"
             style={{
               position: 'absolute', bottom: 0, left: p.left,
               width: p.size, height: p.size,
@@ -331,125 +199,49 @@ export default function Hero() {
         ))}
       </div>
 
-      {/* ── Hero text — staggered entrance ── */}
-      <motion.div
-        variants={heroContainer}
-        initial="hidden"
-        animate="show"
-        className="relative text-white text-center px-6 max-w-2xl w-full"
-        style={{ zIndex: 4 }}
-      >
-        <motion.p
-          variants={heroUp}
-          className="text-xs uppercase tracking-[0.4em] mb-6 font-light"
-          style={{ color: 'rgba(255,255,255,0.55)' }}
+      {/* ── Bottom editorial label + RSVP — always above marquee ── */}
+      <div style={{
+        position: 'absolute', bottom: 44, left: 0, right: 0,
+        zIndex: 14, pointerEvents: 'none',
+        display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between',
+        padding: '0 clamp(20px, 5vw, 48px)',
+      }}>
+        {/* Left: couple name + event line */}
+        <motion.div
+          initial={{ opacity: 0, y: 18 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.9, delay: 0.4, ease: EASE }}
+          style={{ display: 'flex', flexDirection: 'column', gap: 5 }}
         >
-          Together with their families
-        </motion.p>
+          <span style={{
+            fontFamily: 'var(--font-great-vibes), Georgia, serif',
+            fontSize: 'clamp(28px, 6vw, 52px)',
+            color: '#C49A28',
+            lineHeight: 1,
+            textShadow: '0 0 40px rgba(196,154,40,0.30)',
+            display: 'block',
+          }}>
+            {COUPLE.brideName} &amp; {COUPLE.groomName}
+          </span>
+          <span style={{
+            fontFamily: '"Courier New", Courier, monospace',
+            fontSize: 'clamp(8px, 1.4vw, 10px)',
+            letterSpacing: '0.26em',
+            color: 'rgba(255,255,255,0.35)',
+            textTransform: 'uppercase',
+            display: 'block',
+          }}>
+            04.12.2026 · Thane
+          </span>
+        </motion.div>
 
-        <div style={{ lineHeight: 1.15, paddingBottom: '0.1em' }}>
-          <h1
-            aria-label={`${COUPLE.brideName} & ${COUPLE.groomName}`}
-            className="block"
-            style={{
-              fontFamily: 'var(--font-great-vibes)',
-              fontSize: 'clamp(56px, 13vw, 108px)',
-              fontWeight: 400,
-              color: '#C49A28',
-              lineHeight: 1.1,
-              textShadow: '0 0 48px rgba(196,154,40,0.28), 0 0 120px rgba(196,154,40,0.12)',
-            }}
-          >
-            <SplitText text={COUPLE.brideName} delay={0.32} />
-          </h1>
-          <motion.p
-            initial={{ opacity: 0, scale: 0.6 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5, ease: CHAR_EASE, delay: 0.82 }}
-            className="text-lg font-light my-3 tracking-widest"
-            style={{ color: 'rgba(196,154,40,0.6)' }}
-          >
-            <span aria-hidden="true">✦</span> &amp; <span aria-hidden="true">✦</span>
-          </motion.p>
-          <div
-            aria-hidden="true"
-            className="block"
-            style={{
-              fontFamily: 'var(--font-great-vibes)',
-              fontSize: 'clamp(56px, 13vw, 108px)',
-              fontWeight: 400,
-              color: '#C49A28',
-              lineHeight: 1.1,
-              textShadow: '0 0 48px rgba(196,154,40,0.28), 0 0 120px rgba(196,154,40,0.12)',
-            }}
-          >
-            <SplitText text={COUPLE.groomName} delay={0.96} />
-          </div>
-        </div>
-
-        <motion.p
-          variants={heroUp}
-          className="text-sm font-light mt-6 mb-8 tracking-wide"
-          style={{ color: 'rgba(255,255,255,0.65)' }}
+        {/* Right: RSVP button */}
+        <motion.div
+          initial={{ opacity: 0, y: 18 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.9, delay: 0.6, ease: EASE }}
+          style={{ pointerEvents: 'auto', flexShrink: 0 }}
         >
-          Friday, December 4, 2026 · Thane, Maharashtra
-        </motion.p>
-
-        {isWeddingDay ? (
-          <motion.p variants={heroUp} className="text-2xl font-light motion-safe:animate-pulse mb-10">
-            Today&apos;s the day! <span aria-hidden="true">🎉</span>
-          </motion.p>
-        ) : (
-          <motion.div variants={heroUp} className="mb-10">
-            <p className="text-xs tracking-[0.3em] uppercase mb-5" style={{ color: 'rgba(196,154,40,0.5)' }}>
-              Counting down to the big day
-            </p>
-            <div className="flex items-center justify-center gap-1 md:gap-2">
-              {[
-                { value: timeLeft.days,    label: 'Days'  },
-                { value: timeLeft.hours,   label: 'Hours' },
-                { value: timeLeft.minutes, label: 'Mins'  },
-                { value: timeLeft.seconds, label: 'Secs'  },
-              ].map(({ value, label }, i) => (
-                <div key={label} className="flex items-center gap-1 md:gap-2">
-                  <div style={{
-                    minWidth: 'clamp(62px, 15vw, 86px)',
-                    background: 'rgba(255,255,255,0.07)',
-                    backdropFilter: 'blur(44px) saturate(160%)',
-                    WebkitBackdropFilter: 'blur(44px) saturate(160%)',
-                    border: '1px solid rgba(196,154,40,0.28)',
-                    borderRadius: 18,
-                    paddingTop: 'clamp(10px, 2.5vw, 18px)',
-                    paddingBottom: 'clamp(8px, 2vw, 14px)',
-                    paddingLeft: 6, paddingRight: 6,
-                    textAlign: 'center' as const,
-                  }}>
-                    <div className="font-extralight tabular-nums" style={{
-                      fontSize: 'clamp(30px, 8vw, 48px)', color: 'white',
-                      lineHeight: 1, letterSpacing: '-0.02em',
-                    }}>
-                      <AnimatedDigit value={value} />
-                    </div>
-                    <div style={{
-                      fontSize: 'clamp(8px, 1.8vw, 10px)', color: 'rgba(196,154,40,0.65)',
-                      letterSpacing: '0.22em', textTransform: 'uppercase', marginTop: 8,
-                    }}>
-                      {label}
-                    </div>
-                  </div>
-                  {i < 3 && (
-                    <span style={{
-                      fontSize: 'clamp(20px, 5vw, 32px)', color: 'rgba(196,154,40,0.35)',
-                      fontWeight: 200, lineHeight: 1, marginTop: -14, display: 'block',
-                    }}>:</span>
-                  )}
-                </div>
-              ))}
-            </div>
-          </motion.div>
-        )}
-
-        <motion.div variants={heroUp}>
           <motion.a
             href="#rsvp"
             whileHover={{ scale: 1.06 }}
@@ -461,29 +253,63 @@ export default function Hero() {
               display: 'inline-block',
               background: 'linear-gradient(135deg, #B8850A, #E8C547, #C49A28)',
               color: '#2A1200',
-              padding: '13px 44px',
+              padding: '11px 28px',
               borderRadius: 100,
               fontWeight: 700,
-              fontSize: 12,
-              letterSpacing: '0.12em',
+              fontSize: 'clamp(9px, 1.6vw, 11px)',
+              letterSpacing: '0.14em',
               textDecoration: 'none',
-              boxShadow: '0 6px 24px rgba(196,154,40,0.45), 0 1px 0 rgba(255,255,255,0.25) inset',
-              textTransform: 'uppercase',
+              boxShadow: '0 6px 24px rgba(196,154,40,0.40), 0 1px 0 rgba(255,255,255,0.25) inset',
+              textTransform: 'uppercase' as const,
+              whiteSpace: 'nowrap',
             }}
           >
             RSVP Now
           </motion.a>
         </motion.div>
-      </motion.div>
+      </div>
 
-      {/* ── Gradient bridge: hero fades into the ivory Story section ── */}
+      {/* ── Marquee strip — ALWAYS visible on both images ── */}
+      <div
+        aria-hidden="true"
+        style={{
+          position: 'absolute', bottom: 0, left: 0, right: 0,
+          zIndex: 15, pointerEvents: 'none',
+          height: 26,
+          background: 'rgba(10,5,20,0.55)',
+          borderTop: '1px solid rgba(196,154,40,0.22)',
+          overflow: 'hidden',
+          display: 'flex', alignItems: 'center',
+        }}
+      >
+        <motion.div
+          animate={{ x: ['0%', '-50%'] }}
+          transition={{ duration: 22, ease: 'linear', repeat: Infinity }}
+          style={{ display: 'flex', whiteSpace: 'nowrap', gap: 0 }}
+        >
+          {[0, 1].map(i => (
+            <span key={i} style={{
+              fontFamily: '"Courier New", Courier, monospace',
+              fontSize: 9,
+              letterSpacing: '0.30em',
+              color: 'rgba(196,154,40,0.72)',
+              textTransform: 'uppercase',
+              paddingRight: 80,
+            }}>
+              {MARQUEE_TEXT}
+            </span>
+          ))}
+        </motion.div>
+      </div>
+
+      {/* ── Gradient bridge: hero fades into Story section ── */}
       <div
         aria-hidden="true"
         style={{
           position: 'absolute',
           bottom: 0, left: 0, right: 0,
-          height: 200,
-          background: 'linear-gradient(to bottom, transparent 0%, rgba(255,253,246,0.7) 65%, #FFFDF6 100%)',
+          height: 180,
+          background: 'linear-gradient(to bottom, transparent 0%, rgba(255,253,246,0.55) 60%, #FFFDF6 100%)',
           zIndex: 5,
           pointerEvents: 'none',
         }}
