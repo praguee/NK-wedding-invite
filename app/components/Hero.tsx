@@ -108,11 +108,13 @@ const heroUp   = { hidden: { opacity: 0, y: 36 }, show: { opacity: 1, y: 0,  tra
 
 export default function Hero() {
   const [timeLeft, setTimeLeft] = useState<TimeLeft>(getTimeLeft())
-  const [phase, setPhase] = useState<'scan' | 'reveal'>('scan')
+  const [phase, setPhase] = useState<'batman' | 'scan' | 'hero'>('batman')
   const [scanIdx, setScanIdx] = useState(0)
   const { scrollY } = useScroll()
   const imageY = useTransform(scrollY, [0, 700], ['0%', '20%'])
   const isMobile = useMediaQuery('(max-width: 767px)')
+
+  const CYCLE_PHASES: Array<'batman' | 'scan' | 'hero'> = ['batman', 'scan', 'hero']
 
   useEffect(() => {
     const interval = setInterval(() => setTimeLeft(getTimeLeft()), 1000)
@@ -120,13 +122,15 @@ export default function Hero() {
   }, [])
 
   useEffect(() => {
+    let idx = 0
     const id = setInterval(() => {
-      setPhase(p => {
-        if (p === 'scan') { setScanIdx(i => (i + 1) % SCAN_STATUS.length); return 'reveal' }
-        return 'scan'
-      })
-    }, 2200)
+      idx = (idx + 1) % CYCLE_PHASES.length
+      const next = CYCLE_PHASES[idx]
+      setPhase(next)
+      if (next === 'scan') setScanIdx(s => (s + 1) % SCAN_STATUS.length)
+    }, 2400)
     return () => clearInterval(id)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const isWeddingDay = Object.values(timeLeft).every((v) => v === 0)
@@ -171,7 +175,51 @@ export default function Hero() {
         background: 'linear-gradient(to top, rgba(5,2,15,.78), rgba(5,2,15,.35), transparent)',
       }} />
 
-      {/* ── Cinematic 404 scan overlay — loops every 2.2s ── */}
+      {/* ── Batman inspiration phase ── */}
+      <AnimatePresence>
+        {phase === 'batman' && (
+          <motion.div
+            key="batman-phase"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.65, ease: 'easeInOut' }}
+            aria-hidden="true"
+            style={{ position: 'absolute', inset: 0, zIndex: 10, pointerEvents: 'none' }}
+          >
+            <Image
+              src="/images/batman-inspiration.jpg"
+              alt=""
+              fill
+              sizes="100vw"
+              style={{
+                objectFit: 'cover',
+                objectPosition: isMobile ? '52% 28%' : 'center 28%',
+                filter: 'contrast(1.08) saturate(0.85) brightness(0.82)',
+              }}
+            />
+            {/* Vignette matching hero style */}
+            <div style={{
+              position: 'absolute', inset: 0,
+              background: 'linear-gradient(to bottom, rgba(3,1,10,0.22) 0%, transparent 40%, rgba(3,1,10,0.72) 80%, rgba(3,1,10,0.92) 100%)',
+            }} />
+            {/* Witty caption */}
+            <div style={{
+              position: 'absolute', bottom: 32, left: 0, right: 0,
+              textAlign: 'center',
+              fontFamily: '"Courier New", Courier, monospace',
+              fontSize: 'clamp(8px, 1.8vw, 10px)',
+              letterSpacing: '0.32em',
+              color: 'rgba(255,255,255,0.28)',
+              textTransform: 'uppercase',
+            }}>
+              same energy · less cape
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* ── Cinematic 404 scan overlay ── */}
       <AnimatePresence>
         {phase === 'scan' && (
           <motion.div
