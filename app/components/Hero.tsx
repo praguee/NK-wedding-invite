@@ -56,8 +56,9 @@ export default function Hero() {
           sizes="100vw"
           style={{
             objectFit: 'cover',
-            objectPosition: isMobile ? '60% 38%' : 'center 38%',
+            objectPosition: isMobile ? '40% 38%' : 'center 38%',
             filter: 'contrast(1.10) saturate(1.20) brightness(0.82) sepia(0.06)',
+            transform: 'scaleX(-1)',
           }}
         />
       </motion.div>
@@ -136,7 +137,7 @@ export default function Hero() {
                 sizes="100vw"
                 style={{
                   objectFit: 'cover',
-                  objectPosition: isMobile ? '52% 28%' : 'center 28%',
+                  objectPosition: isMobile ? '50% 28%' : 'center 28%',
                   filter: 'contrast(1.12) saturate(0.70) brightness(0.76)',
                 }}
               />
