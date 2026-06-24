@@ -170,7 +170,7 @@ export default function Hero() {
           sizes="100vw"
           style={{
             objectFit: 'cover',
-            objectPosition: 'center 20%',
+            objectPosition: 'center 38%',
             filter: 'contrast(1.10) saturate(1.20) brightness(0.82) sepia(0.06)',
           }}
         />
@@ -179,7 +179,7 @@ export default function Hero() {
       {/* ── Cinematic gradient layers ── */}
       <div style={{
         position: 'absolute', inset: 0, zIndex: 1, pointerEvents: 'none',
-        background: 'linear-gradient(to bottom, rgba(10,4,25,0.55) 0%, rgba(10,4,25,0.05) 35%, transparent 55%)',
+        background: 'linear-gradient(to bottom, rgba(10,4,25,0.18) 0%, rgba(10,4,25,0.02) 35%, transparent 55%)',
       }} />
       <div style={{
         position: 'absolute', inset: 0, zIndex: 1, pointerEvents: 'none',

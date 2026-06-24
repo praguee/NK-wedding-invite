@@ -6,6 +6,7 @@ import SectionOrnament from './SectionOrnament'
 import LotusDecoration from './LotusDecoration'
 import Image from 'next/image'
 import { SlideIn, StaggerContainer, StaggerItem } from './ScrollReveal'
+import { useMediaQuery } from '@/app/hooks/useMediaQuery'
 
 const RELATIONSHIP_START = new Date('2023-07-08T00:00:00+05:30')
 const EASE = [0.16, 1, 0.3, 1] as const
@@ -21,6 +22,7 @@ function getRelationshipTime() {
 
 export default function Story() {
   const [t, setT] = useState({ years: 0, months: 0, days: 0 })
+  const isMobile = useMediaQuery('(max-width: 767px)')
 
   useEffect(() => {
     setT(getRelationshipTime())
@@ -40,7 +42,7 @@ export default function Story() {
           fill
           priority
           sizes="100vw"
-          style={{ objectFit: 'cover', objectPosition: 'center 35%' }}
+          style={{ objectFit: 'cover', objectPosition: isMobile ? '28% 35%' : 'center 35%' }}
         />
 
         {/* Cinematic vignette — lighter at top, deep at bottom for text */}
