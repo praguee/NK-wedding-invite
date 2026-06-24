@@ -36,7 +36,7 @@ const PARTICLES = [
   { left: '48%', delay: '4.1s',  dur: '10s', size: 2 },
 ]
 
-const MARQUEE_TEXT = `N × K  ·  December 4, 2026  ·  Thane, India  ·  Floating Mandap  ·  Abhishek Farms  ·  You Are Invited  ·  `
+const MARQUEE_TEXT = `N × K  ·  December 4, 2026  ·  Thane, India  ·  Abhishek Farms  ·  You Are Invited  ·  `
 
 export default function Hero() {
   const [batmanPhase, setBatmanPhase] = useState(true)
@@ -166,38 +166,6 @@ export default function Hero() {
               background: 'linear-gradient(to bottom, rgba(3,1,10,0.28) 0%, transparent 38%, rgba(3,1,10,0.70) 78%, rgba(3,1,10,0.94) 100%)',
             }} />
 
-            {/* Gotham label — clips up after wipe lands */}
-            <motion.div
-              initial={{ clipPath: 'inset(0 0 100% 0)' }}
-              animate={{ clipPath: 'inset(0 0 0% 0)' }}
-              transition={{ delay: 0.72, duration: 0.48, ease: WIPE_EASE }}
-              style={{
-                position: 'absolute',
-                bottom: 52,
-                left: 0, right: 0,
-                display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 5,
-              }}
-            >
-              <span style={{
-                fontFamily: '"Courier New", Courier, monospace',
-                fontSize: 'clamp(8px, 1.6vw, 10px)',
-                letterSpacing: '0.38em',
-                color: 'rgba(196,154,40,0.55)',
-                textTransform: 'uppercase',
-              }}>
-                Gotham City
-              </span>
-              <span aria-hidden="true" style={{ width: 1, height: 16, background: 'rgba(196,154,40,0.22)', display: 'block' }} />
-              <span style={{
-                fontFamily: '"Courier New", Courier, monospace',
-                fontSize: 'clamp(7px, 1.2vw, 9px)',
-                letterSpacing: '0.26em',
-                color: 'rgba(255,255,255,0.22)',
-                textTransform: 'uppercase',
-              }}>
-                same energy · less cape
-              </span>
-            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
@@ -224,12 +192,11 @@ export default function Hero() {
         display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between',
         padding: '0 clamp(20px, 5vw, 48px)',
       }}>
-        {/* Left: couple name + event line */}
+        {/* Left: couple names only */}
         <motion.div
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.9, delay: 0.4, ease: EASE }}
-          style={{ display: 'flex', flexDirection: 'column', gap: 5 }}
         >
           <span style={{
             fontFamily: 'var(--font-great-vibes), Georgia, serif',
@@ -240,40 +207,6 @@ export default function Hero() {
             display: 'block',
           }}>
             {COUPLE.brideName} &amp; {COUPLE.groomName}
-          </span>
-          <span style={{
-            fontFamily: '"Courier New", Courier, monospace',
-            fontSize: 'clamp(8px, 1.4vw, 10px)',
-            letterSpacing: '0.20em',
-            color: 'rgba(255,255,255,0.30)',
-            textTransform: 'uppercase',
-            display: 'block',
-          }}>
-            04.12.2026
-          </span>
-          {/* Compact countdown replacing "Thane" */}
-          <span style={{
-            fontFamily: '"Courier New", Courier, monospace',
-            fontSize: 'clamp(8px, 1.4vw, 10px)',
-            letterSpacing: '0.16em',
-            color: 'rgba(196,154,40,0.65)',
-            display: 'flex',
-            gap: 'clamp(6px, 1.2vw, 10px)',
-            alignItems: 'baseline',
-          }}>
-            {[
-              { v: timeLeft.days,    l: 'd' },
-              { v: timeLeft.hours,   l: 'h' },
-              { v: timeLeft.minutes, l: 'm' },
-              { v: timeLeft.seconds, l: 's' },
-            ].map(({ v, l }) => (
-              <span key={l} style={{ display: 'inline-flex', alignItems: 'baseline', gap: 1 }}>
-                <span style={{ color: 'rgba(255,255,255,0.70)', fontWeight: 600 }}>
-                  {String(v).padStart(2, '0')}
-                </span>
-                <span style={{ color: 'rgba(196,154,40,0.50)', fontSize: '0.75em' }}>{l}</span>
-              </span>
-            ))}
           </span>
         </motion.div>
 
@@ -323,6 +256,56 @@ export default function Hero() {
         </motion.div>
       </div>
 
+      {/* ── Bottom-centre: date + countdown — always visible on BOTH phases ── */}
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.9, delay: 0.55, ease: EASE }}
+        aria-live="polite"
+        aria-atomic="true"
+        style={{
+          position: 'absolute',
+          bottom: 52,
+          left: 0, right: 0,
+          zIndex: 14,
+          display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 5,
+          pointerEvents: 'none',
+        }}
+      >
+        <span style={{
+          fontFamily: '"Courier New", Courier, monospace',
+          fontSize: 'clamp(11px, 2.6vw, 14px)',
+          letterSpacing: '0.24em',
+          color: 'rgba(255,255,255,0.38)',
+          textTransform: 'uppercase',
+        }}>
+          04.12.2026
+        </span>
+        <span style={{
+          fontFamily: '"Courier New", Courier, monospace',
+          fontSize: 'clamp(11px, 2.6vw, 14px)',
+          letterSpacing: '0.16em',
+          color: 'rgba(196,154,40,0.75)',
+          display: 'flex',
+          gap: 'clamp(8px, 1.8vw, 14px)',
+          alignItems: 'baseline',
+        }}>
+          {[
+            { v: timeLeft.days,    l: 'd' },
+            { v: timeLeft.hours,   l: 'h' },
+            { v: timeLeft.minutes, l: 'm' },
+            { v: timeLeft.seconds, l: 's' },
+          ].map(({ v, l }) => (
+            <span key={l} style={{ display: 'inline-flex', alignItems: 'baseline', gap: 2 }}>
+              <span style={{ color: 'rgba(255,255,255,0.82)', fontWeight: 600 }}>
+                {String(v).padStart(2, '0')}
+              </span>
+              <span style={{ color: 'rgba(196,154,40,0.55)', fontSize: '0.72em' }}>{l}</span>
+            </span>
+          ))}
+        </span>
+      </motion.div>
+
       {/* ── Marquee strip — ALWAYS visible on both images ── */}
       <div
         aria-hidden="true"
@@ -337,11 +320,11 @@ export default function Hero() {
         }}
       >
         <motion.div
-          animate={{ x: ['0%', '-50%'] }}
-          transition={{ duration: 22, ease: 'linear', repeat: Infinity }}
+          animate={{ x: ['0%', '-25%'] }}
+          transition={{ duration: 26, ease: 'linear', repeat: Infinity, repeatType: 'loop' }}
           style={{ display: 'flex', whiteSpace: 'nowrap', gap: 0 }}
         >
-          {[0, 1].map(i => (
+          {[0, 1, 2, 3].map(i => (
             <span key={i} style={{
               fontFamily: '"Courier New", Courier, monospace',
               fontSize: 9,
