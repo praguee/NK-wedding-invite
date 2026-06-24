@@ -195,16 +195,18 @@ export default function Hero() {
       </div>
 
       {/* ── Batman wipe-in panel — workoholics clip-path reveal ── */}
+      {/* Mobile: vertical top↓bottom wipe (portrait screens, avoids left-cut subject) */}
+      {/* Desktop: horizontal left→right wipe */}
       <AnimatePresence>
         {batmanPhase && (
           <motion.div
-            key="batman-phase"
-            initial={{ clipPath: 'inset(0 100% 0 0)' }}
-            animate={{ clipPath: 'inset(0 0% 0 0)' }}
-            exit={{ clipPath: 'inset(0 0 0 100%)' }}
+            key={`batman-phase-${isMobile ? 'mobile' : 'desktop'}`}
+            initial={{ clipPath: isMobile ? 'inset(0 0 100% 0)' : 'inset(0 100% 0 0)' }}
+            animate={{ clipPath: 'inset(0 0 0% 0)' }}
+            exit={{ clipPath: isMobile ? 'inset(100% 0 0 0)' : 'inset(0 0 0 100%)' }}
             transition={{ duration: 0.88, ease: [0.76, 0, 0.24, 1] }}
             aria-hidden="true"
-            style={{ position: 'absolute', inset: 0, zIndex: 10, pointerEvents: 'none', overflow: 'hidden' }}
+            style={{ position: 'absolute', inset: 0, zIndex: 10, pointerEvents: 'none' }}
           >
             {/* Ken Burns: slow zoom-in + subtle drift */}
             <motion.div
