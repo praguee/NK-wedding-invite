@@ -14,6 +14,7 @@ interface Photo {
   title: string
   caption: string
   meta: string
+  objectPosition?: string
 }
 
 interface MobileGalleryProps {
@@ -80,7 +81,7 @@ export default function MobileGallery({ photos, onOpen }: MobileGalleryProps) {
               alt={photo.alt}
               fill
               sizes="90vw"
-              style={{ objectFit: 'cover', objectPosition: 'center 20%' }}
+              style={{ objectFit: 'cover', objectPosition: photo.objectPosition ?? 'center center' }}
             />
 
             {/* Gradient overlay */}
