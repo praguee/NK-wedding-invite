@@ -157,23 +157,60 @@ export default function Hero() {
         background: 'linear-gradient(to top, rgba(5,2,15,.78), rgba(5,2,15,.35), transparent)',
       }} />
 
-      {/* ── Batman ↔ NK hero crossfade with Ken Burns ── */}
+      {/* ── Slide counter (01 / 02) — top-right, always visible ── */}
+      <div aria-hidden="true" style={{
+        position: 'absolute', top: 28, right: 28, zIndex: 20,
+        display: 'flex', alignItems: 'center', gap: 10,
+        pointerEvents: 'none',
+      }}>
+        <AnimatePresence mode="wait">
+          <motion.span
+            key={batmanPhase ? '01' : '02'}
+            initial={{ clipPath: 'inset(0 0 100% 0)', y: 6 }}
+            animate={{ clipPath: 'inset(0 0 0% 0)', y: 0 }}
+            exit={{ clipPath: 'inset(100% 0 0 0)', y: -6 }}
+            transition={{ duration: 0.45, ease: [0.76, 0, 0.24, 1] }}
+            style={{
+              fontFamily: '"Courier New", Courier, monospace',
+              fontSize: 'clamp(10px, 1.4vw, 13px)',
+              fontWeight: 700,
+              letterSpacing: '0.18em',
+              color: 'rgba(196,154,40,0.55)',
+            }}
+          >
+            {batmanPhase ? '01' : '02'}
+          </motion.span>
+        </AnimatePresence>
+        <span style={{
+          width: 24, height: 1,
+          background: 'rgba(196,154,40,0.30)',
+          display: 'inline-block',
+        }} />
+        <span style={{
+          fontFamily: '"Courier New", Courier, monospace',
+          fontSize: 'clamp(10px, 1.4vw, 13px)',
+          letterSpacing: '0.18em',
+          color: 'rgba(255,255,255,0.18)',
+        }}>02</span>
+      </div>
+
+      {/* ── Batman wipe-in panel — workoholics clip-path reveal ── */}
       <AnimatePresence>
         {batmanPhase && (
           <motion.div
             key="batman-phase"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 1.4, ease: [0.4, 0, 0.2, 1] }}
+            initial={{ clipPath: 'inset(0 100% 0 0)' }}
+            animate={{ clipPath: 'inset(0 0% 0 0)' }}
+            exit={{ clipPath: 'inset(0 0 0 100%)' }}
+            transition={{ duration: 0.88, ease: [0.76, 0, 0.24, 1] }}
             aria-hidden="true"
             style={{ position: 'absolute', inset: 0, zIndex: 10, pointerEvents: 'none', overflow: 'hidden' }}
           >
-            {/* Ken Burns: slow zoom-in + slight leftward drift while visible */}
+            {/* Ken Burns: slow zoom-in + subtle drift */}
             <motion.div
               initial={{ scale: 1.0, x: 0 }}
-              animate={{ scale: 1.07, x: -10 }}
-              transition={{ duration: 5.0, ease: 'linear' }}
+              animate={{ scale: 1.06, x: -8 }}
+              transition={{ duration: 5.5, ease: 'linear' }}
               style={{ position: 'absolute', inset: 0 }}
             >
               <Image
@@ -184,7 +221,7 @@ export default function Hero() {
                 style={{
                   objectFit: 'cover',
                   objectPosition: isMobile ? '52% 28%' : 'center 28%',
-                  filter: 'contrast(1.1) saturate(0.78) brightness(0.80)',
+                  filter: 'contrast(1.12) saturate(0.72) brightness(0.78)',
                 }}
               />
             </motion.div>
@@ -192,25 +229,85 @@ export default function Hero() {
             {/* Deep vignette */}
             <div style={{
               position: 'absolute', inset: 0,
-              background: 'linear-gradient(to bottom, rgba(3,1,10,0.30) 0%, transparent 35%, rgba(3,1,10,0.68) 78%, rgba(3,1,10,0.94) 100%)',
+              background: 'linear-gradient(to bottom, rgba(3,1,10,0.28) 0%, transparent 38%, rgba(3,1,10,0.72) 80%, rgba(3,1,10,0.95) 100%)',
             }} />
 
-            {/* Caption — bottom of screen */}
+            {/* Location label — clips up into view after wipe lands */}
             <motion.div
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.8, duration: 0.6 }}
+              initial={{ clipPath: 'inset(0 0 100% 0)' }}
+              animate={{ clipPath: 'inset(0 0 0% 0)' }}
+              transition={{ delay: 0.7, duration: 0.5, ease: [0.76, 0, 0.24, 1] }}
               style={{
-                position: 'absolute', bottom: 32, left: 0, right: 0,
-                textAlign: 'center',
-                fontFamily: '"Courier New", Courier, monospace',
-                fontSize: 'clamp(8px, 1.8vw, 10px)',
-                letterSpacing: '0.32em',
-                color: 'rgba(255,255,255,0.26)',
-                textTransform: 'uppercase',
+                position: 'absolute', bottom: 44, left: 0, right: 0,
+                display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6,
               }}
             >
-              same energy · less cape
+              <span style={{
+                fontFamily: '"Courier New", Courier, monospace',
+                fontSize: 'clamp(8px, 1.6vw, 10px)',
+                letterSpacing: '0.36em',
+                color: 'rgba(196,154,40,0.45)',
+                textTransform: 'uppercase',
+              }}>
+                Gotham City
+              </span>
+              <span style={{
+                width: 1, height: 18,
+                background: 'rgba(196,154,40,0.25)',
+                display: 'block',
+              }} />
+              <span style={{
+                fontFamily: '"Courier New", Courier, monospace',
+                fontSize: 'clamp(7px, 1.3vw, 9px)',
+                letterSpacing: '0.28em',
+                color: 'rgba(255,255,255,0.20)',
+                textTransform: 'uppercase',
+              }}>
+                same energy · less cape
+              </span>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* ── Marquee strip — fires during transition ── */}
+      <AnimatePresence>
+        {!batmanPhase && (
+          <motion.div
+            key="marquee"
+            initial={{ clipPath: 'inset(0 0 100% 0)' }}
+            animate={{ clipPath: 'inset(0 0 0% 0)' }}
+            exit={{ clipPath: 'inset(100% 0 0 0)' }}
+            transition={{ duration: 0.42, ease: [0.76, 0, 0.24, 1] }}
+            aria-hidden="true"
+            style={{
+              position: 'absolute', bottom: 0, left: 0, right: 0,
+              zIndex: 12, pointerEvents: 'none',
+              height: 28,
+              background: 'rgba(196,154,40,0.06)',
+              borderTop: '1px solid rgba(196,154,40,0.14)',
+              overflow: 'hidden',
+              display: 'flex', alignItems: 'center',
+            }}
+          >
+            {/* Infinite scrolling text */}
+            <motion.div
+              animate={{ x: ['0%', '-50%'] }}
+              transition={{ duration: 18, ease: 'linear', repeat: Infinity }}
+              style={{ display: 'flex', whiteSpace: 'nowrap', gap: 0 }}
+            >
+              {[...Array(2)].map((_, i) => (
+                <span key={i} style={{
+                  fontFamily: '"Courier New", Courier, monospace',
+                  fontSize: 9,
+                  letterSpacing: '0.28em',
+                  color: 'rgba(196,154,40,0.40)',
+                  textTransform: 'uppercase',
+                  paddingRight: 60,
+                }}>
+                  N × K &nbsp;&nbsp;·&nbsp;&nbsp; December 4, 2026 &nbsp;&nbsp;·&nbsp;&nbsp; Thane, India &nbsp;&nbsp;·&nbsp;&nbsp; Floating Mandap &nbsp;&nbsp;·&nbsp;&nbsp; Abhishek Farms &nbsp;&nbsp;·&nbsp;&nbsp; You Are Invited &nbsp;&nbsp;·&nbsp;&nbsp;
+                </span>
+              ))}
             </motion.div>
           </motion.div>
         )}
