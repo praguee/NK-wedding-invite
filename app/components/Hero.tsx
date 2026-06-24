@@ -39,7 +39,7 @@ const PARTICLES = [
 const MARQUEE_TEXT = `N × K  ·  December 4, 2026  ·  Thane, India  ·  Abhishek Farms  ·  You Are Invited  ·  `
 
 export default function Hero() {
-  const [batmanPhase, setBatmanPhase] = useState(true)
+  const [batmanPhase, setBatmanPhase] = useState(false)
   const [timeLeft, setTimeLeft] = useState<TimeLeft>(getTimeLeft())
   const { scrollY } = useScroll()
   const imageY = useTransform(scrollY, [0, 700], ['0%', '20%'])
@@ -102,7 +102,7 @@ export default function Hero() {
       }}>
         <AnimatePresence mode="wait">
           <motion.span
-            key={batmanPhase ? '01' : '02'}
+            key={batmanPhase ? '02' : '01'}
             initial={{ clipPath: 'inset(0 0 100% 0)', y: 6 }}
             animate={{ clipPath: 'inset(0 0 0% 0)', y: 0 }}
             exit={{ clipPath: 'inset(100% 0 0 0)', y: -6 }}
@@ -115,7 +115,7 @@ export default function Hero() {
               color: 'rgba(196,154,40,0.60)',
             }}
           >
-            {batmanPhase ? '01' : '02'}
+            {batmanPhase ? '02' : '01'}
           </motion.span>
         </AnimatePresence>
         <span style={{ width: 22, height: 1, background: 'rgba(196,154,40,0.28)', display: 'inline-block' }} />
@@ -265,7 +265,7 @@ export default function Hero() {
         aria-atomic="true"
         style={{
           position: 'absolute',
-          bottom: 52,
+          bottom: 'clamp(88px, 13svh, 110px)',
           left: 0, right: 0,
           zIndex: 14,
           display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 5,
