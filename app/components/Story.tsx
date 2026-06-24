@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
-import SectionOrnament from './SectionOrnament'
 import LotusDecoration from './LotusDecoration'
 import Image from 'next/image'
 import { SlideIn, StaggerContainer, StaggerItem } from './ScrollReveal'
@@ -53,28 +52,6 @@ export default function Story() {
             background: 'linear-gradient(to bottom, rgba(3,1,10,0.10) 0%, rgba(3,1,10,0.04) 30%, rgba(3,1,10,0.52) 68%, rgba(3,1,10,0.88) 100%)',
           }}
         />
-
-        {/* Thin gold rule that wipes across */}
-        <motion.div
-          aria-hidden="true"
-          initial={{ scaleX: 0, opacity: 0 }}
-          whileInView={{ scaleX: 1, opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 1.1, ease: EASE, delay: 0.2 }}
-          style={{
-            position: 'absolute',
-            bottom: '28%',
-            left: 0, right: 0,
-            height: 1,
-            background: 'rgba(196,154,40,0.22)',
-            transformOrigin: 'left center',
-          }}
-        />
-
-        {/* Ornament — top left inside image */}
-        <div style={{ position: 'absolute', top: 28, left: 28, zIndex: 2 }}>
-          <SectionOrnament />
-        </div>
 
         {/* Title + caption — bottom of image */}
         <div style={{
