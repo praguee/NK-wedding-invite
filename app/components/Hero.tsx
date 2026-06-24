@@ -6,14 +6,6 @@ import Image from 'next/image'
 import { COUPLE, EVENT } from '@/lib/constants'
 import { useMediaQuery } from '@/app/hooks/useMediaQuery'
 
-const SCAN_STATUS = [
-  'SIGNAL NOT FOUND',
-  'SCANNING ENVIRONMENT...',
-  'COORDINATES ENCRYPTED',
-  'DECODING STREAM...',
-  'CONNECTION REFUSED',
-]
-
 const CHAR_EASE = [0.16, 1, 0.3, 1] as const
 
 // Each letter tumbles in from below with a 3D flip — theatrical, distinctive
@@ -108,13 +100,10 @@ const heroUp   = { hidden: { opacity: 0, y: 36 }, show: { opacity: 1, y: 0,  tra
 
 export default function Hero() {
   const [timeLeft, setTimeLeft] = useState<TimeLeft>(getTimeLeft())
-  const [phase, setPhase] = useState<'batman' | 'scan' | 'hero'>('batman')
-  const [scanIdx, setScanIdx] = useState(0)
+  const [batmanPhase, setBatmanPhase] = useState(true)
   const { scrollY } = useScroll()
   const imageY = useTransform(scrollY, [0, 700], ['0%', '20%'])
   const isMobile = useMediaQuery('(max-width: 767px)')
-
-  const CYCLE_PHASES: Array<'batman' | 'scan' | 'hero'> = ['batman', 'scan', 'hero']
 
   useEffect(() => {
     const interval = setInterval(() => setTimeLeft(getTimeLeft()), 1000)
@@ -122,15 +111,8 @@ export default function Hero() {
   }, [])
 
   useEffect(() => {
-    let idx = 0
-    const id = setInterval(() => {
-      idx = (idx + 1) % CYCLE_PHASES.length
-      const next = CYCLE_PHASES[idx]
-      setPhase(next)
-      if (next === 'scan') setScanIdx(s => (s + 1) % SCAN_STATUS.length)
-    }, 2400)
+    const id = setInterval(() => setBatmanPhase(b => !b), 4000)
     return () => clearInterval(id)
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const isWeddingDay = Object.values(timeLeft).every((v) => v === 0)
@@ -175,135 +157,61 @@ export default function Hero() {
         background: 'linear-gradient(to top, rgba(5,2,15,.78), rgba(5,2,15,.35), transparent)',
       }} />
 
-      {/* ── Batman inspiration phase ── */}
+      {/* ── Batman ↔ NK hero crossfade with Ken Burns ── */}
       <AnimatePresence>
-        {phase === 'batman' && (
+        {batmanPhase && (
           <motion.div
             key="batman-phase"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.65, ease: 'easeInOut' }}
+            transition={{ duration: 1.4, ease: [0.4, 0, 0.2, 1] }}
             aria-hidden="true"
-            style={{ position: 'absolute', inset: 0, zIndex: 10, pointerEvents: 'none' }}
+            style={{ position: 'absolute', inset: 0, zIndex: 10, pointerEvents: 'none', overflow: 'hidden' }}
           >
-            <Image
-              src="/images/batman-inspiration.jpg"
-              alt=""
-              fill
-              sizes="100vw"
-              style={{
-                objectFit: 'cover',
-                objectPosition: isMobile ? '52% 28%' : 'center 28%',
-                filter: 'contrast(1.08) saturate(0.85) brightness(0.82)',
-              }}
-            />
-            {/* Vignette matching hero style */}
-            <div style={{
-              position: 'absolute', inset: 0,
-              background: 'linear-gradient(to bottom, rgba(3,1,10,0.22) 0%, transparent 40%, rgba(3,1,10,0.72) 80%, rgba(3,1,10,0.92) 100%)',
-            }} />
-            {/* Witty caption */}
-            <div style={{
-              position: 'absolute', bottom: 32, left: 0, right: 0,
-              textAlign: 'center',
-              fontFamily: '"Courier New", Courier, monospace',
-              fontSize: 'clamp(8px, 1.8vw, 10px)',
-              letterSpacing: '0.32em',
-              color: 'rgba(255,255,255,0.28)',
-              textTransform: 'uppercase',
-            }}>
-              same energy · less cape
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* ── Cinematic 404 scan overlay ── */}
-      <AnimatePresence>
-        {phase === 'scan' && (
-          <motion.div
-            key="scan-overlay"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.55, ease: 'easeInOut' }}
-            aria-hidden="true"
-            style={{
-              position: 'absolute', inset: 0, zIndex: 10,
-              background: 'rgba(3,1,12,0.88)',
-              pointerEvents: 'none',
-              display: 'flex', flexDirection: 'column',
-              alignItems: 'center', justifyContent: 'center',
-            }}
-          >
-            {/* Scanlines */}
-            <div style={{
-              position: 'absolute', inset: 0,
-              backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,0,0,0.06) 3px, rgba(0,0,0,0.06) 4px)',
-            }} />
-
-            {/* Sweeping scan beam */}
+            {/* Ken Burns: slow zoom-in + slight leftward drift while visible */}
             <motion.div
-              aria-hidden="true"
+              initial={{ scale: 1.0, x: 0 }}
+              animate={{ scale: 1.07, x: -10 }}
+              transition={{ duration: 5.0, ease: 'linear' }}
+              style={{ position: 'absolute', inset: 0 }}
+            >
+              <Image
+                src="/images/batman-inspiration.jpg"
+                alt=""
+                fill
+                sizes="100vw"
+                style={{
+                  objectFit: 'cover',
+                  objectPosition: isMobile ? '52% 28%' : 'center 28%',
+                  filter: 'contrast(1.1) saturate(0.78) brightness(0.80)',
+                }}
+              />
+            </motion.div>
+
+            {/* Deep vignette */}
+            <div style={{
+              position: 'absolute', inset: 0,
+              background: 'linear-gradient(to bottom, rgba(3,1,10,0.30) 0%, transparent 35%, rgba(3,1,10,0.68) 78%, rgba(3,1,10,0.94) 100%)',
+            }} />
+
+            {/* Caption — bottom of screen */}
+            <motion.div
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.8, duration: 0.6 }}
               style={{
-                position: 'absolute', left: 0, right: 0, height: 1,
-                background: 'linear-gradient(90deg, transparent 0%, rgba(196,154,40,0.18) 20%, rgba(196,154,40,0.45) 50%, rgba(196,154,40,0.18) 80%, transparent 100%)',
+                position: 'absolute', bottom: 32, left: 0, right: 0,
+                textAlign: 'center',
+                fontFamily: '"Courier New", Courier, monospace',
+                fontSize: 'clamp(8px, 1.8vw, 10px)',
+                letterSpacing: '0.32em',
+                color: 'rgba(255,255,255,0.26)',
+                textTransform: 'uppercase',
               }}
-              animate={{ top: ['8%', '92%'] }}
-              transition={{ duration: 2.0, ease: 'linear', repeat: Infinity }}
-            />
-
-            {/* Error text */}
-            <div style={{ position: 'relative', zIndex: 1, textAlign: 'center', padding: '0 32px' }}>
-              <motion.p
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.1 }}
-                style={{
-                  fontFamily: '"Courier New", Courier, monospace',
-                  fontSize: 'clamp(9px, 2.2vw, 11px)',
-                  letterSpacing: '0.28em',
-                  color: 'rgba(196,154,40,0.40)',
-                  marginBottom: 16,
-                }}
-              >
-                {'// NK_WEDDING.SYS'}
-              </motion.p>
-
-              <motion.p
-                initial={{ opacity: 0, scale: 0.94 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.12, duration: 0.38 }}
-                style={{
-                  fontFamily: '"Courier New", Courier, monospace',
-                  fontSize: 'clamp(64px, 16vw, 100px)',
-                  fontWeight: 700,
-                  color: 'rgba(255,255,255,0.90)',
-                  lineHeight: 0.95,
-                  letterSpacing: '-0.02em',
-                  textShadow: '0 0 80px rgba(196,154,40,0.15)',
-                }}
-              >
-                404
-              </motion.p>
-
-              <motion.p
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.28 }}
-                style={{
-                  fontFamily: '"Courier New", Courier, monospace',
-                  fontSize: 'clamp(9px, 2.2vw, 11px)',
-                  letterSpacing: '0.28em',
-                  color: 'rgba(255,255,255,0.30)',
-                  marginTop: 14,
-                  textTransform: 'uppercase',
-                }}
-              >
-                {SCAN_STATUS[scanIdx]}
-              </motion.p>
-            </div>
+            >
+              same energy · less cape
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
