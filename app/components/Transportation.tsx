@@ -4,158 +4,353 @@ import Image from 'next/image'
 import { VENUE } from '@/lib/constants'
 import { Car, Navigation } from 'lucide-react'
 import SectionOrnament from './SectionOrnament'
-import { StaggerContainer, StaggerItem, TextReveal } from './ScrollReveal'
 import { motion } from 'framer-motion'
+
+const EASE = [0.16, 1, 0.3, 1] as const
 
 export default function Transportation() {
   return (
-    <section id="travel" className="py-24 bg-slate-50">
-      <div className="max-w-4xl mx-auto px-6">
-        <SectionOrnament />
-        <TextReveal delay={0.05}>
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-extralight text-center mb-4 tracking-tight">
-            Venue &amp; Getting There
-          </h2>
-        </TextReveal>
-        <p className="text-center mb-12 text-sm" style={{ color: '#9C7A5A' }}>
-          Everything you need to find us — and get home safely
-        </p>
-
-        {/* Venue photo card — full address inlined */}
-        <div
-          className="relative rounded-3xl overflow-hidden mb-8"
-          style={{ height: 300, boxShadow: '0 8px 40px rgba(0,0,0,0.18)' }}
-        >
+    <section
+      id="travel"
+      aria-labelledby="travel-heading"
+      style={{ position: 'relative', overflow: 'hidden', minHeight: '100svh' }}
+    >
+      {/* ── Full-section background: two photos side by side ── */}
+      <div aria-hidden="true" style={{ position: 'absolute', inset: 0, display: 'flex' }}>
+        <div style={{ position: 'relative', flex: 1, overflow: 'hidden' }}>
           <Image
-            src="/images/venue-cover.jpg"
-            alt="Abhishek Farms — venue"
+            src="/images/vng1.jpg"
+            alt=""
             fill
-            style={{
-              objectFit: 'cover',
-              objectPosition: 'center 40%',
-              filter: 'contrast(1.08) saturate(1.15) brightness(0.82)',
-            }}
+            priority
+            sizes="50vw"
+            style={{ objectFit: 'cover', objectPosition: 'center 50%' }}
           />
-          <div style={{
-            position: 'absolute', inset: 0,
-            background: 'linear-gradient(to top, rgba(5,2,15,0.9) 0%, rgba(10,5,20,0.35) 45%, rgba(0,0,0,0.05) 100%)',
-          }} />
-          <div style={{
-            position: 'absolute', top: 0, left: 0, right: 0, height: 2,
-            background: 'linear-gradient(90deg, transparent, #C49A28, transparent)',
-            opacity: 0.9,
-          }} />
+        </div>
+        <div style={{ position: 'relative', flex: 1, overflow: 'hidden' }}>
+          <Image
+            src="/images/vng2.jpg"
+            alt=""
+            fill
+            sizes="50vw"
+            style={{ objectFit: 'cover', objectPosition: 'center 50%' }}
+          />
+        </div>
+      </div>
 
-          <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
-            <div className="flex items-end justify-between gap-4">
-              <div>
-                <p className="text-xs tracking-widest uppercase mb-1" style={{ color: 'rgba(196,154,40,0.9)' }}>
-                  Wedding Venue · December 4, 2026
-                </p>
-                <h3 className="text-2xl font-light mb-1">{VENUE.name}</h3>
-                <p className="text-sm leading-relaxed" style={{ color: 'rgba(255,255,255,0.55)' }}>
-                  {VENUE.fullAddress}
-                </p>
-              </div>
-              <motion.a
-                href={VENUE.mapUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex-shrink-0 text-xs font-semibold tracking-widest uppercase px-5 py-2.5 rounded-full"
-                style={{
-                  background: 'linear-gradient(135deg, #B8850A, #E8C547, #C49A28)',
-                  color: '#2A1200',
-                  boxShadow: '0 2px 12px rgba(196,154,40,0.45)',
-                  textDecoration: 'none',
-                  cursor: 'pointer',
-                }}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.96 }}
-                transition={{ type: 'spring', stiffness: 400, damping: 18 }}
-              >
-                Directions →
-              </motion.a>
-            </div>
-          </div>
+      {/* ── Cinematic vignette ── */}
+      <div aria-hidden="true" style={{
+        position: 'absolute', inset: 0,
+        background: 'linear-gradient(to bottom, rgba(3,1,10,0.80) 0%, rgba(3,1,10,0.52) 25%, rgba(3,1,10,0.52) 65%, rgba(3,1,10,0.88) 100%)',
+      }} />
+      <div aria-hidden="true" style={{
+        position: 'absolute', inset: 0,
+        background: 'radial-gradient(ellipse 80% 60% at 50% 50%, rgba(3,1,10,0.28) 0%, transparent 100%)',
+      }} />
+
+      {/* ── Content overlaid on photos ── */}
+      <div style={{
+        position: 'relative', zIndex: 2,
+        maxWidth: 600,
+        marginLeft: 'auto', marginRight: 'auto',
+        padding: 'clamp(48px, 8vw, 96px) clamp(18px, 5vw, 40px) clamp(56px, 9vw, 100px)',
+      }}>
+
+        {/* Header */}
+        <div style={{ textAlign: 'center', marginBottom: 'clamp(24px, 4vw, 40px)' }}>
+          <SectionOrnament />
+          <motion.h2
+            id="travel-heading"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.72, ease: EASE }}
+            style={{
+              fontFamily: 'var(--font-playfair), "Playfair Display", Georgia, serif',
+              fontSize: 'clamp(2rem, 5vw, 4rem)',
+              fontWeight: 300,
+              fontStyle: 'italic',
+              color: 'rgba(255,255,255,0.96)',
+              lineHeight: 1.05,
+              letterSpacing: '-0.02em',
+              margin: 0,
+              marginBottom: 'clamp(4px, 0.8vh, 8px)',
+              textShadow: '0 2px 40px rgba(3,1,10,0.85)',
+            }}
+          >
+            Venue &amp; Getting There
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.18 }}
+            style={{
+              fontFamily: 'var(--font-dm-sans), Inter, system-ui, sans-serif',
+              fontSize: 'clamp(10px, 1.2vw, 12px)',
+              letterSpacing: '0.18em',
+              textTransform: 'uppercase',
+              color: 'rgba(196,154,40,0.80)',
+              margin: 0,
+              textShadow: '0 1px 20px rgba(3,1,10,0.9)',
+            }}
+          >
+            Everything you need to find us
+          </motion.p>
         </div>
 
-        {/* Transport info cards */}
-        <StaggerContainer className="grid md:grid-cols-2 gap-5">
+        {/* Venue name + address + directions */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.65, delay: 0.22, ease: EASE }}
+          style={{
+            background: 'rgba(8,4,18,0.52)',
+            backdropFilter: 'blur(24px) saturate(180%)',
+            WebkitBackdropFilter: 'blur(24px) saturate(180%)',
+            border: '1px solid rgba(255,255,255,0.12)',
+            borderBottomColor: 'rgba(0,0,0,0.25)',
+            boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.15), 0 8px 32px rgba(0,0,0,0.38)',
+            borderRadius: 'clamp(14px, 2vw, 20px)',
+            padding: 'clamp(16px, 3vw, 24px)',
+            marginBottom: 'clamp(10px, 2vw, 16px)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: 'clamp(12px, 2vw, 20px)',
+            flexWrap: 'wrap',
+          }}
+        >
+          <div style={{ flex: '1 1 auto', minWidth: 0 }}>
+            <p style={{
+              fontSize: 'clamp(9px, 1.05vw, 11px)',
+              letterSpacing: '0.22em',
+              textTransform: 'uppercase',
+              color: 'rgba(196,154,40,0.85)',
+              marginBottom: 4,
+              fontFamily: 'var(--font-dm-sans), Inter, system-ui, sans-serif',
+            }}>
+              Wedding Venue · December 4, 2026
+            </p>
+            <h3 style={{
+              fontSize: 'clamp(1rem, 2.2vw, 1.4rem)',
+              fontWeight: 400,
+              color: 'rgba(255,255,255,0.95)',
+              margin: '0 0 4px',
+              fontFamily: 'var(--font-playfair), "Playfair Display", Georgia, serif',
+            }}>
+              {VENUE.name}
+            </h3>
+            <p style={{
+              fontSize: 'clamp(11px, 1.15vw, 13px)',
+              color: 'rgba(255,255,255,0.50)',
+              lineHeight: 1.5,
+              margin: 0,
+              fontFamily: 'var(--font-dm-sans), Inter, system-ui, sans-serif',
+            }}>
+              {VENUE.fullAddress}
+            </p>
+          </div>
+          <motion.a
+            href={VENUE.mapUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.96 }}
+            transition={{ type: 'spring', stiffness: 400, damping: 18 }}
+            style={{
+              flexShrink: 0,
+              fontSize: 'clamp(9px, 1vw, 11px)',
+              fontWeight: 700,
+              letterSpacing: '0.18em',
+              textTransform: 'uppercase',
+              padding: '10px 18px',
+              borderRadius: 100,
+              background: 'linear-gradient(135deg, #B8850A, #E8C547, #C49A28)',
+              color: '#2A1200',
+              textDecoration: 'none',
+              boxShadow: '0 2px 12px rgba(196,154,40,0.40)',
+              cursor: 'pointer',
+              minHeight: 44,
+              display: 'flex',
+              alignItems: 'center',
+            }}
+          >
+            Directions →
+          </motion.a>
+        </motion.div>
 
-          {/* Card 1: Parking */}
-          <StaggerItem>
-            <div className="glass-gold p-6 rounded-2xl h-full">
-              <div className="flex gap-4 items-start">
-                <div className="p-2.5 rounded-xl flex-shrink-0" style={{ background: 'rgba(196,154,40,0.12)' }}>
-                  <Car style={{ color: '#C49A28' }} size={20} />
-                </div>
-                <div>
-                  <h3 className="font-semibold mb-1.5" style={{ color: '#3B1F00' }}>Parking &amp; Valet</h3>
-                  <p className="text-sm leading-relaxed" style={{ color: '#7C5A3A' }}>
-                    Ample parking at Abhishek Farms. Valet attendants will guide you from the entrance — just roll up and hand over the keys.
-                  </p>
-                </div>
-              </div>
+        {/* Transport cards: 2-col on tablet+, stacked on mobile */}
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+          gap: 'clamp(8px, 1.5vw, 12px)',
+          marginBottom: 'clamp(8px, 1.5vw, 12px)',
+        }}>
+          {/* Parking */}
+          <motion.div
+            initial={{ opacity: 0, y: 14 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.55, delay: 0.30, ease: EASE }}
+            style={{
+              background: 'rgba(8,4,18,0.48)',
+              backdropFilter: 'blur(20px) saturate(160%)',
+              WebkitBackdropFilter: 'blur(20px) saturate(160%)',
+              border: '1px solid rgba(255,255,255,0.10)',
+              boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.12), 0 4px 20px rgba(0,0,0,0.30)',
+              borderRadius: 'clamp(12px, 1.6vw, 16px)',
+              padding: 'clamp(14px, 2.2vw, 20px)',
+              display: 'flex',
+              gap: 14,
+              alignItems: 'flex-start',
+            }}
+          >
+            <div style={{
+              width: 36, height: 36, flexShrink: 0, borderRadius: 10,
+              background: 'rgba(196,154,40,0.15)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+            }}>
+              <Car size={18} style={{ color: '#C49A28' }} />
             </div>
-          </StaggerItem>
-
-          {/* Card 2: Getting There */}
-          <StaggerItem>
-            <div className="glass-gold p-6 rounded-2xl h-full">
-              <div className="flex gap-4 items-start">
-                <div className="p-2.5 rounded-xl flex-shrink-0" style={{ background: 'rgba(196,154,40,0.12)' }}>
-                  <Navigation style={{ color: '#C49A28' }} size={20} />
-                </div>
-                <div>
-                  <h3 className="font-semibold mb-1.5" style={{ color: '#3B1F00' }}>Getting Here</h3>
-                  <p className="text-sm leading-relaxed" style={{ color: '#7C5A3A' }}>
-                    Uber, Ola, and autos work fine heading <em>up</em> to Yeoor Hills. Tell your driver:{' '}
-                    <strong style={{ color: '#3B1F00' }}>&ldquo;Abhishek Farms, Narlepada, Yeoor Hills, Thane West&rdquo;</strong>
-                    {' '}— about 20 mins from Thane station.
-                  </p>
-                </div>
-              </div>
+            <div>
+              <h3 style={{
+                fontSize: 'clamp(12px, 1.3vw, 14px)',
+                fontWeight: 600,
+                color: 'rgba(255,255,255,0.92)',
+                marginBottom: 5,
+                fontFamily: 'var(--font-dm-sans), Inter, system-ui, sans-serif',
+              }}>
+                Parking &amp; Valet
+              </h3>
+              <p style={{
+                fontSize: 'clamp(11px, 1.05vw, 12px)',
+                color: 'rgba(255,255,255,0.48)',
+                lineHeight: 1.55,
+                margin: 0,
+                fontFamily: 'var(--font-dm-sans), Inter, system-ui, sans-serif',
+              }}>
+                Ample parking at Abhishek Farms. Valet attendants will guide you from the entrance.
+              </p>
             </div>
-          </StaggerItem>
+          </motion.div>
 
-          {/* Card 3: Getting Back Down — SPECIAL */}
-          <StaggerItem className="md:col-span-2">
-            <div
-              className="p-6 rounded-2xl"
-              style={{
-                background: 'linear-gradient(135deg, rgba(139,34,82,0.08) 0%, rgba(196,154,40,0.08) 100%)',
-                border: '1.5px solid rgba(139,34,82,0.22)',
-                boxShadow: '0 2px 20px rgba(139,34,82,0.08)',
-              }}
-            >
-              <div className="flex gap-4 items-start">
-                <div className="p-2.5 rounded-xl flex-shrink-0" style={{ background: 'rgba(139,34,82,0.12)' }}>
-                  <Car style={{ color: '#8B2252' }} size={20} />
-                </div>
-                <div className="flex-1">
-                  <div className="flex flex-wrap items-center gap-2 mb-1.5">
-                    <h3 className="font-semibold" style={{ color: '#3B1F00' }}>Getting Back Down the Hill</h3>
-                    <span
-                      className="text-xs font-semibold px-2.5 py-0.5 rounded-full"
-                      style={{
-                        background: 'linear-gradient(135deg, #B8850A, #E8C547)',
-                        color: '#2A1200',
-                      }}
-                    >
-                      ★ We&apos;ve arranged this
-                    </span>
-                  </div>
-                  <p className="text-sm leading-relaxed" style={{ color: '#7C5A3A' }}>
-                    After the reception, getting an auto or Uber/Ola from Yeoor Hills at night can be a bit of a mission — they don&apos;t venture up here much. So we&apos;ve sorted it.{' '}
-                    <strong style={{ color: '#3B1F00' }}>Cars with drivers will be stationed at the venue all evening</strong>{' '}
-                    to drop guests back down to Thane city, where you can easily pick up a ride home. Just find us before you&apos;re ready to leave and we&apos;ll get you a car.
-                  </p>
-                </div>
-              </div>
+          {/* Getting Here */}
+          <motion.div
+            initial={{ opacity: 0, y: 14 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.55, delay: 0.38, ease: EASE }}
+            style={{
+              background: 'rgba(8,4,18,0.48)',
+              backdropFilter: 'blur(20px) saturate(160%)',
+              WebkitBackdropFilter: 'blur(20px) saturate(160%)',
+              border: '1px solid rgba(255,255,255,0.10)',
+              boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.12), 0 4px 20px rgba(0,0,0,0.30)',
+              borderRadius: 'clamp(12px, 1.6vw, 16px)',
+              padding: 'clamp(14px, 2.2vw, 20px)',
+              display: 'flex',
+              gap: 14,
+              alignItems: 'flex-start',
+            }}
+          >
+            <div style={{
+              width: 36, height: 36, flexShrink: 0, borderRadius: 10,
+              background: 'rgba(196,154,40,0.15)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+            }}>
+              <Navigation size={18} style={{ color: '#C49A28' }} />
             </div>
-          </StaggerItem>
+            <div>
+              <h3 style={{
+                fontSize: 'clamp(12px, 1.3vw, 14px)',
+                fontWeight: 600,
+                color: 'rgba(255,255,255,0.92)',
+                marginBottom: 5,
+                fontFamily: 'var(--font-dm-sans), Inter, system-ui, sans-serif',
+              }}>
+                Getting Here
+              </h3>
+              <p style={{
+                fontSize: 'clamp(11px, 1.05vw, 12px)',
+                color: 'rgba(255,255,255,0.48)',
+                lineHeight: 1.55,
+                margin: 0,
+                fontFamily: 'var(--font-dm-sans), Inter, system-ui, sans-serif',
+              }}>
+                Uber, Ola, and autos work fine up to Yeoor Hills. Tell your driver:{' '}
+                <strong style={{ color: 'rgba(255,255,255,0.70)' }}>&ldquo;Abhishek Farms, Narlepada, Yeoor Hills, Thane West&rdquo;</strong>
+                {' '}— about 20 mins from Thane station.
+              </p>
+            </div>
+          </motion.div>
+        </div>
 
-        </StaggerContainer>
+        {/* Getting Back Down — full width, burgundy accent */}
+        <motion.div
+          initial={{ opacity: 0, y: 14 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.55, delay: 0.46, ease: EASE }}
+          style={{
+            background: 'rgba(139,34,82,0.18)',
+            backdropFilter: 'blur(20px) saturate(160%)',
+            WebkitBackdropFilter: 'blur(20px) saturate(160%)',
+            border: '1px solid rgba(139,34,82,0.35)',
+            boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.10), 0 4px 20px rgba(139,34,82,0.15)',
+            borderRadius: 'clamp(12px, 1.6vw, 16px)',
+            padding: 'clamp(14px, 2.2vw, 20px)',
+            display: 'flex',
+            gap: 14,
+            alignItems: 'flex-start',
+          }}
+        >
+          <div style={{
+            width: 36, height: 36, flexShrink: 0, borderRadius: 10,
+            background: 'rgba(139,34,82,0.22)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+          }}>
+            <Car size={18} style={{ color: '#C4607A' }} />
+          </div>
+          <div style={{ flex: 1 }}>
+            <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 8, marginBottom: 5 }}>
+              <h3 style={{
+                fontSize: 'clamp(12px, 1.3vw, 14px)',
+                fontWeight: 600,
+                color: 'rgba(255,255,255,0.92)',
+                margin: 0,
+                fontFamily: 'var(--font-dm-sans), Inter, system-ui, sans-serif',
+              }}>
+                Getting Back Down the Hill
+              </h3>
+              <span style={{
+                fontSize: 'clamp(9px, 0.9vw, 10px)',
+                fontWeight: 700,
+                letterSpacing: '0.12em',
+                textTransform: 'uppercase',
+                padding: '3px 10px',
+                borderRadius: 100,
+                background: 'linear-gradient(135deg, #B8850A, #E8C547)',
+                color: '#2A1200',
+              }}>
+                ★ We&apos;ve arranged this
+              </span>
+            </div>
+            <p style={{
+              fontSize: 'clamp(11px, 1.05vw, 12px)',
+              color: 'rgba(255,255,255,0.48)',
+              lineHeight: 1.55,
+              margin: 0,
+              fontFamily: 'var(--font-dm-sans), Inter, system-ui, sans-serif',
+            }}>
+              Getting an auto or Uber from Yeoor Hills at night is tricky — they don&apos;t venture up here much. So we&apos;ve sorted it.{' '}
+              <strong style={{ color: 'rgba(255,255,255,0.70)' }}>Cars with drivers will be stationed at the venue all evening</strong>{' '}
+              to drop guests back to Thane city. Just find us before you leave.
+            </p>
+          </div>
+        </motion.div>
+
       </div>
     </section>
   )
