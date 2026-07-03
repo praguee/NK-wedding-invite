@@ -2,11 +2,32 @@
 
 import Image from 'next/image'
 import { VENUE } from '@/lib/constants'
-import { Car, Navigation } from 'lucide-react'
 import SectionOrnament from './SectionOrnament'
 import { motion } from 'framer-motion'
 
 const EASE = [0.16, 1, 0.3, 1] as const
+
+const INFO = [
+  {
+    label: 'Parking & Valet',
+    text: 'Ample parking at Abhishek Farms. Valet attendants will guide you from the entrance — just roll up and hand over the keys.',
+    accent: 'rgba(196,154,40,0.70)',
+    dot: '#C49A28',
+  },
+  {
+    label: 'Getting Here',
+    text: 'Uber, Ola, and autos work fine heading up to Yeoor Hills. Tell your driver: "Abhishek Farms, Narlepada, Yeoor Hills, Thane West" — about 20 mins from Thane station.',
+    accent: 'rgba(196,154,40,0.70)',
+    dot: '#C49A28',
+  },
+  {
+    label: 'Getting Back Down the Hill',
+    text: 'Getting a ride from Yeoor Hills at night can be a mission — they don\'t venture up here much. So we\'ve sorted it. Cars with drivers will be stationed at the venue all evening to drop guests back to Thane city. Find us before you\'re ready to leave.',
+    note: 'we\'ve arranged this',
+    accent: 'rgba(196,100,120,0.70)',
+    dot: '#C4607A',
+  },
+]
 
 export default function Transportation() {
   return (
@@ -41,23 +62,23 @@ export default function Transportation() {
       {/* ── Cinematic vignette ── */}
       <div aria-hidden="true" style={{
         position: 'absolute', inset: 0,
-        background: 'linear-gradient(to bottom, rgba(3,1,10,0.80) 0%, rgba(3,1,10,0.52) 25%, rgba(3,1,10,0.52) 65%, rgba(3,1,10,0.88) 100%)',
+        background: 'linear-gradient(to bottom, rgba(3,1,10,0.82) 0%, rgba(3,1,10,0.55) 28%, rgba(3,1,10,0.55) 65%, rgba(3,1,10,0.90) 100%)',
       }} />
       <div aria-hidden="true" style={{
         position: 'absolute', inset: 0,
-        background: 'radial-gradient(ellipse 80% 60% at 50% 50%, rgba(3,1,10,0.28) 0%, transparent 100%)',
+        background: 'radial-gradient(ellipse 85% 60% at 50% 50%, rgba(3,1,10,0.28) 0%, transparent 100%)',
       }} />
 
       {/* ── Content overlaid on photos ── */}
       <div style={{
         position: 'relative', zIndex: 2,
-        maxWidth: 600,
+        maxWidth: 560,
         marginLeft: 'auto', marginRight: 'auto',
-        padding: 'clamp(48px, 8vw, 96px) clamp(18px, 5vw, 40px) clamp(56px, 9vw, 100px)',
+        padding: 'clamp(52px, 8vw, 96px) clamp(20px, 5vw, 40px) clamp(60px, 9vw, 104px)',
       }}>
 
-        {/* Header */}
-        <div style={{ textAlign: 'center', marginBottom: 'clamp(24px, 4vw, 40px)' }}>
+        {/* ── Header ── */}
+        <div style={{ textAlign: 'center', marginBottom: 'clamp(32px, 5vw, 52px)' }}>
           <SectionOrnament />
           <motion.h2
             id="travel-heading"
@@ -67,14 +88,14 @@ export default function Transportation() {
             transition={{ duration: 0.72, ease: EASE }}
             style={{
               fontFamily: 'var(--font-playfair), "Playfair Display", Georgia, serif',
-              fontSize: 'clamp(2rem, 5vw, 4rem)',
+              fontSize: 'clamp(2.2rem, 5.2vw, 5rem)',
               fontWeight: 300,
               fontStyle: 'italic',
               color: 'rgba(255,255,255,0.96)',
               lineHeight: 1.05,
               letterSpacing: '-0.02em',
               margin: 0,
-              marginBottom: 'clamp(4px, 0.8vh, 8px)',
+              marginBottom: 'clamp(6px, 1vh, 10px)',
               textShadow: '0 2px 40px rgba(3,1,10,0.85)',
             }}
           >
@@ -87,269 +108,171 @@ export default function Transportation() {
             transition={{ duration: 0.6, delay: 0.18 }}
             style={{
               fontFamily: 'var(--font-dm-sans), Inter, system-ui, sans-serif',
-              fontSize: 'clamp(10px, 1.2vw, 12px)',
+              fontSize: 'clamp(10px, 1.15vw, 12px)',
               letterSpacing: '0.18em',
               textTransform: 'uppercase',
-              color: 'rgba(196,154,40,0.80)',
+              color: 'rgba(196,154,40,0.75)',
               margin: 0,
               textShadow: '0 1px 20px rgba(3,1,10,0.9)',
             }}
           >
-            Everything you need to find us
+            Come as guests. Leave as family.
           </motion.p>
         </div>
 
-        {/* Venue name + address + directions */}
+        {/* ── Venue block ── */}
         <motion.div
-          initial={{ opacity: 0, y: 16 }}
+          initial={{ opacity: 0, y: 18 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.65, delay: 0.22, ease: EASE }}
+          transition={{ duration: 0.68, delay: 0.18, ease: EASE }}
           style={{
-            background: 'rgba(8,4,18,0.52)',
-            backdropFilter: 'blur(24px) saturate(180%)',
-            WebkitBackdropFilter: 'blur(24px) saturate(180%)',
-            border: '1px solid rgba(255,255,255,0.12)',
-            borderBottomColor: 'rgba(0,0,0,0.25)',
-            boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.15), 0 8px 32px rgba(0,0,0,0.38)',
-            borderRadius: 'clamp(14px, 2vw, 20px)',
-            padding: 'clamp(16px, 3vw, 24px)',
-            marginBottom: 'clamp(10px, 2vw, 16px)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            gap: 'clamp(12px, 2vw, 20px)',
-            flexWrap: 'wrap',
+            marginBottom: 'clamp(28px, 4.5vw, 48px)',
+            paddingBottom: 'clamp(24px, 4vw, 40px)',
+            borderBottom: '1px solid rgba(196,154,40,0.18)',
           }}
         >
-          <div style={{ flex: '1 1 auto', minWidth: 0 }}>
-            <p style={{
-              fontSize: 'clamp(9px, 1.05vw, 11px)',
-              letterSpacing: '0.22em',
-              textTransform: 'uppercase',
-              color: 'rgba(196,154,40,0.85)',
-              marginBottom: 4,
-              fontFamily: 'var(--font-dm-sans), Inter, system-ui, sans-serif',
-            }}>
-              Wedding Venue · December 4, 2026
-            </p>
-            <h3 style={{
-              fontSize: 'clamp(1rem, 2.2vw, 1.4rem)',
-              fontWeight: 400,
-              color: 'rgba(255,255,255,0.95)',
-              margin: '0 0 4px',
-              fontFamily: 'var(--font-playfair), "Playfair Display", Georgia, serif',
-            }}>
-              {VENUE.name}
-            </h3>
-            <p style={{
-              fontSize: 'clamp(11px, 1.15vw, 13px)',
-              color: 'rgba(255,255,255,0.50)',
-              lineHeight: 1.5,
-              margin: 0,
-              fontFamily: 'var(--font-dm-sans), Inter, system-ui, sans-serif',
-            }}>
-              {VENUE.fullAddress}
-            </p>
-          </div>
+          <p style={{
+            fontFamily: 'var(--font-dm-sans), Inter, system-ui, sans-serif',
+            fontSize: 'clamp(9px, 1vw, 11px)',
+            letterSpacing: '0.24em',
+            textTransform: 'uppercase',
+            color: 'rgba(196,154,40,0.72)',
+            marginBottom: 'clamp(6px, 1vh, 10px)',
+          }}>
+            December 4, 2026 · Thane West, Maharashtra
+          </p>
+          <h3 style={{
+            fontFamily: 'var(--font-playfair), "Playfair Display", Georgia, serif',
+            fontSize: 'clamp(1.5rem, 3.5vw, 3rem)',
+            fontWeight: 400,
+            color: 'rgba(255,255,255,0.95)',
+            margin: '0 0 clamp(6px, 1vh, 10px)',
+            lineHeight: 1.1,
+            letterSpacing: '-0.01em',
+          }}>
+            {VENUE.name}
+          </h3>
+          <p style={{
+            fontFamily: 'var(--font-dm-sans), Inter, system-ui, sans-serif',
+            fontSize: 'clamp(11px, 1.2vw, 13px)',
+            color: 'rgba(255,255,255,0.45)',
+            lineHeight: 1.6,
+            margin: '0 0 clamp(12px, 2vh, 18px)',
+          }}>
+            {VENUE.fullAddress}
+          </p>
           <motion.a
             href={VENUE.mapUrl}
             target="_blank"
             rel="noopener noreferrer"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.96 }}
-            transition={{ type: 'spring', stiffness: 400, damping: 18 }}
+            whileHover={{ x: 4 }}
+            transition={{ type: 'spring', stiffness: 400, damping: 20 }}
             style={{
-              flexShrink: 0,
-              fontSize: 'clamp(9px, 1vw, 11px)',
-              fontWeight: 700,
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 8,
+              fontFamily: 'var(--font-dm-sans), Inter, system-ui, sans-serif',
+              fontSize: 'clamp(10px, 1.1vw, 12px)',
               letterSpacing: '0.18em',
               textTransform: 'uppercase',
-              padding: '10px 18px',
-              borderRadius: 100,
-              background: 'linear-gradient(135deg, #B8850A, #E8C547, #C49A28)',
-              color: '#2A1200',
+              color: 'rgba(196,154,40,0.85)',
               textDecoration: 'none',
-              boxShadow: '0 2px 12px rgba(196,154,40,0.40)',
               cursor: 'pointer',
-              minHeight: 44,
-              display: 'flex',
-              alignItems: 'center',
             }}
+            aria-label="Open Abhishek Farms in Google Maps"
           >
-            Directions →
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+              <circle cx="12" cy="10" r="3"/>
+            </svg>
+            Open in Maps
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" style={{ opacity: 0.6 }}>
+              <line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/>
+            </svg>
           </motion.a>
         </motion.div>
 
-        {/* Transport cards: 2-col on tablet+, stacked on mobile */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
-          gap: 'clamp(8px, 1.5vw, 12px)',
-          marginBottom: 'clamp(8px, 1.5vw, 12px)',
-        }}>
-          {/* Parking */}
+        {/* ── Info items — free-flowing, no boxes ── */}
+        <div style={{ position: 'relative' }}>
+          {/* Vertical connecting line */}
           <motion.div
-            initial={{ opacity: 0, y: 14 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.55, delay: 0.30, ease: EASE }}
+            initial={{ scaleY: 0 }}
+            whileInView={{ scaleY: 1 }}
+            viewport={{ once: true, margin: '-40px' }}
+            transition={{ duration: 1.6, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
             style={{
-              background: 'rgba(8,4,18,0.48)',
-              backdropFilter: 'blur(20px) saturate(160%)',
-              WebkitBackdropFilter: 'blur(20px) saturate(160%)',
-              border: '1px solid rgba(255,255,255,0.10)',
-              boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.12), 0 4px 20px rgba(0,0,0,0.30)',
-              borderRadius: 'clamp(12px, 1.6vw, 16px)',
-              padding: 'clamp(14px, 2.2vw, 20px)',
-              display: 'flex',
-              gap: 14,
-              alignItems: 'flex-start',
+              position: 'absolute',
+              left: 19, top: 20, bottom: 20, width: 1,
+              background: 'linear-gradient(to bottom, #C49A28, #C4607A)',
+              opacity: 0.28,
+              transformOrigin: 'top center',
             }}
-          >
-            <div style={{
-              width: 36, height: 36, flexShrink: 0, borderRadius: 10,
-              background: 'rgba(196,154,40,0.15)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-            }}>
-              <Car size={18} style={{ color: '#C49A28' }} />
-            </div>
-            <div>
-              <h3 style={{
-                fontSize: 'clamp(12px, 1.3vw, 14px)',
-                fontWeight: 600,
-                color: 'rgba(255,255,255,0.92)',
-                marginBottom: 5,
-                fontFamily: 'var(--font-dm-sans), Inter, system-ui, sans-serif',
-              }}>
-                Parking &amp; Valet
-              </h3>
-              <p style={{
-                fontSize: 'clamp(11px, 1.05vw, 12px)',
-                color: 'rgba(255,255,255,0.48)',
-                lineHeight: 1.55,
-                margin: 0,
-                fontFamily: 'var(--font-dm-sans), Inter, system-ui, sans-serif',
-              }}>
-                Ample parking at Abhishek Farms. Valet attendants will guide you from the entrance.
-              </p>
-            </div>
-          </motion.div>
+          />
 
-          {/* Getting Here */}
-          <motion.div
-            initial={{ opacity: 0, y: 14 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.55, delay: 0.38, ease: EASE }}
-            style={{
-              background: 'rgba(8,4,18,0.48)',
-              backdropFilter: 'blur(20px) saturate(160%)',
-              WebkitBackdropFilter: 'blur(20px) saturate(160%)',
-              border: '1px solid rgba(255,255,255,0.10)',
-              boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.12), 0 4px 20px rgba(0,0,0,0.30)',
-              borderRadius: 'clamp(12px, 1.6vw, 16px)',
-              padding: 'clamp(14px, 2.2vw, 20px)',
-              display: 'flex',
-              gap: 14,
-              alignItems: 'flex-start',
-            }}
-          >
-            <div style={{
-              width: 36, height: 36, flexShrink: 0, borderRadius: 10,
-              background: 'rgba(196,154,40,0.15)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-            }}>
-              <Navigation size={18} style={{ color: '#C49A28' }} />
-            </div>
-            <div>
-              <h3 style={{
-                fontSize: 'clamp(12px, 1.3vw, 14px)',
-                fontWeight: 600,
-                color: 'rgba(255,255,255,0.92)',
-                marginBottom: 5,
-                fontFamily: 'var(--font-dm-sans), Inter, system-ui, sans-serif',
-              }}>
-                Getting Here
-              </h3>
-              <p style={{
-                fontSize: 'clamp(11px, 1.05vw, 12px)',
-                color: 'rgba(255,255,255,0.48)',
-                lineHeight: 1.55,
-                margin: 0,
-                fontFamily: 'var(--font-dm-sans), Inter, system-ui, sans-serif',
-              }}>
-                Uber, Ola, and autos work fine up to Yeoor Hills. Tell your driver:{' '}
-                <strong style={{ color: 'rgba(255,255,255,0.70)' }}>&ldquo;Abhishek Farms, Narlepada, Yeoor Hills, Thane West&rdquo;</strong>
-                {' '}— about 20 mins from Thane station.
-              </p>
-            </div>
-          </motion.div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
+            {INFO.map((item, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.58, delay: 0.25 + i * 0.14, ease: EASE }}
+                style={{ display: 'flex', gap: 20, alignItems: 'flex-start', padding: 'clamp(14px, 2.2vh, 22px) 0' }}
+              >
+                {/* Dot */}
+                <div style={{ flexShrink: 0, paddingTop: 3 }}>
+                  <div style={{
+                    width: 38, height: 38, borderRadius: '50%',
+                    background: `${item.dot}18`,
+                    border: `1.5px solid ${item.dot}55`,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    boxShadow: `0 0 14px ${item.dot}30`,
+                  }}>
+                    <div style={{ width: 9, height: 9, borderRadius: '50%', background: item.dot, opacity: 0.88 }} />
+                  </div>
+                </div>
+
+                {/* Text */}
+                <div style={{ flex: 1, paddingTop: 6 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 10, marginBottom: 6 }}>
+                    <h3 style={{
+                      fontFamily: 'var(--font-dm-sans), Inter, system-ui, sans-serif',
+                      fontSize: 'clamp(13px, 1.4vw, 15px)',
+                      fontWeight: 600,
+                      color: 'rgba(255,255,255,0.90)',
+                      margin: 0,
+                      textShadow: '0 1px 14px rgba(3,1,10,0.95)',
+                    }}>
+                      {item.label}
+                    </h3>
+                    {item.note && (
+                      <span style={{
+                        fontFamily: 'var(--font-playfair), "Playfair Display", Georgia, serif',
+                        fontSize: 'clamp(9px, 0.95vw, 11px)',
+                        fontStyle: 'italic',
+                        color: 'rgba(196,100,120,0.72)',
+                        letterSpacing: '0.04em',
+                      }}>
+                        — {item.note}
+                      </span>
+                    )}
+                  </div>
+                  <p style={{
+                    fontFamily: 'var(--font-dm-sans), Inter, system-ui, sans-serif',
+                    fontSize: 'clamp(12px, 1.2vw, 13.5px)',
+                    color: 'rgba(255,255,255,0.50)',
+                    lineHeight: 1.65,
+                    margin: 0,
+                    textShadow: '0 1px 10px rgba(3,1,10,0.90)',
+                  }}>
+                    {item.text}
+                  </p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
         </div>
-
-        {/* Getting Back Down — full width, burgundy accent */}
-        <motion.div
-          initial={{ opacity: 0, y: 14 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.55, delay: 0.46, ease: EASE }}
-          style={{
-            background: 'rgba(139,34,82,0.18)',
-            backdropFilter: 'blur(20px) saturate(160%)',
-            WebkitBackdropFilter: 'blur(20px) saturate(160%)',
-            border: '1px solid rgba(139,34,82,0.35)',
-            boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.10), 0 4px 20px rgba(139,34,82,0.15)',
-            borderRadius: 'clamp(12px, 1.6vw, 16px)',
-            padding: 'clamp(14px, 2.2vw, 20px)',
-            display: 'flex',
-            gap: 14,
-            alignItems: 'flex-start',
-          }}
-        >
-          <div style={{
-            width: 36, height: 36, flexShrink: 0, borderRadius: 10,
-            background: 'rgba(139,34,82,0.22)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-          }}>
-            <Car size={18} style={{ color: '#C4607A' }} />
-          </div>
-          <div style={{ flex: 1 }}>
-            <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 8, marginBottom: 5 }}>
-              <h3 style={{
-                fontSize: 'clamp(12px, 1.3vw, 14px)',
-                fontWeight: 600,
-                color: 'rgba(255,255,255,0.92)',
-                margin: 0,
-                fontFamily: 'var(--font-dm-sans), Inter, system-ui, sans-serif',
-              }}>
-                Getting Back Down the Hill
-              </h3>
-              <span style={{
-                fontSize: 'clamp(9px, 0.9vw, 10px)',
-                fontWeight: 700,
-                letterSpacing: '0.12em',
-                textTransform: 'uppercase',
-                padding: '3px 10px',
-                borderRadius: 100,
-                background: 'linear-gradient(135deg, #B8850A, #E8C547)',
-                color: '#2A1200',
-              }}>
-                ★ We&apos;ve arranged this
-              </span>
-            </div>
-            <p style={{
-              fontSize: 'clamp(11px, 1.05vw, 12px)',
-              color: 'rgba(255,255,255,0.48)',
-              lineHeight: 1.55,
-              margin: 0,
-              fontFamily: 'var(--font-dm-sans), Inter, system-ui, sans-serif',
-            }}>
-              Getting an auto or Uber from Yeoor Hills at night is tricky — they don&apos;t venture up here much. So we&apos;ve sorted it.{' '}
-              <strong style={{ color: 'rgba(255,255,255,0.70)' }}>Cars with drivers will be stationed at the venue all evening</strong>{' '}
-              to drop guests back to Thane city. Just find us before you leave.
-            </p>
-          </div>
-        </motion.div>
 
       </div>
     </section>
