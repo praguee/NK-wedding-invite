@@ -8,6 +8,7 @@ import Story from './components/Story'
 import JabWeMet from './components/JabWeMet'
 import Gallery from './components/Gallery'
 import Timeline from './components/Timeline'
+import VenuePreview from './components/VenuePreview'
 import RSVPForm from './components/RSVPForm'
 import GuestBook from './components/GuestBook'
 import Transportation from './components/Transportation'
@@ -38,6 +39,7 @@ export default function Home() {
         <Story />
         <JabWeMet />
         <Timeline />
+        <VenuePreview />
         <Gallery />
         <RSVPForm />
         <GuestBook />
