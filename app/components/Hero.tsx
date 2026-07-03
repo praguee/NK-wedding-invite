@@ -66,18 +66,26 @@ export default function Hero() {
         className="absolute inset-0"
         style={{ y: imageY, scale: 1.05 }}
       >
-        <Image
-          src="/images/hero-cover.jpg"
-          alt={`${COUPLE.brideName} and ${COUPLE.groomName}`}
-          fill
-          priority
-          sizes="100vw"
-          style={{
-            objectFit: 'cover',
-            objectPosition: isMobile ? '38% 0%' : 'center 0%',
-            filter: 'contrast(1.10) saturate(1.20) brightness(0.82) sepia(0.06)',
-          }}
-        />
+        {/* Ken Burns — very slow breathing zoom + gentle drift, only visible if you stare */}
+        <motion.div
+          className="absolute inset-0"
+          initial={{ scale: 1.0, x: 0, y: 0 }}
+          animate={{ scale: 1.04, x: -7, y: 3 }}
+          transition={{ duration: 18, ease: 'easeInOut', repeat: Infinity, repeatType: 'reverse' }}
+        >
+          <Image
+            src="/images/hero-cover.jpg"
+            alt={`${COUPLE.brideName} and ${COUPLE.groomName}`}
+            fill
+            priority
+            sizes="100vw"
+            style={{
+              objectFit: 'cover',
+              objectPosition: isMobile ? '38% 0%' : 'center 0%',
+              filter: 'contrast(1.10) saturate(1.20) brightness(0.82) sepia(0.06)',
+            }}
+          />
+        </motion.div>
       </motion.div>
 
       {/* ── Cinematic gradient layers ── */}
