@@ -58,14 +58,20 @@ export default function AdminPage() {
     setRsvps([])
   }
 
+  const sanitizeCSV = (val: string) => {
+    // Neutralise formula injection: prefix dangerous-start chars with a tab
+    const safe = /^[=+\-@\t\r]/.test(val) ? `\t${val}` : val
+    return `"${safe.replace(/"/g, '""')}"`
+  }
+
   const exportCSV = () => {
     const rows = [
-      ['Name', 'Plus-Ones', 'Message', 'Date'],
+      ['"Name"', '"Plus-Ones"', '"Message"', '"Date"'],
       ...rsvps.map((r) => [
-        r.name,
-        String(r.plus_ones),
-        `"${(r.message || '').replace(/"/g, '""')}"`,
-        new Date(r.created_at).toLocaleDateString('en-IN'),
+        sanitizeCSV(r.name),
+        sanitizeCSV(String(r.plus_ones)),
+        sanitizeCSV(r.message || ''),
+        sanitizeCSV(new Date(r.created_at).toLocaleDateString('en-IN')),
       ]),
     ]
     const csv = rows.map((r) => r.join(',')).join('\n')

@@ -44,9 +44,8 @@ export async function POST(request: NextRequest) {
   const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY?.trim()
 
   if (!supabaseUrl || !serviceKey) {
-    return NextResponse.json({
-      message: `Env missing — URL: ${supabaseUrl ? 'OK' : 'MISSING'}, KEY: ${serviceKey ? 'OK' : 'MISSING'}`
-    }, { status: 500 })
+    console.error('RSVP API: missing env vars', { url: !!supabaseUrl, key: !!serviceKey })
+    return NextResponse.json({ message: 'Server configuration error' }, { status: 500 })
   }
 
   try {
@@ -56,9 +55,15 @@ export async function POST(request: NextRequest) {
     if (!name?.trim()) {
       return NextResponse.json({ message: 'Name is required' }, { status: 400 })
     }
+    if (name.trim().length > 200) {
+      return NextResponse.json({ message: 'Name is too long' }, { status: 400 })
+    }
     const plusOnesNum = Number(plus_ones)
     if (isNaN(plusOnesNum) || plusOnesNum < 0 || plusOnesNum > 5) {
       return NextResponse.json({ message: 'Plus-ones must be between 0 and 5' }, { status: 400 })
+    }
+    if (message && message.trim().split(/\s+/).filter(Boolean).length > 100) {
+      return NextResponse.json({ message: 'Message exceeds 100 word limit' }, { status: 400 })
     }
 
     const authHeaders = {
@@ -90,13 +95,14 @@ export async function POST(request: NextRequest) {
     )
 
     if (insertRes.status !== 200 && insertRes.status !== 201) {
-      return NextResponse.json({ message: `Insert failed: ${insertRes.status} ${insertRes.body}` }, { status: 500 })
+      console.error('RSVP insert failed', insertRes.status, insertRes.body)
+      return NextResponse.json({ message: 'Failed to submit RSVP. Please try again.' }, { status: 500 })
     }
 
     return NextResponse.json({ message: 'RSVP submitted successfully' }, { status: 201 })
   } catch (err) {
-    const msg = err instanceof Error ? err.message : String(err)
-    return NextResponse.json({ message: `Error: ${msg}` }, { status: 500 })
+    console.error('RSVP route error', err)
+    return NextResponse.json({ message: 'Something went wrong. Please try again.' }, { status: 500 })
   }
 }
 

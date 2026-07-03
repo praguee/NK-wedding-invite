@@ -12,7 +12,7 @@ Wedding invite website for **Nidhi Kesarkar (bride, from Mumbai/Thane India — 
 - **Production:** https://nk-wedding-invite.vercel.app
 - **Admin dashboard:** https://nk-wedding-invite.vercel.app/admin
 - **Games page:** https://nk-wedding-invite.vercel.app/games
-- **Admin password:** `Vadapav@774` (stored in Vercel env var `ADMIN_PASSWORD`)
+- **Admin password:** stored in Vercel env var `ADMIN_PASSWORD` — do not commit the value here
 
 ## Tech Stack
 - **Framework:** Next.js 14 (App Router, TypeScript)
