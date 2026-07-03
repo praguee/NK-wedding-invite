@@ -3,67 +3,94 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import Image from 'next/image'
 import toast from 'react-hot-toast'
 import { motion } from 'framer-motion'
-import { Heart } from 'lucide-react'
 import SectionOrnament from './SectionOrnament'
-import LotusDecoration from './LotusDecoration'
-import { TextReveal } from './ScrollReveal'
 
 interface FormState { name: string; plusOnes: string; message: string }
 const INITIAL: FormState = { name: '', plusOnes: '0', message: '' }
-const INITIAL_SUBMITTED = false
+const EASE = [0.16, 1, 0.3, 1] as const
+
+const FIELD: React.CSSProperties = {
+  width: '100%',
+  padding: '12px 16px',
+  background: 'rgba(8,4,18,0.48)',
+  backdropFilter: 'blur(20px) saturate(160%)',
+  WebkitBackdropFilter: 'blur(20px) saturate(160%)',
+  border: '1px solid rgba(255,255,255,0.13)',
+  borderRadius: 12,
+  color: 'rgba(255,255,255,0.90)',
+  fontSize: 14,
+  outline: 'none',
+  fontFamily: 'var(--font-dm-sans), Inter, system-ui, sans-serif',
+  boxSizing: 'border-box' as const,
+}
+
+const LABEL: React.CSSProperties = {
+  display: 'block',
+  marginBottom: 8,
+  fontSize: 10,
+  letterSpacing: '0.22em',
+  textTransform: 'uppercase' as const,
+  color: 'rgba(196,154,40,0.72)',
+  fontFamily: 'var(--font-dm-sans), Inter, system-ui, sans-serif',
+}
 
 function GamesPrompt({ redirecting }: { redirecting: boolean }) {
   return (
-    <div className="mt-4 glass-gold rounded-2xl overflow-hidden">
-      {/* Gold → burgundy accent line */}
-      <div style={{ height: 2, background: 'linear-gradient(90deg, #C49A28, #8B2252, #D4AA38, #C49A28)', backgroundSize: '200% 100%' }} />
-      <div className="p-5">
-        <p className="text-xs tracking-widest uppercase mb-2" style={{ color: '#9C7A5A' }}>
-          One more thing
-        </p>
-        <p className="text-sm font-light mb-1" style={{ color: '#2A1200' }}>
-          Think you know us? Take the quiz →
-        </p>
-        <p className="text-xs mb-4" style={{ color: '#9C7A5A' }}>
-          Score 60%+ and get a live caricature drawn at the reception.
-        </p>
-        {redirecting ? (
-          <p className="text-xs animate-pulse" style={{ color: '#C49A28' }}>
-            Taking you there now…
-          </p>
-        ) : (
-          <Link href="/games"
-            className="inline-flex items-center gap-2 text-xs font-semibold tracking-widest uppercase px-5 py-2.5 rounded-full"
-            style={{
-              background: 'linear-gradient(135deg, #B8850A, #E8C547, #C49A28)',
-              color: '#2A1200',
-            }}>
-            Go Now →
-          </Link>
-        )}
-      </div>
-    </div>
+    <motion.div
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      style={{
+        marginTop: 16,
+        background: 'rgba(8,4,18,0.52)',
+        backdropFilter: 'blur(24px) saturate(180%)',
+        WebkitBackdropFilter: 'blur(24px) saturate(180%)',
+        border: '1px solid rgba(255,255,255,0.10)',
+        boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.08)',
+        borderRadius: 16,
+        padding: '20px 24px',
+      }}
+    >
+      <p style={{ fontSize: 10, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'rgba(196,154,40,0.70)', marginBottom: 6, fontFamily: 'var(--font-dm-sans), Inter, system-ui, sans-serif' }}>
+        One more thing
+      </p>
+      <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.85)', marginBottom: 4, fontFamily: 'var(--font-dm-sans), Inter, system-ui, sans-serif' }}>
+        Think you know us? Take the quiz.
+      </p>
+      <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.40)', marginBottom: 16, fontFamily: 'var(--font-dm-sans), Inter, system-ui, sans-serif' }}>
+        Score 60%+ and get a live caricature drawn at the reception.
+      </p>
+      {redirecting ? (
+        <p style={{ fontSize: 12, color: 'rgba(196,154,40,0.70)', fontFamily: 'var(--font-dm-sans), Inter, system-ui, sans-serif' }}>Taking you there now…</p>
+      ) : (
+        <Link href="/games" style={{
+          display: 'inline-block',
+          fontSize: 11, fontWeight: 700,
+          letterSpacing: '0.18em', textTransform: 'uppercase',
+          padding: '10px 20px', borderRadius: 100,
+          border: '1px solid rgba(255,255,255,0.22)',
+          color: 'rgba(255,255,255,0.85)',
+          textDecoration: 'none',
+          fontFamily: 'var(--font-dm-sans), Inter, system-ui, sans-serif',
+        }}>
+          Go Now →
+        </Link>
+      )}
+    </motion.div>
   )
 }
 
 const countWords = (text: string) =>
   text.trim() === '' ? 0 : text.trim().split(/\s+/).length
 
-const inputClass =
-  'w-full px-4 py-3 border rounded-xl text-sm focus:outline-none focus:ring-2 transition'
-const inputStyle = {
-  borderColor: 'rgba(196,154,40,0.2)',
-  background: 'rgba(255,253,246,0.7)',
-  '--tw-ring-color': 'rgba(196,154,40,0.4)',
-} as React.CSSProperties
-
 export default function RSVPForm() {
   const router = useRouter()
-  const [form, setForm]       = useState<FormState>(INITIAL)
+  const [form, setForm] = useState<FormState>(INITIAL)
   const [loading, setLoading] = useState(false)
-  const [submitted, setSubmitted] = useState(INITIAL_SUBMITTED)
+  const [submitted, setSubmitted] = useState(false)
   const [redirecting, setRedirecting] = useState(false)
 
   const set = (field: keyof FormState) =>
@@ -74,8 +101,8 @@ export default function RSVPForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!form.name.trim()) { toast.error('Tell us your name! 😊'); return }
-    if (words > 100) { toast.error('Keep your message to 100 words 💕'); return }
+    if (!form.name.trim()) { toast.error('Tell us your name'); return }
+    if (words > 100) { toast.error('Keep your message to 100 words'); return }
     setLoading(true)
     try {
       const res = await fetch('/api/rsvp', {
@@ -88,8 +115,8 @@ export default function RSVPForm() {
         }),
       })
       const data = await res.json()
-      if (!res.ok) { toast.error(data.message || 'Something went wrong, try again!'); return }
-      toast.success("You're on the list! See you December 4th 🎉")
+      if (!res.ok) { toast.error(data.message || 'Something went wrong, try again'); return }
+      toast.success("You're on the list — see you December 4th")
       setForm(INITIAL)
       setSubmitted(true)
       setRedirecting(true)
@@ -102,44 +129,96 @@ export default function RSVPForm() {
   }
 
   return (
-    <section id="rsvp" className="py-24 bg-slate-50 relative overflow-hidden">
-      <LotusDecoration position="bottom-left" size={100} opacity={0.04} />
-      <div className="max-w-xl mx-auto px-6">
+    <section
+      id="rsvp"
+      aria-labelledby="rsvp-heading"
+      style={{
+        position: 'relative', overflow: 'hidden',
+        minHeight: '100svh',
+        display: 'flex', flexDirection: 'column', justifyContent: 'center',
+      }}
+    >
+      {/* Background */}
+      <div aria-hidden="true" style={{ position: 'absolute', inset: 0 }}>
+        <Image
+          src="/images/gallery-diwali.jpg"
+          alt=""
+          fill
+          priority
+          sizes="(max-width: 767px) 100vw, 50vw"
+          style={{ objectFit: 'cover', objectPosition: 'center 28%' }}
+        />
+      </div>
+
+      {/* Vignette */}
+      <div aria-hidden="true" style={{
+        position: 'absolute', inset: 0,
+        background: 'linear-gradient(to bottom, rgba(3,1,10,0.75) 0%, rgba(3,1,10,0.62) 40%, rgba(3,1,10,0.82) 100%)',
+      }} />
+
+      {/* Content */}
+      <div style={{
+        position: 'relative', zIndex: 2,
+        padding: 'clamp(52px, 7vw, 88px) clamp(24px, 5vw, 52px)',
+        width: '100%', maxWidth: 480, margin: '0 auto',
+      }}>
         <SectionOrnament />
-        <TextReveal delay={0.05}>
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-extralight text-center mb-3 tracking-tight">
-            Will you be there?
-          </h2>
-        </TextReveal>
-        <p className="text-center mb-10" style={{ color: '#9C7A5A', fontSize: 15 }}>
-          We&apos;d love to celebrate with you — let us know you&apos;re coming 🎊
-        </p>
 
-        <form onSubmit={handleSubmit} className="glass-gold rounded-2xl p-8 space-y-6">
+        <motion.h2
+          id="rsvp-heading"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.72, ease: EASE }}
+          style={{
+            fontFamily: 'var(--font-playfair), "Playfair Display", Georgia, serif',
+            fontSize: 'clamp(2rem, 4.5vw, 4.5rem)',
+            fontWeight: 300, fontStyle: 'italic',
+            color: 'rgba(255,255,255,0.96)',
+            lineHeight: 1.05, letterSpacing: '-0.02em',
+            margin: '0 0 clamp(6px, 1vh, 10px)',
+            textAlign: 'center',
+            textShadow: '0 2px 40px rgba(3,1,10,0.85)',
+          }}
+        >
+          Will you be there?
+        </motion.h2>
+        <motion.p
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.18 }}
+          style={{
+            textAlign: 'center',
+            fontSize: 'clamp(10px, 1.1vw, 12px)',
+            letterSpacing: '0.18em', textTransform: 'uppercase',
+            color: 'rgba(196,154,40,0.72)',
+            marginBottom: 'clamp(24px, 4vw, 36px)',
+            fontFamily: 'var(--font-dm-sans), Inter, system-ui, sans-serif',
+          }}
+        >
+          Let us know you&apos;re coming
+        </motion.p>
 
-          {/* Name */}
+        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 'clamp(14px, 2vw, 18px)' }}>
+
           <div>
-            <label className="block mb-2 text-xs tracking-widest uppercase" style={{ color: '#9C7A5A' }}>
-              What do we call you?
-            </label>
+            <label style={LABEL}>What do we call you?</label>
             <input
               type="text"
               value={form.name}
               onChange={set('name')}
-              className={inputClass}
-              style={inputStyle}
+              className="rsvp-dark-input"
+              style={FIELD}
               placeholder="Your name"
               required
             />
           </div>
 
-          {/* Plus ones */}
           <div>
-            <label className="block mb-2 text-xs tracking-widest uppercase" style={{ color: '#9C7A5A' }}>
-              Who&apos;s coming with you?
-            </label>
-            <select value={form.plusOnes} onChange={set('plusOnes')} className={inputClass} style={inputStyle}>
-              <option value="0">Single, tho looking for someone</option>
+            <label style={LABEL}>Who&apos;s coming with you?</label>
+            <select value={form.plusOnes} onChange={set('plusOnes')} className="rsvp-dark-input" style={FIELD}>
+              <option value="0">Just me</option>
               <option value="1">Me + my person</option>
               <option value="2">Me + 2, we travel in a pack</option>
               <option value="3">Me + 3, the whole gang</option>
@@ -148,47 +227,53 @@ export default function RSVPForm() {
             </select>
           </div>
 
-          {/* Message */}
           <div>
-            <label className="block mb-2 text-xs tracking-widest uppercase" style={{ color: '#9C7A5A' }}>
-              A little note for the couple 💌
-            </label>
+            <label style={LABEL}>A little note for the couple</label>
             <textarea
               value={form.message}
               onChange={set('message')}
-              className={`${inputClass} resize-none`}
-              style={inputStyle}
-              placeholder="Share a wish, a memory, or just say hi — they'd love to hear from you…"
+              className="rsvp-dark-input"
+              style={{ ...FIELD, resize: 'none' }}
+              placeholder="Share a wish, a memory, or just say hi…"
               rows={4}
             />
-            <div className="flex justify-between mt-1.5">
-              <span className="text-xs" style={{ color: words > 100 ? '#e11d48' : 'transparent' }}>
-                Keep it to 100 words 💕
-              </span>
-              <span className="text-xs" style={{ color: words > 90 ? '#C49A28' : '#C4B09A' }}>
+            <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 5 }}>
+              <span style={{
+                fontSize: 11,
+                color: words > 90 ? 'rgba(196,154,40,0.80)' : 'rgba(255,255,255,0.25)',
+                fontFamily: 'var(--font-dm-sans), Inter, system-ui, sans-serif',
+              }}>
                 {words} / 100 words
               </span>
             </div>
           </div>
 
-          {/* Submit */}
           <motion.button
             type="submit"
             disabled={loading || words > 100}
             whileTap={{ scale: loading ? 1 : 0.97 }}
             whileHover={{ scale: loading ? 1 : 1.02 }}
             transition={{ type: 'spring', stiffness: 400, damping: 18 }}
-            className="w-full disabled:opacity-50 py-3.5 rounded-xl font-bold text-sm tracking-widest flex items-center justify-center gap-2"
             style={{
-              background: 'linear-gradient(135deg, #B8850A, #E8C547, #C49A28)',
-              color: '#2A1200',
-              boxShadow: loading ? 'none' : '0 4px 18px rgba(196,154,40,0.38)',
+              width: '100%',
+              padding: '14px 0',
+              borderRadius: 12,
+              background: 'rgba(255,255,255,0.94)',
+              color: 'rgba(3,1,10,0.88)',
+              fontSize: 12, fontWeight: 700,
+              letterSpacing: '0.22em', textTransform: 'uppercase',
+              border: 'none',
+              cursor: loading || words > 100 ? 'not-allowed' : 'pointer',
+              opacity: loading || words > 100 ? 0.5 : 1,
+              fontFamily: 'var(--font-dm-sans), Inter, system-ui, sans-serif',
+              boxShadow: '0 4px 24px rgba(255,255,255,0.12)',
             }}
           >
-            <Heart size={15} fill="currentColor" />
-            {loading ? 'Sending…' : 'Count me in!'}
+            {loading ? 'Sending…' : 'Count me in'}
           </motion.button>
+
         </form>
+
         {submitted && <GamesPrompt redirecting={redirecting} />}
       </div>
     </section>

@@ -1,10 +1,10 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
+import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import type { RSVP } from '@/lib/types'
 import SectionOrnament from './SectionOrnament'
-import { TextReveal } from './ScrollReveal'
 
 const GRADIENTS = [
   ['#C49A28', '#B8850A'],
@@ -32,7 +32,7 @@ const EASE = [0.25, 0.46, 0.45, 0.94] as const
 
 export default function GuestBook() {
   const [messages, setMessages] = useState<RSVP[]>([])
-  const [loading, setLoading]   = useState(true)
+  const [loading, setLoading] = useState(true)
   const scrollRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -43,35 +43,94 @@ export default function GuestBook() {
   }, [])
 
   return (
-    <section id="messages" className="py-20 bg-slate-50" aria-labelledby="guestbook-heading">
-      <div className="max-w-2xl mx-auto px-6">
+    <section
+      id="messages"
+      aria-labelledby="guestbook-heading"
+      style={{
+        position: 'relative', overflow: 'hidden',
+        minHeight: '100svh',
+        display: 'flex', flexDirection: 'column', justifyContent: 'center',
+      }}
+    >
+      {/* Background: gallery-wish.jpg (wishes written on paper notes, Birmingham) */}
+      <div aria-hidden="true" style={{ position: 'absolute', inset: 0 }}>
+        <Image
+          src="/images/gallery-wish.jpg"
+          alt=""
+          fill
+          sizes="(max-width: 767px) 100vw, 50vw"
+          style={{ objectFit: 'cover', objectPosition: 'center 40%' }}
+        />
+      </div>
+
+      {/* Vignette */}
+      <div aria-hidden="true" style={{
+        position: 'absolute', inset: 0,
+        background: 'linear-gradient(to bottom, rgba(3,1,10,0.80) 0%, rgba(3,1,10,0.68) 40%, rgba(3,1,10,0.88) 100%)',
+      }} />
+
+      {/* Content */}
+      <div style={{
+        position: 'relative', zIndex: 2,
+        padding: 'clamp(52px, 7vw, 88px) clamp(24px, 5vw, 52px)',
+        width: '100%', maxWidth: 480, margin: '0 auto',
+      }}>
         <SectionOrnament />
 
         {/* Header */}
-        <div className="flex items-end justify-between mb-8">
-          <div>
-            <TextReveal delay={0.05}>
-              <h2 id="guestbook-heading" className="text-4xl md:text-5xl lg:text-6xl font-extralight tracking-tight" style={{ color: '#2A1200' }}>
-                Guest Book
-              </h2>
-            </TextReveal>
-            <p className="text-sm mt-1" style={{ color: '#9C7A5A' }}>Wishes from our family and friends</p>
+        <div style={{ marginBottom: 'clamp(20px, 3vw, 28px)' }}>
+          <motion.h2
+            id="guestbook-heading"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.72, ease: EASE }}
+            style={{
+              fontFamily: 'var(--font-playfair), "Playfair Display", Georgia, serif',
+              fontSize: 'clamp(2rem, 4.5vw, 4.5rem)',
+              fontWeight: 300, fontStyle: 'italic',
+              color: 'rgba(255,255,255,0.96)',
+              lineHeight: 1.05, letterSpacing: '-0.02em',
+              margin: 0,
+              textShadow: '0 2px 40px rgba(3,1,10,0.85)',
+            }}
+          >
+            Guest Book
+          </motion.h2>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 8 }}>
+            <p style={{
+              fontSize: 'clamp(10px, 1.1vw, 12px)',
+              letterSpacing: '0.18em', textTransform: 'uppercase',
+              color: 'rgba(196,154,40,0.72)',
+              margin: 0,
+              fontFamily: 'var(--font-dm-sans), Inter, system-ui, sans-serif',
+            }}>
+              Wishes from family &amp; friends
+            </p>
+            {messages.length > 0 && (
+              <span style={{
+                fontSize: 11,
+                color: 'rgba(255,255,255,0.38)',
+                fontFamily: 'var(--font-dm-sans), Inter, system-ui, sans-serif',
+                flexShrink: 0,
+                marginLeft: 8,
+              }} aria-live="polite">
+                {messages.length} {messages.length === 1 ? 'message' : 'messages'}
+              </span>
+            )}
           </div>
-          {messages.length > 0 && (
-            <span className="text-xs font-medium px-3 py-1.5 rounded-full mb-1"
-              style={{ color: '#9C7A5A', background: 'rgba(196,154,40,0.08)', border: '1px solid rgba(196,154,40,0.15)' }}
-              aria-live="polite">
-              {messages.length} {messages.length === 1 ? 'message' : 'messages'}
-            </span>
-          )}
         </div>
 
         {loading ? (
-          <div className="h-64 flex items-center justify-center" aria-label="Loading messages">
-            <div className="flex gap-1.5" role="status">
+          <div style={{ height: 200, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div style={{ display: 'flex', gap: 6 }} role="status">
               {[0,1,2].map(i => (
-                <div key={i} className="w-1.5 h-1.5 rounded-full motion-safe:animate-pulse"
-                  style={{ background: 'rgba(196,154,40,0.4)', animationDelay: `${i * 0.2}s` }} />
+                <div key={i} style={{
+                  width: 6, height: 6, borderRadius: '50%',
+                  background: 'rgba(196,154,40,0.45)',
+                  animation: 'pulse 1.5s ease-in-out infinite',
+                  animationDelay: `${i * 0.2}s`,
+                }} />
               ))}
             </div>
           </div>
@@ -79,25 +138,53 @@ export default function GuestBook() {
           <motion.div
             initial={{ opacity: 0, scale: 0.96 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5, ease: EASE }}
-            className="h-52 flex flex-col items-center justify-center glass-gold rounded-3xl gap-3"
+            transition={{ duration: 0.5 }}
+            style={{
+              height: 180,
+              display: 'flex', flexDirection: 'column',
+              alignItems: 'center', justifyContent: 'center',
+              background: 'rgba(8,4,18,0.45)',
+              backdropFilter: 'blur(20px)',
+              WebkitBackdropFilter: 'blur(20px)',
+              border: '1px solid rgba(255,255,255,0.10)',
+              borderRadius: 20,
+            }}
           >
-            <span className="text-4xl" aria-hidden="true">💌</span>
-            <p className="text-sm" style={{ color: '#9C7A5A' }}>Be the first to leave a message!</p>
+            <p style={{
+              fontSize: 13, color: 'rgba(255,255,255,0.40)',
+              fontFamily: 'var(--font-dm-sans), Inter, system-ui, sans-serif',
+            }}>
+              Be the first to leave a message
+            </p>
           </motion.div>
         ) : (
-          <div className="relative">
+          <div style={{ position: 'relative' }}>
             {/* Top fade */}
-            <div className="absolute top-0 inset-x-0 h-8 z-10 pointer-events-none rounded-t-3xl"
-              style={{ background: 'linear-gradient(to bottom, #FAF3E0, transparent)' }} />
+            <div style={{
+              position: 'absolute', top: 0, left: 0, right: 0, height: 28,
+              zIndex: 10, pointerEvents: 'none',
+              background: 'linear-gradient(to bottom, rgba(3,1,10,0.7), transparent)',
+              borderRadius: '16px 16px 0 0',
+            }} />
             {/* Bottom fade */}
-            <div className="absolute bottom-0 inset-x-0 h-16 z-10 pointer-events-none rounded-b-3xl"
-              style={{ background: 'linear-gradient(to top, #FAF3E0, transparent)' }} />
+            <div style={{
+              position: 'absolute', bottom: 0, left: 0, right: 0, height: 36,
+              zIndex: 10, pointerEvents: 'none',
+              background: 'linear-gradient(to top, rgba(3,1,10,0.7), transparent)',
+              borderRadius: '0 0 16px 16px',
+            }} />
 
             <div
               ref={scrollRef}
-              className="space-y-3 overflow-y-auto py-4 pr-1"
-              style={{ maxHeight: 480, scrollbarWidth: 'thin', scrollbarColor: 'rgba(196,154,40,0.25) transparent' }}
+              style={{
+                display: 'flex', flexDirection: 'column', gap: 10,
+                overflowY: 'auto',
+                maxHeight: 'clamp(360px, 55vh, 520px)',
+                padding: '6px 0',
+                paddingRight: 4,
+                scrollbarWidth: 'thin',
+                scrollbarColor: 'rgba(196,154,40,0.18) transparent',
+              }}
               role="feed"
               aria-label="Guest messages"
             >
@@ -112,47 +199,74 @@ export default function GuestBook() {
                       initial={{ opacity: 0, y: 16, scale: 0.98 }}
                       animate={{ opacity: 1, y: 0, scale: 1 }}
                       exit={{ opacity: 0, scale: 0.95 }}
-                      transition={{ duration: 0.35, ease: EASE }}
-                      className="group relative glass-gold rounded-2xl px-5 py-4"
-                      style={{ boxShadow: '0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04)' }}
-                      whileHover={{ boxShadow: '0 4px 12px rgba(0,0,0,0.08), 0 16px 40px rgba(0,0,0,0.06)' }}
+                      transition={{ duration: 0.35 }}
+                      style={{
+                        background: 'rgba(8,4,18,0.50)',
+                        backdropFilter: 'blur(24px) saturate(160%)',
+                        WebkitBackdropFilter: 'blur(24px) saturate(160%)',
+                        border: '1px solid rgba(255,255,255,0.09)',
+                        boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.07), 0 4px 20px rgba(0,0,0,0.28)',
+                        borderRadius: 16,
+                        padding: '14px 16px',
+                      }}
                     >
-                      <div className="flex items-start gap-3">
-                        {/* Avatar */}
+                      <div style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
                         <div
-                          className="w-9 h-9 rounded-full flex-shrink-0 flex items-center justify-center text-white text-sm font-semibold shadow-sm"
-                          style={{ background: `linear-gradient(135deg, ${from}, ${to})` }}
+                          style={{
+                            width: 34, height: 34, borderRadius: '50%',
+                            flexShrink: 0,
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            background: `linear-gradient(135deg, ${from}, ${to})`,
+                            color: '#fff',
+                            fontSize: 13, fontWeight: 600,
+                          }}
                           aria-hidden="true"
                         >
                           {initial}
                         </div>
-
-                        {/* Content */}
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center justify-between gap-2 mb-1.5">
-                            <span className="font-medium text-sm truncate" style={{ color: '#2A1200' }}>{m.name}</span>
-                            <div className="flex items-center gap-2 flex-shrink-0">
+                        <div style={{ flex: 1, minWidth: 0 }}>
+                          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, marginBottom: 6 }}>
+                            <span style={{
+                              fontSize: 13, fontWeight: 600,
+                              color: 'rgba(255,255,255,0.88)',
+                              fontFamily: 'var(--font-dm-sans), Inter, system-ui, sans-serif',
+                              overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+                            }}>
+                              {m.name}
+                            </span>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
                               {m.plus_ones > 0 && (
-                                <span className="text-xs px-2 py-0.5 rounded-full"
-                                  style={{ color: '#9C7A5A', background: 'rgba(196,154,40,0.1)', border: '1px solid rgba(196,154,40,0.15)' }}>
+                                <span style={{
+                                  fontSize: 10, padding: '2px 8px', borderRadius: 100,
+                                  color: 'rgba(196,154,40,0.80)',
+                                  background: 'rgba(196,154,40,0.10)',
+                                  border: '1px solid rgba(196,154,40,0.18)',
+                                  fontFamily: 'var(--font-dm-sans), Inter, system-ui, sans-serif',
+                                }}>
                                   +{m.plus_ones}
                                 </span>
                               )}
-                              <time className="text-xs" style={{ color: '#C4B09A' }} dateTime={m.created_at}>
+                              <time style={{
+                                fontSize: 10,
+                                color: 'rgba(255,255,255,0.28)',
+                                fontFamily: 'var(--font-dm-sans), Inter, system-ui, sans-serif',
+                              }} dateTime={m.created_at}>
                                 {formatDate(m.created_at)}
                               </time>
                             </div>
                           </div>
-                          <p className="text-sm leading-relaxed" style={{ color: '#7C5A3A' }}>{m.message}</p>
+                          {m.message && (
+                            <p style={{
+                              fontSize: 13, lineHeight: 1.6,
+                              color: 'rgba(255,255,255,0.50)',
+                              fontFamily: 'var(--font-dm-sans), Inter, system-ui, sans-serif',
+                              margin: 0,
+                            }}>
+                              {m.message}
+                            </p>
+                          )}
                         </div>
                       </div>
-
-                      {/* Coloured left accent on hover */}
-                      <div
-                        className="absolute left-0 top-3 bottom-3 w-0.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                        style={{ background: `linear-gradient(to bottom, ${from}, ${to})` }}
-                        aria-hidden="true"
-                      />
                     </motion.article>
                   )
                 })}

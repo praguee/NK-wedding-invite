@@ -38,9 +38,16 @@ export default function Home() {
         <JabWeMet />
         <VenuePreview />
         <Transportation />
-        <RSVPForm />
+        {/* RSVP + GuestBook — side by side on desktop, stacked on mobile */}
+        <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+          <div style={{ flex: '1 1 340px', minWidth: 0 }}>
+            <RSVPForm />
+          </div>
+          <div style={{ flex: '1 1 340px', minWidth: 0 }}>
+            <GuestBook />
+          </div>
+        </div>
         <Gallery />
-        <GuestBook />
         <ContactFAQ />
       </main>
 

@@ -10,20 +10,10 @@ import MobileGallery from './MobileGallery'
 
 const PHOTOS = [
   {
-    id: 1,
-    src: '/images/gallery-wish.jpg',
-    alt: 'A wish written in Birmingham',
-    index: '01',
-    title: 'A Wish',
-    caption: "She wrote it down in Birmingham. You're reading it.",
-    meta: 'Birmingham · 2025',
-    objectPosition: 'center 60%',
-  },
-  {
     id: 3,
     src: '/images/gallery-diwali-sparklers.jpg',
     alt: 'Diwali together',
-    index: '02',
+    index: '01',
     title: 'Diwali',
     caption: 'The way they look at each other — always.',
     meta: 'Diwali · Mumbai',
@@ -33,7 +23,7 @@ const PHOTOS = [
     id: 4,
     src: '/images/gallery-diwali-lights.jpg',
     alt: 'Diwali fairy lights',
-    index: '03',
+    index: '02',
     title: 'Fairy Lights',
     caption: 'The kind of photo you frame.',
     meta: 'Diwali · Mumbai',
@@ -43,7 +33,7 @@ const PHOTOS = [
     id: 5,
     src: '/images/gallery-diwali2.jpg',
     alt: 'Diwali celebrations — dressed up',
-    index: '04',
+    index: '03',
     title: 'All Dressed Up',
     caption: 'He wore maroon. She wore purple. They matched the night.',
     meta: 'Diwali · Mumbai',
@@ -53,7 +43,7 @@ const PHOTOS = [
     id: 7,
     src: '/images/gallery-mirror.jpg',
     alt: 'Mirror selfie in a hotel corridor',
-    index: '05',
+    index: '04',
     title: 'Mirror, Mirror',
     caption: 'Hotel corridor. The architecture posed too.',
     meta: 'Mumbai',
@@ -63,7 +53,7 @@ const PHOTOS = [
     id: 8,
     src: '/images/gallery-park.jpg',
     alt: 'Under the lights at a park at night',
-    index: '06',
+    index: '05',
     title: 'Under the Lights',
     caption: 'Pretending to look at the tree.',
     meta: 'Mumbai',
@@ -73,7 +63,7 @@ const PHOTOS = [
     id: 9,
     src: '/images/gallery-christmas.jpg',
     alt: 'First Christmas together',
-    index: '07',
+    index: '06',
     title: 'First Christmas',
     caption: "She wore the crown. He didn't argue.",
     meta: 'Christmas · Mumbai',
@@ -83,17 +73,16 @@ const PHOTOS = [
 
 // colSpan, rowSpan, revealDelay
 // Grid: 12 columns, auto-rows 240px
-// Row 1-2: wish(5,2)   | diwali(4,1)    | lights(3,1)
-// Row 2:   (wish cont) | diwali2(7,1)
-// Row 3:   mirror(3,1) | park(4,1)      | christmas(5,1)
+// Row 1-2: sparklers(5,2) | lights(4,1)        | diwali2(3,1)
+// Row 2:   (cont)         | mirror(7,1)
+// Row 3:   park(5,1)      | christmas(7,1)
 const GRID_CONFIG = [
   { colSpan: 5, rowSpan: 2, delay: 0.00, rotate: -1.4 },
   { colSpan: 4, rowSpan: 1, delay: 0.10, rotate:  0.9 },
   { colSpan: 3, rowSpan: 1, delay: 0.20, rotate: -0.6 },
   { colSpan: 7, rowSpan: 1, delay: 0.14, rotate:  1.2 },
-  { colSpan: 3, rowSpan: 1, delay: 0.00, rotate:  0.7 },
-  { colSpan: 4, rowSpan: 1, delay: 0.10, rotate: -0.8 },
-  { colSpan: 5, rowSpan: 1, delay: 0.20, rotate:  1.1 },
+  { colSpan: 5, rowSpan: 1, delay: 0.00, rotate: -0.8 },
+  { colSpan: 7, rowSpan: 1, delay: 0.10, rotate:  1.1 },
 ]
 
 const EASE = [0.16, 1, 0.3, 1] as const
