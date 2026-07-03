@@ -38,8 +38,8 @@ export default function Home() {
         <JabWeMet />
         <VenuePreview />
         <Transportation />
-        <Gallery />
         <RSVPForm />
+        <Gallery />
         <GuestBook />
         <ContactFAQ />
       </main>
