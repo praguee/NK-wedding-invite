@@ -1,21 +1,24 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { supabase } from '@/lib/supabase'
+import { useEffect, useRef, useState } from 'react'
 import type { RSVP } from '@/lib/types'
 import { LogOut, Download, Users, UserPlus, BarChart2 } from 'lucide-react'
 
 export default function AdminPage() {
-  const [authed, setAuthed] = useState(false)
-  const [password, setPassword] = useState('')
+  const [authed, setAuthed]           = useState(false)
+  const [password, setPassword]       = useState('')
   const [loginLoading, setLoginLoading] = useState(false)
-  const [rsvps, setRsvps] = useState<RSVP[]>([])
+  const [rsvps, setRsvps]             = useState<RSVP[]>([])
   const [dataLoading, setDataLoading] = useState(false)
+  // Store password in a ref so loadRSVPs can use it without re-renders
+  const tokenRef = useRef('')
 
   useEffect(() => {
-    if (sessionStorage.getItem('admin_auth') === '1') {
+    const saved = sessionStorage.getItem('admin_token')
+    if (saved) {
+      tokenRef.current = saved
       setAuthed(true)
-      loadRSVPs()
+      loadRSVPs(saved)
     }
   }, [])
 
@@ -29,12 +32,14 @@ export default function AdminPage() {
         body: JSON.stringify({ password }),
       })
       if (res.ok) {
-        sessionStorage.setItem('admin_auth', '1')
+        sessionStorage.setItem('admin_token', password)
+        tokenRef.current = password
         setAuthed(true)
         setPassword('')
-        loadRSVPs()
+        loadRSVPs(password)
       } else {
-        alert('Incorrect password')
+        const d = await res.json()
+        alert(d.message ?? 'Incorrect password')
         setPassword('')
       }
     } finally {
@@ -42,18 +47,26 @@ export default function AdminPage() {
     }
   }
 
-  const loadRSVPs = async () => {
+  const loadRSVPs = async (token?: string) => {
     setDataLoading(true)
-    const { data } = await supabase
-      .from('rsvps')
-      .select('*')
-      .order('created_at', { ascending: false })
-    if (data) setRsvps(data)
-    setDataLoading(false)
+    try {
+      const res = await fetch('/api/admin/rsvps', {
+        headers: { 'x-admin-token': token ?? tokenRef.current },
+      })
+      if (res.ok) {
+        const data: RSVP[] = await res.json()
+        setRsvps(data)
+      } else if (res.status === 401) {
+        logout()
+      }
+    } finally {
+      setDataLoading(false)
+    }
   }
 
   const logout = () => {
-    sessionStorage.removeItem('admin_auth')
+    sessionStorage.removeItem('admin_token')
+    tokenRef.current = ''
     setAuthed(false)
     setRsvps([])
   }
@@ -155,7 +168,7 @@ export default function AdminPage() {
             <Download size={16} /> Export CSV
           </button>
           <button
-            onClick={loadRSVPs}
+            onClick={() => loadRSVPs()}
             className="flex items-center gap-2 bg-white border border-slate-200 hover:border-slate-300 text-slate-700 px-4 py-2 rounded-xl text-sm transition-colors"
           >
             Refresh

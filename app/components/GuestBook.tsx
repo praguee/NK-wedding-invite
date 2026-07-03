@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { supabase } from '@/lib/supabase'
 import type { RSVP } from '@/lib/types'
 import SectionOrnament from './SectionOrnament'
 import { TextReveal } from './ScrollReveal'
@@ -37,26 +36,10 @@ export default function GuestBook() {
   const scrollRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    supabase
-      .from('rsvps')
-      .select('*')
-      .not('message', 'is', null)
-      .neq('message', '')
-      .order('created_at', { ascending: false })
-      .then(({ data, error }) => {
-        if (!error && data) setMessages(data)
-        setLoading(false)
-      })
-
-    const channel = supabase
-      .channel('guest-book')
-      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'rsvps' }, (payload) => {
-        const rsvp = payload.new as RSVP
-        if (rsvp.message) setMessages((prev) => [rsvp, ...prev])
-      })
-      .subscribe()
-
-    return () => { supabase.removeChannel(channel) }
+    fetch('/api/guestbook')
+      .then(r => r.json())
+      .then((data: RSVP[]) => { setMessages(data); setLoading(false) })
+      .catch(() => setLoading(false))
   }, [])
 
   return (
