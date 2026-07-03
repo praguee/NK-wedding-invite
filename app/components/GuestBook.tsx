@@ -55,7 +55,7 @@ export default function GuestBook() {
       {/* Background: gallery-wish.jpg (wishes written on paper notes, Birmingham) */}
       <div aria-hidden="true" style={{ position: 'absolute', inset: 0 }}>
         <Image
-          src="/images/gallery-wish.jpg"
+          src="/images/guestbook-bg.jpg"
           alt=""
           fill
           sizes="(max-width: 767px) 100vw, 50vw"

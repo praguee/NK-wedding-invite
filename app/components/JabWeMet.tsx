@@ -39,7 +39,7 @@ export default function JabWeMet() {
         overflow: 'hidden',
       }}>
         <Image
-          src="/images/gallery-diwali.jpg"
+          src="/images/jabwemet-bg.jpg"
           alt="Nidhi and Parag — Diwali, Mumbai"
           fill
           priority

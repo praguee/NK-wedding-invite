@@ -53,7 +53,7 @@ export default function VenuePreview() {
       >
         <div style={{ position: 'relative', flex: 1, overflow: 'hidden' }}>
           <Image
-            src="/images/invited1.jpg"
+            src="/images/venue-bg-1.jpg"
             alt=""
             fill
             priority
@@ -63,7 +63,7 @@ export default function VenuePreview() {
         </div>
         <div style={{ position: 'relative', flex: 1, overflow: 'hidden' }}>
           <Image
-            src="/images/invited2.jpg"
+            src="/images/venue-bg-2.jpg"
             alt=""
             fill
             sizes="50vw"

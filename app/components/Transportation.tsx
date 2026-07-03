@@ -40,7 +40,7 @@ export default function Transportation() {
       <div aria-hidden="true" style={{ position: 'absolute', inset: 0, display: 'flex' }}>
         <div style={{ position: 'relative', flex: 1, overflow: 'hidden' }}>
           <Image
-            src="/images/vng1.jpg"
+            src="/images/travel-bg-1.jpg"
             alt=""
             fill
             priority
@@ -50,7 +50,7 @@ export default function Transportation() {
         </div>
         <div style={{ position: 'relative', flex: 1, overflow: 'hidden' }}>
           <Image
-            src="/images/vng2.jpg"
+            src="/images/travel-bg-2.jpg"
             alt=""
             fill
             sizes="50vw"

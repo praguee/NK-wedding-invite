@@ -141,7 +141,7 @@ export default function RSVPForm() {
       {/* Background */}
       <div aria-hidden="true" style={{ position: 'absolute', inset: 0 }}>
         <Image
-          src="/images/gallery-diwali.jpg"
+          src="/images/jabwemet.jpg"
           alt=""
           fill
           priority
