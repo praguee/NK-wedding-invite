@@ -1,6 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
 import https from 'https'
 
+// Simple in-process rate limit: max 3 RSVPs per IP per 10 minutes
+const rsvpAttempts = new Map<string, { count: number; windowStart: number }>()
+const RSVP_LIMIT = 3
+const RSVP_WINDOW_MS = 10 * 60 * 1000
+
 function httpsPost(url: string, data: string, headers: Record<string, string>): Promise<{ status: number; body: string }> {
   return new Promise((resolve, reject) => {
     const parsed = new URL(url)
@@ -40,6 +45,18 @@ function httpsGet(url: string, headers: Record<string, string>): Promise<{ statu
 }
 
 export async function POST(request: NextRequest) {
+  const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown'
+  const now = Date.now()
+  const rec = rsvpAttempts.get(ip)
+  if (rec && now - rec.windowStart < RSVP_WINDOW_MS) {
+    if (rec.count >= RSVP_LIMIT) {
+      return NextResponse.json({ message: 'Too many submissions. Please try again later.' }, { status: 429 })
+    }
+    rec.count++
+  } else {
+    rsvpAttempts.set(ip, { count: 1, windowStart: now })
+  }
+
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim()
   const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY?.trim()
 
