@@ -8,10 +8,9 @@ import Story from './components/Story'
 import JabWeMet from './components/JabWeMet'
 import Gallery from './components/Gallery'
 import VenuePreview from './components/VenuePreview'
+import Transportation from './components/Transportation'
 import RSVPForm from './components/RSVPForm'
 import GuestBook from './components/GuestBook'
-import Transportation from './components/Transportation'
-import Addresses from './components/Addresses'
 import ContactFAQ from './components/ContactFAQ'
 
 const IntroScreen = dynamic(() => import('./components/IntroScreen'), { ssr: false })
@@ -38,11 +37,10 @@ export default function Home() {
         <Story />
         <JabWeMet />
         <VenuePreview />
+        <Transportation />
         <Gallery />
         <RSVPForm />
         <GuestBook />
-        <Transportation />
-        <Addresses />
         <ContactFAQ />
       </main>
 
