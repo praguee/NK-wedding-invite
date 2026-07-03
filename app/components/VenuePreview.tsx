@@ -95,46 +95,37 @@ export default function VenuePreview() {
         <div style={{ textAlign: 'center', marginBottom: 'clamp(32px, 5vw, 52px)' }}>
           <SectionOrnament />
 
-          {/* Marathi — लग्नाला नक्की या */}
-          <motion.p
-            initial={{ opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, ease: EASE }}
-            lang="mr"
-            style={{
-              fontFamily: '"Noto Serif Devanagari", "Mangal", serif',
-              fontSize: 'clamp(14px, 1.8vw, 20px)',
-              fontWeight: 400,
-              color: 'rgba(196, 154, 40, 0.68)',
-              letterSpacing: '0.06em',
-              margin: '0 0 clamp(8px, 1.2vh, 14px)',
-              textShadow: '0 1px 20px rgba(3,1,10,0.9)',
-            }}
-          >
-            लग्नाला नक्की या
-          </motion.p>
-
+          {/* Bilingual heading — Marathi · English side by side, same size, same colour */}
           <motion.h2
             id="invite-heading"
             initial={{ opacity: 0, y: 22 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.72, delay: 0.10, ease: EASE }}
+            transition={{ duration: 0.72, ease: EASE }}
             style={{
-              fontFamily: 'var(--font-playfair), "Playfair Display", Georgia, serif',
-              fontSize: 'clamp(2.6rem, 5.5vw, 5.5rem)',
+              display: 'flex',
+              alignItems: 'baseline',
+              justifyContent: 'center',
+              flexWrap: 'wrap',
+              gap: '0 clamp(10px, 2vw, 22px)',
+              fontSize: 'clamp(2.2rem, 5.2vw, 5.5rem)',
               fontWeight: 300,
               fontStyle: 'italic',
               color: 'rgba(255, 255, 255, 0.96)',
-              lineHeight: 1.05,
-              letterSpacing: '-0.025em',
+              lineHeight: 1.08,
+              letterSpacing: '-0.02em',
               margin: 0,
               marginBottom: 'clamp(6px, 1vh, 10px)',
               textShadow: '0 2px 40px rgba(3,1,10,0.85)',
             }}
           >
-            You&apos;re Invited
+            <span lang="mr" style={{ fontFamily: '"Noto Serif Devanagari", serif', fontStyle: 'normal', fontWeight: 300 }}>
+              लग्नाला नक्की या
+            </span>
+            <span aria-hidden="true" style={{ fontSize: '0.45em', opacity: 0.35, fontStyle: 'normal', alignSelf: 'center' }}>✦</span>
+            <span style={{ fontFamily: 'var(--font-playfair), "Playfair Display", Georgia, serif' }}>
+              You&apos;re Invited
+            </span>
           </motion.h2>
           <motion.p
             initial={{ opacity: 0 }}

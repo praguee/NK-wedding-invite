@@ -116,7 +116,7 @@ export default function Transportation() {
               textShadow: '0 1px 20px rgba(3,1,10,0.9)',
             }}
           >
-            Come as guests. Leave as family.
+            Up in the hills. Worth every turn.
           </motion.p>
         </div>
 
