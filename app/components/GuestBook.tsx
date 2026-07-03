@@ -49,80 +49,111 @@ export default function GuestBook() {
       style={{
         position: 'relative', overflow: 'hidden',
         minHeight: '100svh',
-        display: 'flex', flexDirection: 'column', justifyContent: 'center',
+        display: 'flex', flexDirection: 'column',
       }}
     >
-      {/* Background: gallery-wish.jpg (wishes written on paper notes, Birmingham) */}
+      {/* Background — wishes notes photo, positioned to show the notes */}
       <div aria-hidden="true" style={{ position: 'absolute', inset: 0 }}>
         <Image
           src="/images/guestbook-bg.jpg"
           alt=""
           fill
           sizes="(max-width: 767px) 100vw, 50vw"
-          style={{ objectFit: 'cover', objectPosition: 'center 40%' }}
+          style={{ objectFit: 'cover', objectPosition: 'center 45%' }}
         />
       </div>
 
-      {/* Vignette */}
+      {/*
+        Two-zone vignette:
+        - Top 0–15%: dark edges for a cinematic frame
+        - 15–42%: near-transparent → photo + wishes notes clearly visible
+        - 42–58%: bridge, darkens toward messages
+        - 58–100%: dark, message cards live here
+      */}
       <div aria-hidden="true" style={{
         position: 'absolute', inset: 0,
-        background: 'linear-gradient(to bottom, rgba(3,1,10,0.80) 0%, rgba(3,1,10,0.68) 40%, rgba(3,1,10,0.88) 100%)',
+        background: [
+          'linear-gradient(to bottom,',
+          '  rgba(3,1,10,0.60) 0%,',
+          '  rgba(3,1,10,0.18) 14%,',
+          '  rgba(3,1,10,0.14) 28%,',
+          '  rgba(3,1,10,0.22) 42%,',
+          '  rgba(3,1,10,0.78) 56%,',
+          '  rgba(3,1,10,0.94) 68%,',
+          '  rgba(3,1,10,0.97) 100%',
+          ')',
+        ].join(''),
+      }} />
+      {/* Side vignette so edges don't look flat */}
+      <div aria-hidden="true" style={{
+        position: 'absolute', inset: 0,
+        background: 'radial-gradient(ellipse 80% 60% at 50% 28%, transparent 40%, rgba(3,1,10,0.55) 100%)',
       }} />
 
-      {/* Content */}
+      {/* ── Zone 1: photo visible area — heading sits here ── */}
       <div style={{
         position: 'relative', zIndex: 2,
-        padding: 'clamp(52px, 7vw, 88px) clamp(24px, 5vw, 52px)',
-        width: '100%', maxWidth: 480, margin: '0 auto',
+        flex: '0 0 auto',
+        padding: 'clamp(40px, 6vw, 72px) clamp(24px, 5vw, 52px) clamp(20px, 3vw, 28px)',
+        display: 'flex', flexDirection: 'column', justifyContent: 'flex-end',
+        minHeight: 'clamp(240px, 45svh, 400px)',
       }}>
         <SectionOrnament />
 
-        {/* Header */}
-        <div style={{ marginBottom: 'clamp(20px, 3vw, 28px)' }}>
-          <motion.h2
-            id="guestbook-heading"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.72, ease: EASE }}
-            style={{
-              fontFamily: 'var(--font-playfair), "Playfair Display", Georgia, serif',
-              fontSize: 'clamp(2rem, 4.5vw, 4.5rem)',
-              fontWeight: 300, fontStyle: 'italic',
-              color: 'rgba(255,255,255,0.96)',
-              lineHeight: 1.05, letterSpacing: '-0.02em',
-              margin: 0,
-              textShadow: '0 2px 40px rgba(3,1,10,0.85)',
-            }}
-          >
-            Guest Book
-          </motion.h2>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 8 }}>
-            <p style={{
-              fontSize: 'clamp(10px, 1.1vw, 12px)',
-              letterSpacing: '0.18em', textTransform: 'uppercase',
-              color: 'rgba(196,154,40,0.72)',
-              margin: 0,
-              fontFamily: 'var(--font-dm-sans), Inter, system-ui, sans-serif',
-            }}>
-              Wishes from family &amp; friends
-            </p>
-            {messages.length > 0 && (
-              <span style={{
-                fontSize: 11,
-                color: 'rgba(255,255,255,0.38)',
-                fontFamily: 'var(--font-dm-sans), Inter, system-ui, sans-serif',
-                flexShrink: 0,
-                marginLeft: 8,
-              }} aria-live="polite">
-                {messages.length} {messages.length === 1 ? 'message' : 'messages'}
-              </span>
-            )}
-          </div>
-        </div>
+        <motion.h2
+          id="guestbook-heading"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.72, ease: EASE }}
+          style={{
+            fontFamily: 'var(--font-playfair), "Playfair Display", Georgia, serif',
+            fontSize: 'clamp(2rem, 4.5vw, 4.5rem)',
+            fontWeight: 300, fontStyle: 'italic',
+            color: 'rgba(255,255,255,0.96)',
+            lineHeight: 1.05, letterSpacing: '-0.02em',
+            margin: 0,
+            textShadow: '0 2px 32px rgba(3,1,10,0.90)',
+          }}
+        >
+          Guest Book
+        </motion.h2>
 
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 8 }}>
+          <p style={{
+            fontSize: 'clamp(10px, 1.1vw, 12px)',
+            letterSpacing: '0.18em', textTransform: 'uppercase',
+            color: 'rgba(196,154,40,0.80)',
+            margin: 0,
+            fontFamily: 'var(--font-dm-sans), Inter, system-ui, sans-serif',
+            textShadow: '0 1px 12px rgba(3,1,10,0.90)',
+          }}>
+            Wishes from family &amp; friends
+          </p>
+          {messages.length > 0 && (
+            <span style={{
+              fontSize: 11,
+              color: 'rgba(255,255,255,0.45)',
+              fontFamily: 'var(--font-dm-sans), Inter, system-ui, sans-serif',
+              flexShrink: 0,
+              marginLeft: 8,
+              textShadow: '0 1px 8px rgba(3,1,10,0.90)',
+            }} aria-live="polite">
+              {messages.length} {messages.length === 1 ? 'message' : 'messages'}
+            </span>
+          )}
+        </div>
+      </div>
+
+      {/* ── Zone 2: messages — dark glass area ── */}
+      <div style={{
+        position: 'relative', zIndex: 2,
+        flex: '1 1 auto',
+        padding: '0 clamp(24px, 5vw, 52px) clamp(40px, 6vw, 64px)',
+        display: 'flex', flexDirection: 'column', justifyContent: 'flex-start',
+      }}>
         {loading ? (
-          <div style={{ height: 200, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{ height: 160, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <div style={{ display: 'flex', gap: 6 }} role="status">
               {[0,1,2].map(i => (
                 <div key={i} style={{
@@ -140,10 +171,10 @@ export default function GuestBook() {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5 }}
             style={{
-              height: 180,
+              height: 160,
               display: 'flex', flexDirection: 'column',
               alignItems: 'center', justifyContent: 'center',
-              background: 'rgba(8,4,18,0.45)',
+              background: 'rgba(8,4,18,0.50)',
               backdropFilter: 'blur(20px)',
               WebkitBackdropFilter: 'blur(20px)',
               border: '1px solid rgba(255,255,255,0.10)',
@@ -159,18 +190,11 @@ export default function GuestBook() {
           </motion.div>
         ) : (
           <div style={{ position: 'relative' }}>
-            {/* Top fade */}
-            <div style={{
-              position: 'absolute', top: 0, left: 0, right: 0, height: 28,
-              zIndex: 10, pointerEvents: 'none',
-              background: 'linear-gradient(to bottom, rgba(3,1,10,0.7), transparent)',
-              borderRadius: '16px 16px 0 0',
-            }} />
             {/* Bottom fade */}
             <div style={{
               position: 'absolute', bottom: 0, left: 0, right: 0, height: 36,
               zIndex: 10, pointerEvents: 'none',
-              background: 'linear-gradient(to top, rgba(3,1,10,0.7), transparent)',
+              background: 'linear-gradient(to top, rgba(3,1,10,0.72), transparent)',
               borderRadius: '0 0 16px 16px',
             }} />
 
@@ -179,8 +203,8 @@ export default function GuestBook() {
               style={{
                 display: 'flex', flexDirection: 'column', gap: 10,
                 overflowY: 'auto',
-                maxHeight: 'clamp(360px, 55vh, 520px)',
-                padding: '6px 0',
+                maxHeight: 'clamp(320px, 48svh, 480px)',
+                padding: '4px 0',
                 paddingRight: 4,
                 scrollbarWidth: 'thin',
                 scrollbarColor: 'rgba(196,154,40,0.18) transparent',
@@ -201,7 +225,7 @@ export default function GuestBook() {
                       exit={{ opacity: 0, scale: 0.95 }}
                       transition={{ duration: 0.35 }}
                       style={{
-                        background: 'rgba(8,4,18,0.50)',
+                        background: 'rgba(8,4,18,0.52)',
                         backdropFilter: 'blur(24px) saturate(160%)',
                         WebkitBackdropFilter: 'blur(24px) saturate(160%)',
                         border: '1px solid rgba(255,255,255,0.09)',
