@@ -1,10 +1,9 @@
 'use client'
 
-import { useState, useEffect, useCallback, useRef } from 'react'
+import { useState, useRef } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { motion, AnimatePresence } from 'framer-motion'
-import { supabase } from '@/lib/supabase'
+import { motion } from 'framer-motion'
 
 // ── CORNER MANDALA DECORATION ────────────────────────────────────
 function MandalaCorner() {
@@ -37,164 +36,6 @@ function MandalaCorner() {
         <circle r="3"  fill="#C49A28" opacity="0.9"/>
       </g>
     </svg>
-  )
-}
-
-// ── POLL ─────────────────────────────────────────────────────────
-type Side = 'bride' | 'groom'
-interface PollCounts { bride: number; groom: number; total: number }
-const POLL_KEY = 'nk_poll_vote_v3'
-
-function Poll({ onDone }: { onDone: () => void }) {
-  const [voted, setVoted]     = useState<Side | null>(null)
-  const [counts, setCounts]   = useState<PollCounts>({ bride: 0, groom: 0, total: 0 })
-  const [loading, setLoading] = useState(false)
-  const [error, setError]     = useState('')
-  const [countdown, setCountdown] = useState<number | null>(null)
-
-  const fetchCounts = useCallback(async () => {
-    try {
-      const r = await fetch('/api/poll')
-      if (r.ok) setCounts(await r.json())
-    } catch { /* silent */ }
-  }, [])
-
-  useEffect(() => {
-    setVoted(localStorage.getItem(POLL_KEY) as Side | null)
-    fetchCounts()
-    const channel = supabase.channel('poll-live')
-      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'poll_votes' }, fetchCounts)
-      .subscribe()
-    return () => { supabase.removeChannel(channel) }
-  }, [fetchCounts])
-
-  const vote = async (side: Side) => {
-    if (voted || loading) return
-    setLoading(true)
-    setError('')
-    try {
-      const r = await fetch('/api/poll', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ side }),
-      })
-      if (r.ok) {
-        localStorage.setItem(POLL_KEY, side)
-        setVoted(side)
-        await fetchCounts()
-        let c = 3
-        setCountdown(c)
-        const t = setInterval(() => {
-          c -= 1
-          setCountdown(c)
-          if (c <= 0) { clearInterval(t); onDone() }
-        }, 1000)
-      } else {
-        const d = await r.json()
-        setError(d.message || 'Vote failed')
-      }
-    } catch {
-      setError('Network error — try again')
-    } finally { setLoading(false) }
-  }
-
-  const bp = counts.total ? Math.round((counts.bride / counts.total) * 100) : 50
-  const gp = counts.total ? Math.round((counts.groom / counts.total) * 100) : 50
-
-  return (
-    <div className="max-w-md mx-auto">
-      <h2 className="text-3xl font-extralight text-center mb-2 tracking-tight" style={{ color: '#2A1200' }}>
-        Pick a Side
-      </h2>
-      <p className="text-center text-sm mb-8" style={{ color: '#9C7A5A' }}>
-        No judgement. (Okay, maybe a little.)
-      </p>
-
-      {!voted ? (
-        <>
-          <div className="grid grid-cols-2 gap-4">
-            {([
-              { side: 'bride' as Side, label: 'Team Nidhi', sub: 'Obviously the better choice', img: '/images/nidhi-stand.png', accent: '#C43C5E' },
-              { side: 'groom' as Side, label: 'Team Parag',  sub: 'Bold, brave, delusional',    img: '/images/parag-avatar.png', accent: '#C49A28' },
-            ]).map(opt => (
-              <motion.button key={opt.side} onClick={() => vote(opt.side)} disabled={loading}
-                whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
-                transition={{ type: 'spring', stiffness: 400, damping: 18 }}
-                className="glass-gold relative overflow-hidden rounded-2xl p-6 text-center disabled:opacity-60"
-                style={{ boxShadow: '0 4px 20px rgba(92,58,30,0.06)' }}
-              >
-                <div className="relative w-16 h-16 rounded-full overflow-hidden mx-auto mb-3"
-                  style={{ border: `2px solid ${opt.accent}40` }}>
-                  <Image src={opt.img} alt={opt.label} fill
-                    style={{ objectFit: 'cover', objectPosition: opt.side === 'groom' ? '50% 8%' : '50% 15%' }} />
-                </div>
-                <p className="font-semibold text-sm mb-1" style={{ color: opt.accent }}>{opt.label}</p>
-                <p className="text-xs" style={{ color: '#9C7A5A' }}>{opt.sub}</p>
-              </motion.button>
-            ))}
-          </div>
-          {error && <p className="text-xs text-center mt-3" style={{ color: '#C43C5E' }}>{error}</p>}
-        </>
-      ) : (
-        <div className="glass-gold rounded-2xl overflow-hidden">
-          <div className="p-6">
-            <p className="text-center text-sm mb-6" style={{ color: '#5C3A1E' }}>
-              {voted === 'bride' ? "Smart. Nidhi approves. Parag does not." : "Brave. Truly. Nidhi's already made a list."}
-            </p>
-
-            <div className="flex items-center gap-3 mb-3">
-              <div className="relative w-9 h-9 rounded-full overflow-hidden flex-shrink-0"
-                style={{ border: '1.5px solid rgba(196,60,94,0.35)' }}>
-                <Image src="/images/nidhi-stand.png" alt="Nidhi" fill
-                  style={{ objectFit: 'cover', objectPosition: '50% 15%' }} />
-              </div>
-              <div className="flex-1 h-2 rounded-full overflow-hidden" style={{ background: 'rgba(196,154,40,0.12)' }}>
-                <div style={{ height: '100%', width: `${bp}%`, background: 'linear-gradient(to right,#e05080,#C43C5E)', borderRadius: 100, transition: 'width 0.7s cubic-bezier(0.16,1,0.3,1)' }} />
-              </div>
-              <span className="text-sm font-light w-10 text-right" style={{ color: '#C43C5E' }}>{bp}%</span>
-            </div>
-            <div className="flex items-center gap-3 mb-5">
-              <div className="relative w-9 h-9 rounded-full overflow-hidden flex-shrink-0"
-                style={{ border: '1.5px solid rgba(196,154,40,0.35)' }}>
-                <Image src="/images/parag-avatar.png" alt="Parag" fill
-                  style={{ objectFit: 'cover', objectPosition: '50% 8%' }} />
-              </div>
-              <div className="flex-1 h-2 rounded-full overflow-hidden" style={{ background: 'rgba(196,154,40,0.12)' }}>
-                <div style={{ height: '100%', width: `${gp}%`, background: 'linear-gradient(to right,#C49A28,#E8C547)', borderRadius: 100, transition: 'width 0.7s cubic-bezier(0.16,1,0.3,1)' }} />
-              </div>
-              <span className="text-sm font-light w-10 text-right" style={{ color: '#C49A28' }}>{gp}%</span>
-            </div>
-
-            <div className="flex justify-between items-center mb-4">
-              <p className="text-xs" style={{ color: '#9C7A5A' }}>
-                {bp > gp ? "Nidhi winning. Parag is fine. He's fine." : bp === gp ? "It's a tie. Diplomatic." : "Parag winning. Nidhi is planning revenge."}
-              </p>
-              <div className="flex items-center gap-1.5">
-                <div className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: '#22c55e' }} />
-                <span className="text-xs" style={{ color: '#9C7A5A' }}>{counts.total} votes · live</span>
-              </div>
-            </div>
-
-            {countdown !== null && countdown > 0 && (
-              <div className="text-center py-2 rounded-xl"
-                style={{ background: 'rgba(196,154,40,0.1)', border: '1px solid rgba(196,154,40,0.2)' }}>
-                <p className="text-xs" style={{ color: '#C49A28' }}>
-                  Quiz starting in {countdown}…
-                </p>
-              </div>
-            )}
-            {countdown === null && (
-              <button
-                onClick={() => { localStorage.removeItem(POLL_KEY); setVoted(null) }}
-                className="text-xs w-full text-center mt-2 py-1"
-                style={{ color: 'rgba(92,58,30,0.4)' }}
-              >
-                Change vote
-              </button>
-            )}
-          </div>
-        </div>
-      )}
-    </div>
   )
 }
 
@@ -443,21 +284,9 @@ function Quiz() {
 }
 
 // ── GAMES PAGE ────────────────────────────────────────────────────
-type PageStep = 'poll' | 'quiz'
-
 export default function GamesPage() {
-  const [step, setStep] = useState<PageStep>('poll')
-
   return (
     <div className="min-h-screen" style={{ background: 'var(--ivory)' }}>
-      <style>{`
-        @keyframes gamesSlideUp {
-          from { opacity: 0; transform: translateY(28px); }
-          to   { opacity: 1; transform: translateY(0); }
-        }
-        .games-enter { animation: gamesSlideUp 0.5s cubic-bezier(0.16,1,0.3,1); }
-      `}</style>
-
       {/* Top bar — matches Navigation style */}
       <div className="sticky top-0 z-40" style={{
         background: 'rgba(255,253,246,0.92)',
@@ -471,7 +300,7 @@ export default function GamesPage() {
           background: 'linear-gradient(90deg, transparent 0%, #C49A28 30%, #E8C547 50%, #C49A28 70%, transparent 100%)',
           opacity: 0.7,
         }} />
-        <div className="max-w-lg mx-auto px-6 py-4 flex items-center justify-between">
+        <div className="max-w-lg mx-auto px-6 py-4">
           <Link href="/" className="flex items-center gap-2 text-xs tracking-widest uppercase"
             style={{ color: '#9C7A5A' }}>
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -479,27 +308,6 @@ export default function GamesPage() {
             </svg>
             Back to Invitation
           </Link>
-
-          <div className="flex items-center gap-2">
-            {(['poll','quiz'] as const).map((s, i) => (
-              <div key={s} className="flex items-center gap-2">
-                <div className="flex items-center gap-1.5">
-                  <div style={{
-                    width: 6, height: 6, borderRadius: '50%',
-                    background: step === s ? '#C49A28' : (s < step || (step === 'quiz' && s === 'poll')) ? 'rgba(196,154,40,0.4)' : 'rgba(92,58,30,0.15)',
-                    transition: 'background 0.3s',
-                  }} />
-                  <span style={{
-                    fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.08em',
-                    color: step === s ? '#C49A28' : 'rgba(92,58,30,0.4)',
-                  }}>
-                    {s === 'poll' ? 'Poll' : 'Quiz'}
-                  </span>
-                </div>
-                {i === 0 && <div style={{ width: 16, height: 1, background: 'rgba(196,154,40,0.25)' }} />}
-              </div>
-            ))}
-          </div>
         </div>
       </div>
 
@@ -523,29 +331,13 @@ export default function GamesPage() {
         </div>
 
         <div className="relative max-w-lg mx-auto px-6 py-12" style={{ zIndex: 1 }}>
-          <AnimatePresence mode="wait">
-            {step === 'poll' ? (
-              <motion.div
-                key="poll"
-                initial={{ opacity: 0, y: 24 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -24 }}
-                transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
-              >
-                <Poll onDone={() => setStep('quiz')} />
-              </motion.div>
-            ) : (
-              <motion.div
-                key="quiz"
-                initial={{ opacity: 0, y: 24 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -24 }}
-                transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
-              >
-                <Quiz />
-              </motion.div>
-            )}
-          </AnimatePresence>
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
+          >
+            <Quiz />
+          </motion.div>
         </div>
       </div>
     </div>
