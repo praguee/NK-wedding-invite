@@ -94,12 +94,33 @@ export default function VenuePreview() {
         {/* Header */}
         <div style={{ textAlign: 'center', marginBottom: 'clamp(32px, 5vw, 52px)' }}>
           <SectionOrnament />
+
+          {/* Marathi — लग्नाला नक्की या */}
+          <motion.p
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, ease: EASE }}
+            lang="mr"
+            style={{
+              fontFamily: '"Noto Serif Devanagari", "Mangal", serif',
+              fontSize: 'clamp(14px, 1.8vw, 20px)',
+              fontWeight: 400,
+              color: 'rgba(196, 154, 40, 0.68)',
+              letterSpacing: '0.06em',
+              margin: '0 0 clamp(8px, 1.2vh, 14px)',
+              textShadow: '0 1px 20px rgba(3,1,10,0.9)',
+            }}
+          >
+            लग्नाला नक्की या
+          </motion.p>
+
           <motion.h2
             id="invite-heading"
             initial={{ opacity: 0, y: 22 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.72, ease: EASE }}
+            transition={{ duration: 0.72, delay: 0.10, ease: EASE }}
             style={{
               fontFamily: 'var(--font-playfair), "Playfair Display", Georgia, serif',
               fontSize: 'clamp(2.6rem, 5.5vw, 5.5rem)',
