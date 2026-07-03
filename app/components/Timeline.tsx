@@ -15,7 +15,7 @@ const EVENTS = [
   {
     time: '5:30 PM',
     title: 'Wedding Ceremony',
-    desc: 'The sacred Hindu Maharashtrian ceremony — on a floating mandap, in the middle of a pool',
+    desc: 'The sacred ceremony — on a floating mandap, in the middle of a pool',
     accent: '#C49A28',
     dot: '#C49A28',
   },
