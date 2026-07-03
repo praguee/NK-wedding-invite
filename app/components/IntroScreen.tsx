@@ -379,17 +379,33 @@ export default function IntroScreen({ onUnlock }: IntroScreenProps) {
 
       {/* Success card */}
       <div className={`${styles.successCard} ${showSuccess ? styles.successCardVisible : ''}`}>
+        {/* Airport photo — full-bleed top half */}
         <div style={{
-          position: 'relative', width: 110, height: 90, margin: '0 auto 16px',
-          borderRadius: 16, overflow: 'hidden',
-          boxShadow: '0 0 40px rgba(196,154,40,0.22), 0 8px 24px rgba(0,0,0,0.4)',
-          border: '1px solid rgba(196,154,40,0.22)',
+          position: 'relative', width: '100%', height: 180,
+          borderRadius: '16px 16px 0 0', overflow: 'hidden',
+          marginBottom: 0,
         }}>
-          <Image src="/images/couple-avatar.png" alt="Nidhi and Parag" fill
-            style={{ objectFit: 'cover', objectPosition: 'center 15%' }} />
+          <Image
+            src="/images/gallery-airport.jpg"
+            alt="Nidhi and Parag at Mumbai Airport"
+            fill
+            style={{ objectFit: 'cover', objectPosition: 'center 12%' }}
+          />
+          {/* subtle vignette bottom edge to blend into card body */}
+          <div style={{
+            position: 'absolute', bottom: 0, left: 0, right: 0, height: 60,
+            background: 'linear-gradient(to bottom, transparent, rgba(6,8,18,0.90))',
+          }} />
+          {/* Gold top rule */}
+          <div style={{
+            position: 'absolute', top: 0, left: 0, right: 0, height: 1.5,
+            background: 'linear-gradient(90deg, transparent, rgba(196,154,40,0.7), transparent)',
+          }} />
         </div>
-        <div className={styles.successTitle}>You found us.</div>
-        <div className={styles.successSub}>Nidhi &amp; Parag &nbsp;·&nbsp; December 4, 2026</div>
+        <div style={{ padding: '18px 28px 20px' }}>
+          <div className={styles.successTitle}>You found us.</div>
+          <div className={styles.successSub}>Nidhi &amp; Parag &nbsp;·&nbsp; December 4, 2026</div>
+        </div>
       </div>
 
       {/* "make it fly" hint pill */}

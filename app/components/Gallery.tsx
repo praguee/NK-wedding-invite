@@ -50,20 +50,10 @@ const PHOTOS = [
     objectPosition: 'center 20%',
   },
   {
-    id: 6,
-    src: '/images/gallery-airport.jpg',
-    alt: 'At the airport — long distance begins',
-    index: '05',
-    title: 'See You Soon',
-    caption: "The last flight before long distance. They didn't cry. Much.",
-    meta: 'Mumbai Airport · Sept 2025',
-    objectPosition: 'center 30%',
-  },
-  {
     id: 7,
     src: '/images/gallery-mirror.jpg',
     alt: 'Mirror selfie in a hotel corridor',
-    index: '06',
+    index: '05',
     title: 'Mirror, Mirror',
     caption: 'Hotel corridor. The architecture posed too.',
     meta: 'Mumbai',
@@ -73,7 +63,7 @@ const PHOTOS = [
     id: 8,
     src: '/images/gallery-park.jpg',
     alt: 'Under the lights at a park at night',
-    index: '07',
+    index: '06',
     title: 'Under the Lights',
     caption: 'Pretending to look at the tree.',
     meta: 'Mumbai',
@@ -83,7 +73,7 @@ const PHOTOS = [
     id: 9,
     src: '/images/gallery-christmas.jpg',
     alt: 'First Christmas together',
-    index: '08',
+    index: '07',
     title: 'First Christmas',
     caption: "She wore the crown. He didn't argue.",
     meta: 'Christmas · Mumbai',
@@ -93,15 +83,14 @@ const PHOTOS = [
 
 // colSpan, rowSpan, revealDelay
 // Grid: 12 columns, auto-rows 240px
-// Row 1-2: wish(5,2) | diwali(4,1) | lights(3,1)
-// Row 2:   (wish)    | diwali2(4,1) | airport(3,1)
-// Row 3:   mirror(3,1) | park(4,1) | christmas(5,1)
+// Row 1-2: wish(5,2)   | diwali(4,1)    | lights(3,1)
+// Row 2:   (wish cont) | diwali2(7,1)
+// Row 3:   mirror(3,1) | park(4,1)      | christmas(5,1)
 const GRID_CONFIG = [
   { colSpan: 5, rowSpan: 2, delay: 0.00, rotate: -1.4 },
   { colSpan: 4, rowSpan: 1, delay: 0.10, rotate:  0.9 },
   { colSpan: 3, rowSpan: 1, delay: 0.20, rotate: -0.6 },
-  { colSpan: 4, rowSpan: 1, delay: 0.14, rotate:  1.2 },
-  { colSpan: 3, rowSpan: 1, delay: 0.06, rotate: -1.0 },
+  { colSpan: 7, rowSpan: 1, delay: 0.14, rotate:  1.2 },
   { colSpan: 3, rowSpan: 1, delay: 0.00, rotate:  0.7 },
   { colSpan: 4, rowSpan: 1, delay: 0.10, rotate: -0.8 },
   { colSpan: 5, rowSpan: 1, delay: 0.20, rotate:  1.1 },
