@@ -2,12 +2,11 @@
 
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
-import SectionOrnament from './SectionOrnament'
-import LotusDecoration from './LotusDecoration'
 import Image from 'next/image'
-import { SlideIn, StaggerContainer, StaggerItem, TextReveal } from './ScrollReveal'
+import { useMediaQuery } from '@/app/hooks/useMediaQuery'
 
 const FIRST_MET = new Date('2022-12-23T00:00:00+05:30')
+const EASE = [0.16, 1, 0.3, 1] as const
 
 function getTimeTogether() {
   const diff      = Date.now() - FIRST_MET.getTime()
@@ -20,99 +19,189 @@ function getTimeTogether() {
 }
 
 export default function JabWeMet() {
-  const [t, setT] = useState({ years: 0, months: 0, days: 0 })
+  const [t, setT]   = useState({ years: 0, months: 0, days: 0 })
+  const isMobile    = useMediaQuery('(max-width: 767px)')
 
   useEffect(() => {
     setT(getTimeTogether())
-    const interval = setInterval(() => setT(getTimeTogether()), 60_000)
-    return () => clearInterval(interval)
+    const id = setInterval(() => setT(getTimeTogether()), 60_000)
+    return () => clearInterval(id)
   }, [])
 
   return (
-    <section id="jab-we-met" className="py-24 bg-slate-50 relative overflow-hidden" aria-labelledby="jwm-heading">
-      <LotusDecoration position="top-left" size={120} opacity={0.07} />
-      <div className="max-w-4xl mx-auto px-6">
-        <SectionOrnament />
-        <TextReveal delay={0.05}>
-          <h2 id="jwm-heading" className="text-4xl md:text-5xl lg:text-6xl font-extralight text-center mb-3 tracking-tight">
-            Jab We Met
-          </h2>
-        </TextReveal>
-        <p className="text-center mb-14 text-sm" style={{ color: '#9C7A5A' }}>
-          How it all started{' '}
-          <span style={{ opacity: 0.5 }}>— not directed by Imtiaz Ali</span>
-        </p>
+    <section id="jab-we-met" aria-labelledby="jwm-heading" style={{ position: 'relative' }}>
 
-        <div className="grid md:grid-cols-2 gap-12 items-start">
+      {/* ── Full-section cinematic image ── */}
+      <div style={{
+        position: 'relative',
+        width: '100%',
+        height: 'clamp(72vh, 88vh, 96vh)',
+        overflow: 'hidden',
+      }}>
+        <Image
+          src="/images/gallery-diwali.jpg"
+          alt="Nidhi and Parag — Diwali, Mumbai"
+          fill
+          priority
+          sizes="100vw"
+          style={{ objectFit: 'cover', objectPosition: 'center 28%' }}
+        />
 
-          {/* Story — slides in from left */}
-          <SlideIn from="left">
-            <StaggerContainer className="space-y-5">
-              {[
-                <><span>It was at </span><strong style={{ color: '#C49A28' }}>Runwal Greens, Mulund</strong><span>. Nidhi showed up straight from office — laptop bag on shoulder, mask on face, because pandemic habits don&apos;t die, they just relocate to social situations.</span></>,
-                <>Parag thought: alright, seems nice.</>,
-                <>Then she took off the mask.</>,
-                <>That was the moment. He didn&apos;t say it out loud. He just quietly knew.</>,
-                <>They had a few drinks, danced — the kind of dancing that happens when you&apos;re both pretending you&apos;re not trying to impress each other. Parag dropped her home like a complete gentleman.</>,
-                <>He drove back. Went to bed. Woke up the next morning. And only <em>two days later</em>, mid-reach for his wallet — gone. Left at her place.</>,
-                <>Here&apos;s the thing: he didn&apos;t call to ask for it back. Not because he forgot. Because it gave him an excuse to meet her again.</>,
-              ].map((para, i) => (
-                <StaggerItem key={i}>
-                  <p className="leading-relaxed" style={{ color: '#5C3A2E', fontSize: 16 }}>{para}</p>
-                </StaggerItem>
-              ))}
-              <StaggerItem>
-                <p className="text-sm italic mt-2" style={{ color: '#9C7A5A' }}>
-                  She says she didn&apos;t steal it. We&apos;re letting you decide. <span aria-hidden="true">🕵️</span>
-                </p>
-              </StaggerItem>
-            </StaggerContainer>
+        {/* Deep cinematic vignette — heavier at bottom for legibility */}
+        <div aria-hidden="true" style={{
+          position: 'absolute', inset: 0,
+          background: 'linear-gradient(to bottom, rgba(3,1,10,0.10) 0%, rgba(3,1,10,0.02) 28%, rgba(3,1,10,0.50) 62%, rgba(3,1,10,0.94) 100%)',
+        }} />
 
-            {/* Live counter */}
-            <div className="mt-8">
-              <p className="text-xs text-center mb-3 tracking-widest uppercase" style={{ color: '#9C7A5A' }}>
-                Known each other for
-              </p>
-              <div className="flex gap-3" role="group" aria-label="Time since first meeting">
-                {[
-                  { value: t.years,  label: 'years'  },
-                  { value: t.months, label: 'months' },
-                  { value: t.days,   label: 'days'   },
-                ].map(({ value, label }) => (
-                  <motion.div
-                    key={label}
-                    className="glass-gold rounded-xl p-4 text-center flex-1"
-                    whileHover={{ scale: 1.04, y: -2 }}
-                    transition={{ type: 'spring', stiffness: 400, damping: 18 }}
-                  >
-                    <p className="text-2xl font-extralight tracking-tight" style={{ color: '#C49A28' }}>{value}</p>
-                    <p className="text-xs mt-1" style={{ color: '#9C7A5A' }}>{label}</p>
-                  </motion.div>
-                ))}
-              </div>
-              <p className="text-xs text-center mt-3" style={{ color: '#C4B09A' }}>
-                Counting every day since the universe decided to be helpful
-              </p>
-            </div>
-          </SlideIn>
+        {/* ── Bottom bar: title (left) + counter (right) ── */}
+        <div style={{
+          position: 'absolute', bottom: 0, left: 0, right: 0,
+          padding: 'clamp(20px, 4vw, 52px)',
+          zIndex: 2,
+          display: 'flex',
+          alignItems: 'flex-end',
+          justifyContent: 'space-between',
+          gap: 'clamp(16px, 3vw, 32px)',
+          flexWrap: isMobile ? 'wrap' : 'nowrap',
+        }}>
 
-          {/* Photo placeholder — slides in from right */}
-          <SlideIn from="right" delay={0.12}>
-            <motion.div
-              className="aspect-[4/5] rounded-2xl relative overflow-hidden"
-              style={{ boxShadow: '0 8px 40px rgba(196,154,40,0.12)' }}
-              whileHover={{ scale: 1.01 }}
-              transition={{ duration: 0.4 }}
+          {/* Left: cinematic title */}
+          <div style={{ flex: '1 1 auto', minWidth: 0 }}>
+            <motion.h2
+              id="jwm-heading"
+              initial={{ opacity: 0, y: 28 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '0px 0px -60px 0px' }}
+              transition={{ duration: 0.78, ease: EASE }}
+              style={{
+                fontFamily: 'var(--font-playfair), "Playfair Display", Georgia, serif',
+                fontSize: 'clamp(2.8rem, 7.5vw, 8.5rem)',
+                fontWeight: 900,
+                fontStyle: 'italic',
+                lineHeight: 0.88,
+                color: 'rgba(255, 255, 255, 0.96)',
+                letterSpacing: '-0.025em',
+                margin: 0,
+                marginBottom: 'clamp(8px, 1.4vh, 14px)',
+              }}
             >
-              <Image
-                src="/images/jabwemet.jpg"
-                alt="Nidhi and Parag — Jab We Met"
-                fill
-                sizes="(max-width: 768px) 100vw, 40vw"
-                style={{ objectFit: 'cover', objectPosition: 'center 25%' }}
-              />
+              Jab We Met
+            </motion.h2>
+
+            <motion.div
+              initial={{ opacity: 0, y: 14 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.55, delay: 0.32, ease: EASE }}
+              style={{ display: 'flex', alignItems: 'center', gap: 'clamp(8px, 1.6vw, 16px)', flexWrap: 'wrap' }}
+            >
+              <span style={{
+                fontFamily: 'var(--font-dm-sans), Inter, system-ui, sans-serif',
+                fontSize: 'clamp(9px, 1.1vw, 11px)',
+                letterSpacing: '0.22em',
+                textTransform: 'uppercase',
+                color: 'rgba(246, 237, 218, 0.40)',
+              }}>
+                not directed by Imtiaz Ali
+              </span>
+              <span aria-hidden="true" style={{ width: 1, height: 10, flexShrink: 0, background: 'rgba(196,154,40,0.35)', display: 'inline-block' }} />
+              <span style={{
+                fontFamily: 'var(--font-dm-sans), Inter, system-ui, sans-serif',
+                fontSize: 'clamp(9px, 1.1vw, 11px)',
+                letterSpacing: '0.22em',
+                textTransform: 'uppercase',
+                color: 'rgba(196, 154, 40, 0.60)',
+                fontStyle: 'italic',
+              }}>
+                23 December 2022 · Runwal Greens, Mumbai
+              </span>
             </motion.div>
-          </SlideIn>
+          </div>
+
+          {/* Right: known each other counter */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.65, delay: 0.48, ease: EASE }}
+            style={{ flexShrink: 0, textAlign: 'center' }}
+            aria-label="Time known each other"
+          >
+            <p style={{
+              fontFamily: 'var(--font-dm-sans), Inter, system-ui, sans-serif',
+              fontSize: 'clamp(8px, 0.9vw, 10px)',
+              letterSpacing: '0.30em',
+              textTransform: 'uppercase',
+              color: 'rgba(196, 154, 40, 0.72)',
+              marginBottom: 'clamp(8px, 1.2vh, 12px)',
+            }}>
+              Known each other for
+            </p>
+
+            {/* Three glass counter pills */}
+            <div style={{ display: 'flex', gap: 'clamp(6px, 1.2vw, 12px)' }} role="group">
+              {[
+                { value: t.years,  label: 'years'  },
+                { value: t.months, label: 'months' },
+                { value: t.days,   label: 'days'   },
+              ].map(({ value, label }) => (
+                <motion.div
+                  key={label}
+                  whileHover={{ y: -3, scale: 1.04 }}
+                  transition={{ type: 'spring', stiffness: 380, damping: 18 }}
+                  style={{
+                    background: 'rgba(8, 4, 18, 0.58)',
+                    backdropFilter: 'blur(28px) saturate(180%)',
+                    WebkitBackdropFilter: 'blur(28px) saturate(180%)',
+                    border: '1px solid rgba(255, 255, 255, 0.14)',
+                    borderBottomColor: 'rgba(0, 0, 0, 0.22)',
+                    boxShadow: [
+                      'inset 0 1px 0 rgba(255, 255, 255, 0.18)',
+                      'inset 0 0 0 0.5px rgba(255, 255, 255, 0.07)',
+                      '0 8px 32px rgba(0, 0, 0, 0.40)',
+                      '0 0 0 0.5px rgba(196, 154, 40, 0.10)',
+                    ].join(', '),
+                    borderRadius: 'clamp(8px, 1vw, 14px)',
+                    padding: 'clamp(10px, 1.4vh, 16px) clamp(12px, 1.8vw, 22px)',
+                    textAlign: 'center',
+                    minWidth: 'clamp(54px, 7vw, 84px)',
+                  }}
+                >
+                  <p style={{
+                    fontFamily: '"Courier New", Courier, monospace',
+                    fontSize: 'clamp(22px, 3.2vw, 42px)',
+                    fontWeight: 300,
+                    color: 'rgba(255, 255, 255, 0.92)',
+                    lineHeight: 1,
+                    letterSpacing: '-0.02em',
+                  }}>
+                    {String(value).padStart(2, '0')}
+                  </p>
+                  <p style={{
+                    fontFamily: 'var(--font-dm-sans), Inter, system-ui, sans-serif',
+                    fontSize: 'clamp(7px, 0.85vw, 9px)',
+                    letterSpacing: '0.20em',
+                    textTransform: 'uppercase',
+                    color: 'rgba(196, 154, 40, 0.62)',
+                    marginTop: 'clamp(4px, 0.6vh, 7px)',
+                  }}>
+                    {label}
+                  </p>
+                </motion.div>
+              ))}
+            </div>
+
+            <p style={{
+              fontFamily: 'var(--font-dm-sans), Inter, system-ui, sans-serif',
+              fontSize: 'clamp(7px, 0.82vw, 9px)',
+              letterSpacing: '0.18em',
+              textTransform: 'uppercase',
+              color: 'rgba(246, 237, 218, 0.28)',
+              marginTop: 'clamp(6px, 0.8vh, 10px)',
+            }}>
+              Counting every day since the universe decided to be helpful
+            </p>
+          </motion.div>
 
         </div>
       </div>
