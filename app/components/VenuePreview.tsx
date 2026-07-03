@@ -52,24 +52,8 @@ export default function VenuePreview() {
               margin: 0,
             }}
           >
-            The Setting
+            You&apos;re Invited
           </motion.h2>
-          <motion.p
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.28 }}
-            style={{
-              fontFamily: 'var(--font-dm-sans), Inter, system-ui, sans-serif',
-              fontSize: 'clamp(10px, 1.1vw, 12px)',
-              letterSpacing: '0.18em',
-              textTransform: 'uppercase',
-              color: 'rgba(255, 255, 255, 0.22)',
-              marginTop: 'clamp(10px, 1.4vh, 16px)',
-            }}
-          >
-            where it all happens
-          </motion.p>
         </div>
 
         {/* Diptych */}
@@ -100,35 +84,10 @@ export default function VenuePreview() {
               sizes="(max-width: 767px) 100vw, 50vw"
               style={{ objectFit: 'cover', objectPosition: 'center 38%' }}
             />
-            {/* Film vignette */}
             <div aria-hidden="true" style={{
               position: 'absolute', inset: 0,
-              background: 'linear-gradient(to bottom, rgba(7,3,10,0.06) 0%, rgba(7,3,10,0.04) 50%, rgba(7,3,10,0.60) 100%)',
+              background: 'linear-gradient(to bottom, rgba(7,3,10,0.06) 0%, rgba(7,3,10,0.04) 50%, rgba(7,3,10,0.45) 100%)',
             }} />
-            {/* Corner grain texture illusion — thin bottom bar */}
-            <div aria-hidden="true" style={{
-              position: 'absolute', bottom: 0, left: 0, right: 0,
-              padding: 'clamp(12px, 2vw, 20px)',
-              display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end',
-            }}>
-              <span style={{
-                fontFamily: '"Courier New", Courier, monospace',
-                fontSize: 'clamp(8px, 0.85vw, 10px)',
-                letterSpacing: '0.12em',
-                color: 'rgba(255,255,255,0.30)',
-              }}>
-                001
-              </span>
-              <span style={{
-                fontFamily: 'var(--font-dm-sans), Inter, system-ui, sans-serif',
-                fontSize: 'clamp(8px, 0.85vw, 10px)',
-                letterSpacing: '0.20em',
-                textTransform: 'uppercase',
-                color: 'rgba(196,154,40,0.45)',
-              }}>
-                The Mandap
-              </span>
-            </div>
           </motion.div>
 
           {/* Photo 2 — offset down on desktop for diptych stagger */}
@@ -154,53 +113,11 @@ export default function VenuePreview() {
             />
             <div aria-hidden="true" style={{
               position: 'absolute', inset: 0,
-              background: 'linear-gradient(to bottom, rgba(7,3,10,0.06) 0%, rgba(7,3,10,0.04) 50%, rgba(7,3,10,0.60) 100%)',
+              background: 'linear-gradient(to bottom, rgba(7,3,10,0.06) 0%, rgba(7,3,10,0.04) 50%, rgba(7,3,10,0.45) 100%)',
             }} />
-            <div aria-hidden="true" style={{
-              position: 'absolute', bottom: 0, left: 0, right: 0,
-              padding: 'clamp(12px, 2vw, 20px)',
-              display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end',
-            }}>
-              <span style={{
-                fontFamily: '"Courier New", Courier, monospace',
-                fontSize: 'clamp(8px, 0.85vw, 10px)',
-                letterSpacing: '0.12em',
-                color: 'rgba(255,255,255,0.30)',
-              }}>
-                002
-              </span>
-              <span style={{
-                fontFamily: 'var(--font-dm-sans), Inter, system-ui, sans-serif',
-                fontSize: 'clamp(8px, 0.85vw, 10px)',
-                letterSpacing: '0.20em',
-                textTransform: 'uppercase',
-                color: 'rgba(196,154,40,0.45)',
-              }}>
-                The Arrival
-              </span>
-            </div>
           </motion.div>
 
         </div>
-
-        {/* Bottom film caption */}
-        <motion.p
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 1.0, delay: 0.55 }}
-          style={{
-            textAlign: 'center',
-            marginTop: 'clamp(28px, 4vw, 44px)',
-            fontFamily: 'var(--font-dm-sans), Inter, system-ui, sans-serif',
-            fontSize: 'clamp(9px, 0.95vw, 11px)',
-            letterSpacing: '0.24em',
-            textTransform: 'uppercase',
-            color: 'rgba(255, 255, 255, 0.16)',
-          }}
-        >
-          Narlepada · Yeoor Hills · Friday, December 4 · 2026
-        </motion.p>
 
       </div>
     </section>
