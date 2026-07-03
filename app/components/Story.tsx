@@ -2,9 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
-import LotusDecoration from './LotusDecoration'
 import Image from 'next/image'
-import { SlideIn, StaggerContainer, StaggerItem } from './ScrollReveal'
 import { useMediaQuery } from '@/app/hooks/useMediaQuery'
 
 const RELATIONSHIP_START = new Date('2023-07-08T00:00:00+05:30')
@@ -21,7 +19,7 @@ function getRelationshipTime() {
 
 export default function Story() {
   const [t, setT] = useState({ years: 0, months: 0, days: 0 })
-  const isMobile = useMediaQuery('(max-width: 767px)')
+  const isMobile  = useMediaQuery('(max-width: 767px)')
 
   useEffect(() => {
     setT(getRelationshipTime())
@@ -30,11 +28,15 @@ export default function Story() {
   }, [])
 
   return (
-    <section id="story" className="relative overflow-hidden bg-white" aria-labelledby="story-heading">
-      <LotusDecoration position="top-right" size={120} opacity={0.07} />
+    <section id="story" aria-labelledby="story-heading" style={{ position: 'relative' }}>
 
-      {/* ── Cinematic image header — full-width landscape ── */}
-      <div style={{ position: 'relative', width: '100%', height: 'clamp(55vh, 72vh, 85vh)', overflow: 'hidden' }}>
+      {/* ── Full-section cinematic image ── */}
+      <div style={{
+        position: 'relative',
+        width: '100%',
+        height: 'clamp(72vh, 88vh, 96vh)',
+        overflow: 'hidden',
+      }}>
         <Image
           src="/images/story-wayofwater.jpg"
           alt="Abhishek Farms floating mandap — where it all begins"
@@ -44,23 +46,26 @@ export default function Story() {
           style={{ objectFit: 'cover', objectPosition: isMobile ? '28% 35%' : 'center 35%' }}
         />
 
-        {/* Cinematic vignette — lighter at top, deep at bottom for text */}
-        <div
-          aria-hidden="true"
-          style={{
-            position: 'absolute', inset: 0,
-            background: 'linear-gradient(to bottom, rgba(3,1,10,0.10) 0%, rgba(3,1,10,0.04) 30%, rgba(3,1,10,0.52) 68%, rgba(3,1,10,0.88) 100%)',
-          }}
-        />
+        {/* Deep cinematic vignette — heavier at bottom for legibility */}
+        <div aria-hidden="true" style={{
+          position: 'absolute', inset: 0,
+          background: 'linear-gradient(to bottom, rgba(3,1,10,0.08) 0%, rgba(3,1,10,0.02) 28%, rgba(3,1,10,0.48) 62%, rgba(3,1,10,0.92) 100%)',
+        }} />
 
-        {/* Title + caption — bottom of image */}
+        {/* ── Bottom bar: title (left) + timer (right) ── */}
         <div style={{
           position: 'absolute', bottom: 0, left: 0, right: 0,
-          padding: 'clamp(24px, 4vw, 56px)',
+          padding: 'clamp(20px, 4vw, 52px)',
           zIndex: 2,
+          display: 'flex',
+          alignItems: 'flex-end',
+          justifyContent: 'space-between',
+          gap: 'clamp(16px, 3vw, 32px)',
+          flexWrap: isMobile ? 'wrap' : 'nowrap',
         }}>
-          {/* Heading — fades up into view */}
-          <div style={{ marginBottom: 'clamp(10px, 1.6vh, 18px)' }}>
+
+          {/* Left: cinematic title */}
+          <div style={{ flex: '1 1 auto', minWidth: 0 }}>
             <motion.h2
               id="story-heading"
               initial={{ opacity: 0, y: 28 }}
@@ -69,111 +74,133 @@ export default function Story() {
               transition={{ duration: 0.78, ease: EASE }}
               style={{
                 fontFamily: 'var(--font-playfair), "Playfair Display", Georgia, serif',
-                fontSize: 'clamp(3.2rem, 8.5vw, 9rem)',
+                fontSize: 'clamp(2.8rem, 7.5vw, 8.5rem)',
                 fontWeight: 900,
                 fontStyle: 'italic',
                 lineHeight: 0.88,
                 color: 'rgba(255, 255, 255, 0.96)',
                 letterSpacing: '-0.025em',
                 margin: 0,
+                marginBottom: 'clamp(8px, 1.4vh, 14px)',
               }}
             >
               The Way of Water
             </motion.h2>
+
+            <motion.div
+              initial={{ opacity: 0, y: 14 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.55, delay: 0.32, ease: EASE }}
+              style={{ display: 'flex', alignItems: 'center', gap: 'clamp(8px, 1.6vw, 16px)', flexWrap: 'wrap' }}
+            >
+              <span style={{
+                fontFamily: 'var(--font-dm-sans), Inter, system-ui, sans-serif',
+                fontSize: 'clamp(9px, 1.1vw, 11px)',
+                letterSpacing: '0.22em',
+                textTransform: 'uppercase',
+                color: 'rgba(246, 237, 218, 0.40)',
+              }}>
+                not directed by James Cameron
+              </span>
+              <span aria-hidden="true" style={{ width: 1, height: 10, flexShrink: 0, background: 'rgba(196,154,40,0.35)', display: 'inline-block' }} />
+              <span style={{
+                fontFamily: 'var(--font-dm-sans), Inter, system-ui, sans-serif',
+                fontSize: 'clamp(9px, 1.1vw, 11px)',
+                letterSpacing: '0.22em',
+                textTransform: 'uppercase',
+                color: 'rgba(196, 154, 40, 0.60)',
+                fontStyle: 'italic',
+              }}>
+                Water brought us together. Water will witness our forever.
+              </span>
+            </motion.div>
           </div>
 
-          {/* Caption strip */}
+          {/* Right: relationship timer */}
           <motion.div
-            initial={{ opacity: 0, y: 14 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.55, delay: 0.32, ease: EASE }}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 'clamp(10px, 1.8vw, 18px)',
-              flexWrap: 'wrap',
-            }}
+            transition={{ duration: 0.65, delay: 0.48, ease: EASE }}
+            style={{ flexShrink: 0, textAlign: 'center' }}
+            aria-label="Relationship duration"
           >
-            <span style={{
+            <p style={{
               fontFamily: 'var(--font-dm-sans), Inter, system-ui, sans-serif',
-              fontSize: 'clamp(9px, 1.1vw, 12px)',
-              letterSpacing: '0.22em',
+              fontSize: 'clamp(8px, 0.9vw, 10px)',
+              letterSpacing: '0.30em',
               textTransform: 'uppercase',
-              color: 'rgba(246, 237, 218, 0.45)',
+              color: 'rgba(196, 154, 40, 0.72)',
+              marginBottom: 'clamp(8px, 1.2vh, 12px)',
             }}>
-              not directed by James Cameron
-            </span>
-            <span aria-hidden="true" style={{ width: 1, height: 10, flexShrink: 0, background: 'rgba(196,154,40,0.35)', display: 'inline-block' }} />
-            <span style={{
-              fontFamily: 'var(--font-dm-sans), Inter, system-ui, sans-serif',
-              fontSize: 'clamp(9px, 1.1vw, 12px)',
-              letterSpacing: '0.22em',
-              textTransform: 'uppercase',
-              color: 'rgba(196, 154, 40, 0.65)',
-              fontStyle: 'italic',
-            }}>
-              Water brought us together. Water will witness our forever.
-            </span>
-          </motion.div>
-        </div>
-      </div>
+              In a relationship for
+            </p>
 
-      {/* ── Story content — below the image ── */}
-      <div className="max-w-4xl mx-auto px-6 py-16">
-        <div className="grid md:grid-cols-2 gap-12 items-start">
-
-          {/* Story text */}
-          <SlideIn from="left" className="space-y-5">
-            <StaggerContainer className="space-y-5">
+            {/* Three glass counter pills */}
+            <div style={{ display: 'flex', gap: 'clamp(6px, 1.2vw, 12px)' }} role="group">
               {[
-                <>Nidhi has always had a deep, unshakeable love for water. Whether it&apos;s a three-hour bath, a glass of water every five minutes, or drinking water until she physically cannot drink more water — Nidhi and hydration have an exclusive, committed relationship.</>,
-                <>Parag noticed this early on, and when the moment came to ask if she&apos;d be his girlfriend, he didn&apos;t go for a candlelit dinner or a rooftop view.</>,
-                <>He asked her in the shower. Yes, really. <strong style={{ color: '#C49A28' }}>8th July 2023.</strong> She said yes — and honestly, we think she had no choice. It was too original to refuse.</>,
-                <>So when it came to the wedding, there was really only one way to do it properly. They&apos;re exchanging vows on a <strong style={{ color: '#C49A28' }}>floating mandap, right in the middle of a pool</strong> — surrounded by flowers, family, and the element that started it all.</>,
-              ].map((para, i) => (
-                <StaggerItem key={i}>
-                  <p className="leading-relaxed" style={{ color: '#5C3A2E', fontSize: 16 }}>{para}</p>
-                </StaggerItem>
+                { value: t.years,  label: 'years'  },
+                { value: t.months, label: 'months' },
+                { value: t.days,   label: 'days'   },
+              ].map(({ value, label }) => (
+                <motion.div
+                  key={label}
+                  whileHover={{ y: -3, scale: 1.04 }}
+                  transition={{ type: 'spring', stiffness: 380, damping: 18 }}
+                  style={{
+                    background: 'rgba(8, 4, 18, 0.58)',
+                    backdropFilter: 'blur(28px) saturate(180%)',
+                    WebkitBackdropFilter: 'blur(28px) saturate(180%)',
+                    border: '1px solid rgba(255, 255, 255, 0.14)',
+                    borderBottomColor: 'rgba(0, 0, 0, 0.22)',
+                    boxShadow: [
+                      'inset 0 1px 0 rgba(255, 255, 255, 0.18)',
+                      'inset 0 0 0 0.5px rgba(255, 255, 255, 0.07)',
+                      '0 8px 32px rgba(0, 0, 0, 0.40)',
+                      '0 0 0 0.5px rgba(196, 154, 40, 0.10)',
+                    ].join(', '),
+                    borderRadius: 'clamp(8px, 1vw, 14px)',
+                    padding: 'clamp(10px, 1.4vh, 16px) clamp(12px, 1.8vw, 22px)',
+                    textAlign: 'center',
+                    minWidth: 'clamp(54px, 7vw, 84px)',
+                  }}
+                >
+                  <p style={{
+                    fontFamily: '"Courier New", Courier, monospace',
+                    fontSize: 'clamp(22px, 3.2vw, 42px)',
+                    fontWeight: 300,
+                    color: 'rgba(255, 255, 255, 0.92)',
+                    lineHeight: 1,
+                    letterSpacing: '-0.02em',
+                  }}>
+                    {String(value).padStart(2, '0')}
+                  </p>
+                  <p style={{
+                    fontFamily: 'var(--font-dm-sans), Inter, system-ui, sans-serif',
+                    fontSize: 'clamp(7px, 0.85vw, 9px)',
+                    letterSpacing: '0.20em',
+                    textTransform: 'uppercase',
+                    color: 'rgba(196, 154, 40, 0.62)',
+                    marginTop: 'clamp(4px, 0.6vh, 7px)',
+                  }}>
+                    {label}
+                  </p>
+                </motion.div>
               ))}
-            </StaggerContainer>
-          </SlideIn>
-
-          {/* Relationship counter + wedding detail */}
-          <SlideIn from="right" delay={0.12} className="space-y-6">
-            <div>
-              <p className="text-xs tracking-widest uppercase mb-3" style={{ color: '#9C7A5A' }}>
-                In a relationship for
-              </p>
-              <div className="flex gap-3" role="group" aria-label="Relationship duration">
-                {[
-                  { value: t.years,  label: 'years'  },
-                  { value: t.months, label: 'months' },
-                  { value: t.days,   label: 'days'   },
-                ].map(({ value, label }) => (
-                  <motion.div
-                    key={label}
-                    className="glass-gold rounded-xl p-4 text-center flex-1"
-                    whileHover={{ scale: 1.04, y: -2 }}
-                    transition={{ type: 'spring', stiffness: 400, damping: 18 }}
-                  >
-                    <p className="text-2xl font-extralight" style={{ color: '#C49A28' }}>{value}</p>
-                    <p className="text-xs mt-1" style={{ color: '#9C7A5A' }}>{label}</p>
-                  </motion.div>
-                ))}
-              </div>
-              <p className="text-xs mt-2" style={{ color: '#C4B09A' }}>
-                Since 8 July 2023 — officially, officially official
-              </p>
             </div>
 
-            <div className="glass-gold rounded-2xl px-5 py-4 text-center">
-              <p className="text-xs tracking-widest uppercase mb-1" style={{ color: '#C49A28' }}>The Wedding</p>
-              <p className="text-sm font-light" style={{ color: '#5C3A2E' }}>
-                A floating mandap · in the middle of a pool
-              </p>
-            </div>
-          </SlideIn>
+            <p style={{
+              fontFamily: 'var(--font-dm-sans), Inter, system-ui, sans-serif',
+              fontSize: 'clamp(7px, 0.82vw, 9px)',
+              letterSpacing: '0.18em',
+              textTransform: 'uppercase',
+              color: 'rgba(246, 237, 218, 0.28)',
+              marginTop: 'clamp(6px, 0.8vh, 10px)',
+            }}>
+              Since 8 July 2023
+            </p>
+          </motion.div>
 
         </div>
       </div>
