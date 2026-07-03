@@ -2,7 +2,6 @@
 
 import { motion } from 'framer-motion'
 import Image from 'next/image'
-import { useMediaQuery } from '@/app/hooks/useMediaQuery'
 import SectionOrnament from './SectionOrnament'
 import { StaggerContainer, StaggerItem } from './ScrollReveal'
 
@@ -40,69 +39,102 @@ const EVENTS = [
 ]
 
 export default function VenuePreview() {
-  const isMobile = useMediaQuery('(max-width: 767px)')
-
   return (
     <section
       id="timeline"
       aria-labelledby="invite-heading"
-      style={{ background: '#07030A', padding: 'clamp(56px, 8vw, 96px) 0 clamp(64px, 9vw, 104px)' }}
+      style={{ position: 'relative', overflow: 'hidden', minHeight: '100vh' }}
     >
 
-      {/* ── Header ── */}
-      <div style={{
-        maxWidth: 520,
-        marginLeft: 'auto', marginRight: 'auto',
-        marginBottom: 'clamp(32px, 5vw, 52px)',
-        padding: '0 clamp(20px, 5vw, 40px)',
-        textAlign: 'center',
-      }}>
-        <SectionOrnament />
-        <motion.h2
-          id="invite-heading"
-          initial={{ opacity: 0, y: 22 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.72, ease: EASE }}
-          style={{
-            fontFamily: 'var(--font-playfair), "Playfair Display", Georgia, serif',
-            fontSize: 'clamp(2.6rem, 5.5vw, 5.5rem)',
-            fontWeight: 300,
-            fontStyle: 'italic',
-            color: 'rgba(255, 255, 255, 0.94)',
-            lineHeight: 1.05,
-            letterSpacing: '-0.025em',
-            margin: 0,
-            marginBottom: 'clamp(6px, 1vh, 10px)',
-          }}
-        >
-          You&apos;re Invited
-        </motion.h2>
-        <motion.p
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.18 }}
-          style={{
-            fontFamily: 'var(--font-dm-sans), Inter, system-ui, sans-serif',
-            fontSize: 'clamp(10px, 1.2vw, 13px)',
-            letterSpacing: '0.20em',
-            textTransform: 'uppercase',
-            color: 'rgba(196, 154, 40, 0.65)',
-            margin: 0,
-          }}
-        >
-          Friday, December 4, 2026
-        </motion.p>
+      {/* ── Full-section background: two photos side by side ── */}
+      <div
+        aria-hidden="true"
+        style={{ position: 'absolute', inset: 0, display: 'flex' }}
+      >
+        <div style={{ position: 'relative', flex: 1, overflow: 'hidden' }}>
+          <Image
+            src="/images/invited1.jpg"
+            alt=""
+            fill
+            priority
+            sizes="50vw"
+            style={{ objectFit: 'cover', objectPosition: 'center 40%' }}
+          />
+        </div>
+        <div style={{ position: 'relative', flex: 1, overflow: 'hidden' }}>
+          <Image
+            src="/images/invited2.jpg"
+            alt=""
+            fill
+            sizes="50vw"
+            style={{ objectFit: 'cover', objectPosition: 'center 40%' }}
+          />
+        </div>
       </div>
 
-      {/* ── Timeline ── */}
+      {/* ── Cinematic vignette — heavier top + bottom for text legibility ── */}
+      <div aria-hidden="true" style={{
+        position: 'absolute', inset: 0,
+        background: 'linear-gradient(to bottom, rgba(3,1,10,0.82) 0%, rgba(3,1,10,0.55) 22%, rgba(3,1,10,0.50) 60%, rgba(3,1,10,0.90) 100%)',
+      }} />
+      {/* Center horizontal darkening so timeline text pops */}
+      <div aria-hidden="true" style={{
+        position: 'absolute', inset: 0,
+        background: 'radial-gradient(ellipse 80% 50% at 50% 50%, rgba(3,1,10,0.30) 0%, transparent 100%)',
+      }} />
+
+      {/* ── Content overlaid on photos ── */}
       <div style={{
-        maxWidth: 520,
+        position: 'relative', zIndex: 2,
+        maxWidth: 560,
         marginLeft: 'auto', marginRight: 'auto',
-        marginBottom: 'clamp(52px, 8vw, 88px)',
-        padding: '0 clamp(20px, 5vw, 40px)',
+        padding: 'clamp(60px, 9vw, 104px) clamp(20px, 5vw, 40px) clamp(72px, 10vw, 112px)',
       }}>
+
+        {/* Header */}
+        <div style={{ textAlign: 'center', marginBottom: 'clamp(32px, 5vw, 52px)' }}>
+          <SectionOrnament />
+          <motion.h2
+            id="invite-heading"
+            initial={{ opacity: 0, y: 22 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.72, ease: EASE }}
+            style={{
+              fontFamily: 'var(--font-playfair), "Playfair Display", Georgia, serif',
+              fontSize: 'clamp(2.6rem, 5.5vw, 5.5rem)',
+              fontWeight: 300,
+              fontStyle: 'italic',
+              color: 'rgba(255, 255, 255, 0.96)',
+              lineHeight: 1.05,
+              letterSpacing: '-0.025em',
+              margin: 0,
+              marginBottom: 'clamp(6px, 1vh, 10px)',
+              textShadow: '0 2px 40px rgba(3,1,10,0.85)',
+            }}
+          >
+            You&apos;re Invited
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.18 }}
+            style={{
+              fontFamily: 'var(--font-dm-sans), Inter, system-ui, sans-serif',
+              fontSize: 'clamp(10px, 1.2vw, 13px)',
+              letterSpacing: '0.20em',
+              textTransform: 'uppercase',
+              color: 'rgba(196, 154, 40, 0.85)',
+              margin: 0,
+              textShadow: '0 1px 20px rgba(3,1,10,0.9)',
+            }}
+          >
+            Friday, December 4, 2026
+          </motion.p>
+        </div>
+
+        {/* Timeline */}
         <div style={{ position: 'relative' }}>
           {/* Vertical connecting line */}
           <motion.div
@@ -114,7 +146,7 @@ export default function VenuePreview() {
               position: 'absolute',
               left: 19, top: 20, bottom: 20, width: 1,
               background: 'linear-gradient(to bottom, #C4B09A, #C49A28, #9C7A5A, #8B2252)',
-              opacity: 0.22,
+              opacity: 0.35,
               transformOrigin: 'top center',
             }}
           />
@@ -132,13 +164,13 @@ export default function VenuePreview() {
                       transition={{ type: 'spring', stiffness: 280, damping: 14, delay: 0.3 + i * 0.14 }}
                       style={{
                         width: 38, height: 38, borderRadius: '50%',
-                        background: `${event.dot}18`,
-                        border: `1.5px solid ${event.dot}55`,
+                        background: `${event.dot}22`,
+                        border: `1.5px solid ${event.dot}65`,
                         display: 'flex', alignItems: 'center', justifyContent: 'center',
-                        boxShadow: `0 0 14px ${event.dot}25`,
+                        boxShadow: `0 0 16px ${event.dot}35`,
                       }}
                     >
-                      <div style={{ width: 10, height: 10, borderRadius: '50%', background: event.dot, opacity: 0.85 }} />
+                      <div style={{ width: 10, height: 10, borderRadius: '50%', background: event.dot, opacity: 0.9 }} />
                     </motion.div>
                   </div>
 
@@ -149,8 +181,8 @@ export default function VenuePreview() {
                       fontSize: 11, fontWeight: 600,
                       letterSpacing: '0.08em', textTransform: 'uppercase',
                       color: event.accent,
-                      background: `${event.accent}18`,
-                      border: `1px solid ${event.accent}35`,
+                      background: `${event.accent}22`,
+                      border: `1px solid ${event.accent}45`,
                       borderRadius: 100,
                       padding: '3px 10px',
                       marginBottom: 6,
@@ -159,12 +191,18 @@ export default function VenuePreview() {
                     </span>
                     <h3 style={{
                       fontSize: 16, fontWeight: 600,
-                      color: 'rgba(255, 255, 255, 0.88)',
+                      color: 'rgba(255, 255, 255, 0.94)',
                       marginBottom: 4, lineHeight: 1.3,
+                      textShadow: '0 1px 16px rgba(3,1,10,0.95)',
                     }}>
                       {event.title}
                     </h3>
-                    <p style={{ fontSize: 13, color: 'rgba(255, 255, 255, 0.40)', lineHeight: 1.6 }}>
+                    <p style={{
+                      fontSize: 13,
+                      color: 'rgba(255, 255, 255, 0.55)',
+                      lineHeight: 1.6,
+                      textShadow: '0 1px 10px rgba(3,1,10,0.90)',
+                    }}>
                       {event.desc}
                     </p>
                   </div>
@@ -173,83 +211,8 @@ export default function VenuePreview() {
             ))}
           </StaggerContainer>
         </div>
+
       </div>
-
-      {/* ── Gold rule divider ── */}
-      <div aria-hidden="true" style={{
-        width: 'clamp(48px, 7vw, 80px)', height: 1,
-        background: 'linear-gradient(to right, transparent, rgba(196,154,40,0.30), transparent)',
-        marginLeft: 'auto', marginRight: 'auto',
-        marginBottom: 'clamp(40px, 6vw, 60px)',
-      }} />
-
-      {/* ── Venue photo diptych ── */}
-      <div style={{
-        maxWidth: 1100,
-        marginLeft: 'auto', marginRight: 'auto',
-        padding: '0 clamp(20px, 5vw, 56px)',
-      }}>
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr',
-          gap: 'clamp(10px, 1.8vw, 18px)',
-          alignItems: 'start',
-        }}>
-
-          <motion.div
-            initial={{ opacity: 0, y: 44, scale: 0.98 }}
-            whileInView={{ opacity: 1, y: 0, scale: 1 }}
-            viewport={{ once: true, margin: '-80px' }}
-            transition={{ duration: 1.1, ease: EASE }}
-            style={{
-              position: 'relative',
-              borderRadius: 'clamp(8px, 1vw, 14px)',
-              overflow: 'hidden',
-              aspectRatio: '3 / 4',
-            }}
-          >
-            <Image
-              src="/images/invited1.jpg"
-              alt="Abhishek Farms — stage and seating ready for the ceremony"
-              fill
-              sizes="(max-width: 767px) 100vw, 50vw"
-              style={{ objectFit: 'cover', objectPosition: 'center 38%' }}
-            />
-            <div aria-hidden="true" style={{
-              position: 'absolute', inset: 0,
-              background: 'linear-gradient(to bottom, rgba(7,3,10,0.06) 0%, rgba(7,3,10,0.04) 50%, rgba(7,3,10,0.45) 100%)',
-            }} />
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 64, scale: 0.98 }}
-            whileInView={{ opacity: 1, y: 0, scale: 1 }}
-            viewport={{ once: true, margin: '-80px' }}
-            transition={{ duration: 1.1, delay: 0.2, ease: EASE }}
-            style={{
-              position: 'relative',
-              borderRadius: 'clamp(8px, 1vw, 14px)',
-              overflow: 'hidden',
-              aspectRatio: '3 / 4',
-              marginTop: isMobile ? 0 : 'clamp(36px, 5vw, 64px)',
-            }}
-          >
-            <Image
-              src="/images/invited2.jpg"
-              alt="Abhishek Farms — floral archways and gold chiavari chairs"
-              fill
-              sizes="(max-width: 767px) 100vw, 50vw"
-              style={{ objectFit: 'cover', objectPosition: 'center 42%' }}
-            />
-            <div aria-hidden="true" style={{
-              position: 'absolute', inset: 0,
-              background: 'linear-gradient(to bottom, rgba(7,3,10,0.06) 0%, rgba(7,3,10,0.04) 50%, rgba(7,3,10,0.45) 100%)',
-            }} />
-          </motion.div>
-
-        </div>
-      </div>
-
     </section>
   )
 }
