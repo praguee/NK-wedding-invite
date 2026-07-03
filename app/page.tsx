@@ -6,7 +6,6 @@ import Navigation from './components/Navigation'
 import Hero from './components/Hero'
 import Story from './components/Story'
 import JabWeMet from './components/JabWeMet'
-import InviteDetails from './components/InviteDetails'
 import Gallery from './components/Gallery'
 import Timeline from './components/Timeline'
 import RSVPForm from './components/RSVPForm'
@@ -38,9 +37,8 @@ export default function Home() {
         <Hero />
         <Story />
         <JabWeMet />
-        <InviteDetails />
-        <Gallery />
         <Timeline />
+        <Gallery />
         <RSVPForm />
         <GuestBook />
         <Transportation />
