@@ -6,6 +6,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import toast from 'react-hot-toast'
 import { motion } from 'framer-motion'
+import { useMediaQuery } from '@/app/hooks/useMediaQuery'
 
 interface FormState { name: string; plusOnes: string; message: string }
 const INITIAL: FormState = { name: '', plusOnes: '0', message: '' }
@@ -79,6 +80,7 @@ const countWords = (text: string) =>
 
 export default function RSVPForm() {
   const router = useRouter()
+  const isMobile = useMediaQuery('(max-width: 767px)')
   const [form, setForm] = useState<FormState>(INITIAL)
   const [loading, setLoading] = useState(false)
   const [submitted, setSubmitted] = useState(false)
@@ -147,11 +149,14 @@ export default function RSVPForm() {
         background: 'linear-gradient(to bottom, rgba(3,1,10,0.78) 0%, rgba(3,1,10,0.60) 42%, rgba(3,1,10,0.86) 100%)',
       }} />
 
-      {/* Content */}
+      {/* Content — docked left on desktop so Nidhi's face (right of centre in
+          the photo) stays visible beside the panel; centred on mobile */}
       <div style={{
         position: 'relative', zIndex: 2,
-        padding: 'clamp(48px, 7vw, 88px) clamp(20px, 5vw, 52px)',
-        width: '100%', maxWidth: 468, margin: '0 auto',
+        padding: 'clamp(48px, 7vw, 88px) clamp(20px, 4vw, 44px)',
+        width: '100%',
+        maxWidth: isMobile ? 468 : 396,
+        margin: isMobile ? '0 auto' : '0 auto 0 clamp(16px, 3.5vw, 48px)',
       }}>
         {/* ── Header ── */}
         <div style={{ textAlign: 'center', marginBottom: 'clamp(22px, 3.5vw, 32px)' }}>
@@ -266,22 +271,25 @@ export default function RSVPForm() {
             type="submit"
             disabled={loading || words > 100}
             whileTap={{ scale: loading ? 1 : 0.98 }}
-            whileHover={{ scale: loading ? 1 : 1.015 }}
+            whileHover={loading ? {} : { scale: 1.015, backgroundColor: 'rgba(255,255,255,0.22)' }}
             transition={{ type: 'spring', stiffness: 400, damping: 18 }}
             style={{
               width: '100%',
               marginTop: 4,
               padding: '15px 0',
               borderRadius: 100,
-              background: 'rgba(255,255,255,0.95)',
-              color: 'rgba(3,1,10,0.90)',
+              background: 'rgba(255,255,255,0.13)',
+              backdropFilter: 'blur(44px) saturate(200%)',
+              WebkitBackdropFilter: 'blur(44px) saturate(200%)',
+              color: 'rgba(255,255,255,0.95)',
               fontSize: 12, fontWeight: 700,
               letterSpacing: '0.24em', textTransform: 'uppercase',
-              border: 'none',
+              border: '1px solid rgba(255,255,255,0.30)',
+              boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.35), inset 0 -1px 0 rgba(0,0,0,0.20), 0 8px 32px rgba(0,0,0,0.35)',
               cursor: loading || words > 100 ? 'not-allowed' : 'pointer',
               opacity: loading || words > 100 ? 0.5 : 1,
               fontFamily: 'var(--font-dm-sans), Inter, system-ui, sans-serif',
-              boxShadow: '0 6px 28px rgba(0,0,0,0.35)',
+              textShadow: '0 1px 12px rgba(3,1,10,0.60)',
             }}
           >
             {loading ? 'Sending…' : 'Count me in'}
