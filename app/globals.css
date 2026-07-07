@@ -301,6 +301,37 @@ h2, h3 {
   color: rgba(255, 255, 255, 0.88);
 }
 
+/* Refined line-style RSVP fields — hairline underline, gold on focus */
+.rsvp-line-input {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.20);
+  border-radius: 0;
+  transition: border-color 0.28s ease;
+  -webkit-appearance: none;
+  appearance: none;
+}
+.rsvp-line-input:focus {
+  border-bottom-color: rgba(196, 154, 40, 0.9);
+}
+.rsvp-line-input::placeholder {
+  color: rgba(255, 255, 255, 0.32);
+}
+.rsvp-line-input option {
+  background: #0d0618;
+  color: rgba(255, 255, 255, 0.9);
+}
+/* Gold caret + select arrow */
+.rsvp-line-input {
+  caret-color: rgba(196, 154, 40, 0.9);
+}
+select.rsvp-line-input {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%23C49A28' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 2px center;
+  padding-right: 22px;
+}
+
 /* ==========================================================================
    Split photo backgrounds — side by side on desktop, stacked on mobile
    (portrait photos get a full-width band each instead of a narrow sliver)

@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import type { RSVP } from '@/lib/types'
-import SectionOrnament from './SectionOrnament'
 
 const GRADIENTS = [
   ['#C49A28', '#B8850A'],
@@ -100,8 +99,6 @@ export default function GuestBook() {
         display: 'flex', flexDirection: 'column', justifyContent: 'flex-end',
         minHeight: 'clamp(240px, 45svh, 400px)',
       }}>
-        <SectionOrnament />
-
         <motion.h2
           id="guestbook-heading"
           initial={{ opacity: 0, y: 20 }}
