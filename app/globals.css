@@ -300,3 +300,18 @@ h2, h3 {
   background: #0d0618;
   color: rgba(255, 255, 255, 0.88);
 }
+
+/* ==========================================================================
+   Split photo backgrounds — side by side on desktop, stacked on mobile
+   (portrait photos get a full-width band each instead of a narrow sliver)
+   ========================================================================== */
+
+.split-bg {
+  display: flex;
+}
+
+@media (max-width: 767px) {
+  .split-bg {
+    flex-direction: column;
+  }
+}

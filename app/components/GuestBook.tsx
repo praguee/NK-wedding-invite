@@ -52,14 +52,16 @@ export default function GuestBook() {
         display: 'flex', flexDirection: 'column',
       }}
     >
-      {/* Background — wishes notes photo, positioned to show the notes */}
-      <div aria-hidden="true" style={{ position: 'absolute', inset: 0 }}>
+      {/* Background — wishes notes photo. Container extends above the section
+          so the "Prayers for Nidhi & Parag's wedding" note (vertical middle of
+          the photo) lands in the bright top zone instead of the dark bottom. */}
+      <div aria-hidden="true" style={{ position: 'absolute', top: '-75%', left: 0, right: 0, bottom: 0, overflow: 'hidden' }}>
         <Image
           src="/images/guestbook-bg.jpg"
           alt=""
           fill
           sizes="(max-width: 767px) 100vw, 50vw"
-          style={{ objectFit: 'cover', objectPosition: 'center 45%' }}
+          style={{ objectFit: 'cover', objectPosition: '48% center' }}
         />
       </div>
 

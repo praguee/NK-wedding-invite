@@ -35,7 +35,9 @@ export default function JabWeMet() {
       <div style={{
         position: 'relative',
         width: '100%',
-        height: 'clamp(72vh, 88vh, 96vh)',
+        // Mobile: cap height at the photo's aspect ratio (1206x1497 ≈ 124vw)
+        // so the full frame is visible instead of a cropped sliver
+        height: isMobile ? 'min(88vh, 124vw)' : 'clamp(72vh, 88vh, 96vh)',
         overflow: 'hidden',
       }}>
         <Image

@@ -46,10 +46,11 @@ export default function VenuePreview() {
       style={{ position: 'relative', overflow: 'hidden', minHeight: '100vh' }}
     >
 
-      {/* ── Full-section background: two photos side by side ── */}
+      {/* ── Full-section background: two photos — side by side on desktop, stacked on mobile ── */}
       <div
         aria-hidden="true"
-        style={{ position: 'absolute', inset: 0, display: 'flex' }}
+        className="split-bg"
+        style={{ position: 'absolute', inset: 0 }}
       >
         <div style={{ position: 'relative', flex: 1, overflow: 'hidden' }}>
           <Image
@@ -57,7 +58,7 @@ export default function VenuePreview() {
             alt=""
             fill
             priority
-            sizes="50vw"
+            sizes="(max-width: 767px) 100vw, 50vw"
             style={{ objectFit: 'cover', objectPosition: 'center 40%' }}
           />
         </div>
@@ -66,7 +67,7 @@ export default function VenuePreview() {
             src="/images/venue-bg-2.jpg"
             alt=""
             fill
-            sizes="50vw"
+            sizes="(max-width: 767px) 100vw, 50vw"
             style={{ objectFit: 'cover', objectPosition: 'center 40%' }}
           />
         </div>

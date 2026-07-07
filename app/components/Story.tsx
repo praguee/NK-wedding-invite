@@ -34,7 +34,9 @@ export default function Story() {
       <div style={{
         position: 'relative',
         width: '100%',
-        height: 'clamp(72vh, 88vh, 96vh)',
+        // Mobile: shorter band for the landscape photo (1280x720) — shows
+        // ~56% of frame width instead of ~31%, keeping both faces visible
+        height: isMobile ? 'min(88vh, 100vw)' : 'clamp(72vh, 88vh, 96vh)',
         overflow: 'hidden',
       }}>
         <Image
@@ -43,7 +45,7 @@ export default function Story() {
           fill
           priority
           sizes="100vw"
-          style={{ objectFit: 'cover', objectPosition: isMobile ? '28% 35%' : 'center 35%' }}
+          style={{ objectFit: 'cover', objectPosition: isMobile ? '30% 40%' : 'center 35%' }}
         />
 
         {/* Deep cinematic vignette — heavier at bottom for legibility */}

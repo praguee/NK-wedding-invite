@@ -36,15 +36,15 @@ export default function Transportation() {
       aria-labelledby="travel-heading"
       style={{ position: 'relative', overflow: 'hidden', minHeight: '100svh' }}
     >
-      {/* ── Full-section background: two photos side by side ── */}
-      <div aria-hidden="true" style={{ position: 'absolute', inset: 0, display: 'flex' }}>
+      {/* ── Full-section background: two photos — side by side on desktop, stacked on mobile ── */}
+      <div aria-hidden="true" className="split-bg" style={{ position: 'absolute', inset: 0 }}>
         <div style={{ position: 'relative', flex: 1, overflow: 'hidden' }}>
           <Image
             src="/images/travel-bg-1.jpg"
             alt=""
             fill
             priority
-            sizes="50vw"
+            sizes="(max-width: 767px) 100vw, 50vw"
             style={{ objectFit: 'cover', objectPosition: 'center 50%' }}
           />
         </div>
@@ -53,7 +53,7 @@ export default function Transportation() {
             src="/images/travel-bg-2.jpg"
             alt=""
             fill
-            sizes="50vw"
+            sizes="(max-width: 767px) 100vw, 50vw"
             style={{ objectFit: 'cover', objectPosition: 'center 50%' }}
           />
         </div>
