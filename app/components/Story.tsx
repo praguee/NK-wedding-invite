@@ -17,6 +17,94 @@ function getRelationshipTime() {
   return { years, months, days }
 }
 
+function RelationshipTimer({ t }: { t: { years: number; months: number; days: number } }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.65, delay: 0.28, ease: EASE }}
+      style={{ flexShrink: 0, textAlign: 'center' }}
+      aria-label="Relationship duration"
+    >
+      <p style={{
+        fontFamily: 'var(--font-dm-sans), Inter, system-ui, sans-serif',
+        fontSize: 'clamp(8px, 0.9vw, 10px)',
+        letterSpacing: '0.30em',
+        textTransform: 'uppercase',
+        color: 'rgba(196, 154, 40, 0.72)',
+        marginBottom: 'clamp(8px, 1.2vh, 12px)',
+      }}>
+        In a relationship for
+      </p>
+
+      {/* Three glass counter pills */}
+      <div style={{ display: 'flex', gap: 'clamp(6px, 1.2vw, 12px)', justifyContent: 'center' }} role="group">
+        {[
+          { value: t.years,  label: 'years'  },
+          { value: t.months, label: 'months' },
+          { value: t.days,   label: 'days'   },
+        ].map(({ value, label }) => (
+          <motion.div
+            key={label}
+            whileHover={{ y: -3, scale: 1.04 }}
+            transition={{ type: 'spring', stiffness: 380, damping: 18 }}
+            style={{
+              background: 'rgba(8, 4, 18, 0.58)',
+              backdropFilter: 'blur(28px) saturate(180%)',
+              WebkitBackdropFilter: 'blur(28px) saturate(180%)',
+              border: '1px solid rgba(255, 255, 255, 0.14)',
+              borderBottomColor: 'rgba(0, 0, 0, 0.22)',
+              boxShadow: [
+                'inset 0 1px 0 rgba(255, 255, 255, 0.18)',
+                'inset 0 0 0 0.5px rgba(255, 255, 255, 0.07)',
+                '0 8px 32px rgba(0, 0, 0, 0.40)',
+                '0 0 0 0.5px rgba(196, 154, 40, 0.10)',
+              ].join(', '),
+              borderRadius: 'clamp(8px, 1vw, 14px)',
+              padding: 'clamp(10px, 1.4vh, 16px) clamp(12px, 1.8vw, 22px)',
+              textAlign: 'center',
+              minWidth: 'clamp(54px, 7vw, 84px)',
+            }}
+          >
+            <p style={{
+              fontFamily: '"Courier New", Courier, monospace',
+              fontSize: 'clamp(22px, 3.2vw, 42px)',
+              fontWeight: 300,
+              color: 'rgba(255, 255, 255, 0.92)',
+              lineHeight: 1,
+              letterSpacing: '-0.02em',
+            }}>
+              {String(value).padStart(2, '0')}
+            </p>
+            <p style={{
+              fontFamily: 'var(--font-dm-sans), Inter, system-ui, sans-serif',
+              fontSize: 'clamp(7px, 0.85vw, 9px)',
+              letterSpacing: '0.20em',
+              textTransform: 'uppercase',
+              color: 'rgba(196, 154, 40, 0.62)',
+              marginTop: 'clamp(4px, 0.6vh, 7px)',
+            }}>
+              {label}
+            </p>
+          </motion.div>
+        ))}
+      </div>
+
+      <p style={{
+        fontFamily: 'var(--font-dm-sans), Inter, system-ui, sans-serif',
+        fontSize: 'clamp(7px, 0.82vw, 9px)',
+        letterSpacing: '0.18em',
+        textTransform: 'uppercase',
+        color: 'rgba(246, 237, 218, 0.28)',
+        marginTop: 'clamp(6px, 0.8vh, 10px)',
+      }}>
+        Since 8 July 2023
+      </p>
+    </motion.div>
+  )
+}
+
 export default function Story() {
   const [t, setT] = useState({ years: 0, months: 0, days: 0 })
   const isMobile  = useMediaQuery('(max-width: 767px)')
@@ -41,7 +129,7 @@ export default function Story() {
       }}>
         <Image
           src="/images/story-wayofwater.jpg"
-          alt="Abhishek Farms floating mandap — where it all begins"
+          alt="Nidhi and Parag — where it all begins"
           fill
           priority
           sizes="100vw"
@@ -54,7 +142,9 @@ export default function Story() {
           background: 'linear-gradient(to bottom, rgba(3,1,10,0.08) 0%, rgba(3,1,10,0.02) 28%, rgba(3,1,10,0.48) 62%, rgba(3,1,10,0.92) 100%)',
         }} />
 
-        {/* ── Bottom bar: title (left) + timer (right) ── */}
+        {/* ── Bottom bar: title (left) + timer (right on desktop) ──
+            On mobile only the title overlays the photo — the timer moves to a
+            dark band below so the text doesn't bury the picture */}
         <div style={{
           position: 'absolute', bottom: 0, left: 0, right: 0,
           padding: 'clamp(20px, 4vw, 52px)',
@@ -63,7 +153,6 @@ export default function Story() {
           alignItems: 'flex-end',
           justifyContent: 'space-between',
           gap: 'clamp(16px, 3vw, 32px)',
-          flexWrap: isMobile ? 'wrap' : 'nowrap',
         }}>
 
           {/* Left: cinematic title */}
@@ -105,107 +194,50 @@ export default function Story() {
               }}>
                 not directed by James Cameron
               </span>
-              <span aria-hidden="true" style={{ width: 1, height: 10, flexShrink: 0, background: 'rgba(196,154,40,0.35)', display: 'inline-block' }} />
-              <span style={{
-                fontFamily: 'var(--font-dm-sans), Inter, system-ui, sans-serif',
-                fontSize: 'clamp(9px, 1.1vw, 11px)',
-                letterSpacing: '0.22em',
-                textTransform: 'uppercase',
-                color: 'rgba(196, 154, 40, 0.60)',
-                fontStyle: 'italic',
-              }}>
-                Water brought us together. Water will witness our forever.
-              </span>
+              {!isMobile && (
+                <>
+                  <span aria-hidden="true" style={{ width: 1, height: 10, flexShrink: 0, background: 'rgba(196,154,40,0.35)', display: 'inline-block' }} />
+                  <span style={{
+                    fontFamily: 'var(--font-dm-sans), Inter, system-ui, sans-serif',
+                    fontSize: 'clamp(9px, 1.1vw, 11px)',
+                    letterSpacing: '0.22em',
+                    textTransform: 'uppercase',
+                    color: 'rgba(196, 154, 40, 0.60)',
+                    fontStyle: 'italic',
+                  }}>
+                    Water brought us together. Water will witness our forever.
+                  </span>
+                </>
+              )}
             </motion.div>
           </div>
 
-          {/* Right: relationship timer */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.65, delay: 0.48, ease: EASE }}
-            style={{ flexShrink: 0, textAlign: 'center' }}
-            aria-label="Relationship duration"
-          >
-            <p style={{
-              fontFamily: 'var(--font-dm-sans), Inter, system-ui, sans-serif',
-              fontSize: 'clamp(8px, 0.9vw, 10px)',
-              letterSpacing: '0.30em',
-              textTransform: 'uppercase',
-              color: 'rgba(196, 154, 40, 0.72)',
-              marginBottom: 'clamp(8px, 1.2vh, 12px)',
-            }}>
-              In a relationship for
-            </p>
-
-            {/* Three glass counter pills */}
-            <div style={{ display: 'flex', gap: 'clamp(6px, 1.2vw, 12px)' }} role="group">
-              {[
-                { value: t.years,  label: 'years'  },
-                { value: t.months, label: 'months' },
-                { value: t.days,   label: 'days'   },
-              ].map(({ value, label }) => (
-                <motion.div
-                  key={label}
-                  whileHover={{ y: -3, scale: 1.04 }}
-                  transition={{ type: 'spring', stiffness: 380, damping: 18 }}
-                  style={{
-                    background: 'rgba(8, 4, 18, 0.58)',
-                    backdropFilter: 'blur(28px) saturate(180%)',
-                    WebkitBackdropFilter: 'blur(28px) saturate(180%)',
-                    border: '1px solid rgba(255, 255, 255, 0.14)',
-                    borderBottomColor: 'rgba(0, 0, 0, 0.22)',
-                    boxShadow: [
-                      'inset 0 1px 0 rgba(255, 255, 255, 0.18)',
-                      'inset 0 0 0 0.5px rgba(255, 255, 255, 0.07)',
-                      '0 8px 32px rgba(0, 0, 0, 0.40)',
-                      '0 0 0 0.5px rgba(196, 154, 40, 0.10)',
-                    ].join(', '),
-                    borderRadius: 'clamp(8px, 1vw, 14px)',
-                    padding: 'clamp(10px, 1.4vh, 16px) clamp(12px, 1.8vw, 22px)',
-                    textAlign: 'center',
-                    minWidth: 'clamp(54px, 7vw, 84px)',
-                  }}
-                >
-                  <p style={{
-                    fontFamily: '"Courier New", Courier, monospace',
-                    fontSize: 'clamp(22px, 3.2vw, 42px)',
-                    fontWeight: 300,
-                    color: 'rgba(255, 255, 255, 0.92)',
-                    lineHeight: 1,
-                    letterSpacing: '-0.02em',
-                  }}>
-                    {String(value).padStart(2, '0')}
-                  </p>
-                  <p style={{
-                    fontFamily: 'var(--font-dm-sans), Inter, system-ui, sans-serif',
-                    fontSize: 'clamp(7px, 0.85vw, 9px)',
-                    letterSpacing: '0.20em',
-                    textTransform: 'uppercase',
-                    color: 'rgba(196, 154, 40, 0.62)',
-                    marginTop: 'clamp(4px, 0.6vh, 7px)',
-                  }}>
-                    {label}
-                  </p>
-                </motion.div>
-              ))}
-            </div>
-
-            <p style={{
-              fontFamily: 'var(--font-dm-sans), Inter, system-ui, sans-serif',
-              fontSize: 'clamp(7px, 0.82vw, 9px)',
-              letterSpacing: '0.18em',
-              textTransform: 'uppercase',
-              color: 'rgba(246, 237, 218, 0.28)',
-              marginTop: 'clamp(6px, 0.8vh, 10px)',
-            }}>
-              Since 8 July 2023
-            </p>
-          </motion.div>
-
+          {/* Right: relationship timer — desktop only */}
+          {!isMobile && <RelationshipTimer t={t} />}
         </div>
       </div>
+
+      {/* ── Mobile: timer below the photo on a dark band ── */}
+      {isMobile && (
+        <div style={{
+          background: 'linear-gradient(to bottom, #05010A 0%, #0B0514 100%)',
+          padding: '30px 20px 38px',
+        }}>
+          <RelationshipTimer t={t} />
+          <p style={{
+            textAlign: 'center',
+            fontFamily: 'var(--font-dm-sans), Inter, system-ui, sans-serif',
+            fontSize: 9,
+            letterSpacing: '0.22em',
+            textTransform: 'uppercase',
+            color: 'rgba(196, 154, 40, 0.55)',
+            fontStyle: 'italic',
+            marginTop: 18,
+          }}>
+            Water brought us together. Water will witness our forever.
+          </p>
+        </div>
+      )}
     </section>
   )
 }
