@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
 import https from 'https'
+import { recordHit } from '@/lib/rate-limit'
 
-// Simple in-process rate limit: max 3 RSVPs per IP per 10 minutes
-const rsvpAttempts = new Map<string, { count: number; windowStart: number }>()
+// Rate limit: max 3 RSVPs per IP per 10 minutes (durable across instances)
 const RSVP_LIMIT = 3
-const RSVP_WINDOW_MS = 10 * 60 * 1000
+const RSVP_WINDOW_SECONDS = 10 * 60
 
 function httpsPost(url: string, data: string, headers: Record<string, string>): Promise<{ status: number; body: string }> {
   return new Promise((resolve, reject) => {
@@ -28,33 +28,11 @@ function httpsPost(url: string, data: string, headers: Record<string, string>): 
   })
 }
 
-function httpsGet(url: string, headers: Record<string, string>): Promise<{ status: number; body: string }> {
-  return new Promise((resolve, reject) => {
-    const parsed = new URL(url)
-    const req = https.request(
-      { hostname: parsed.hostname, path: parsed.pathname + parsed.search, method: 'GET', headers },
-      (res) => {
-        let body = ''
-        res.on('data', (chunk) => { body += chunk })
-        res.on('end', () => resolve({ status: res.statusCode ?? 0, body }))
-      }
-    )
-    req.on('error', reject)
-    req.end()
-  })
-}
-
 export async function POST(request: NextRequest) {
   const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown'
-  const now = Date.now()
-  const rec = rsvpAttempts.get(ip)
-  if (rec && now - rec.windowStart < RSVP_WINDOW_MS) {
-    if (rec.count >= RSVP_LIMIT) {
-      return NextResponse.json({ message: 'Too many submissions. Please try again later.' }, { status: 429 })
-    }
-    rec.count++
-  } else {
-    rsvpAttempts.set(ip, { count: 1, windowStart: now })
+  const hits = await recordHit(`rsvp:${ip}`, RSVP_WINDOW_SECONDS)
+  if (hits > RSVP_LIMIT) {
+    return NextResponse.json({ message: 'Too many submissions. Please try again later.' }, { status: 429 })
   }
 
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim()
@@ -89,27 +67,21 @@ export async function POST(request: NextRequest) {
       'Content-Type': 'application/json',
     }
 
-    // Duplicate check
-    const checkRes = await httpsGet(
-      `${supabaseUrl}/rest/v1/rsvps?name=eq.${encodeURIComponent(name.trim())}&select=id`,
-      authHeaders
-    )
-    if (checkRes.status === 200) {
-      const existing = JSON.parse(checkRes.body)
-      if (existing.length > 0) {
-        return NextResponse.json(
-          { message: "You've already RSVP'd! Contact us if you need to make changes." },
-          { status: 409 }
-        )
-      }
-    }
-
-    // Insert
+    // Insert. Duplicate names are rejected by the database's unique constraint
+    // (case-insensitive once the migration adds the lower(trim(name)) index),
+    // which surfaces as a 409 — more reliable than an app-level pre-check.
     const insertRes = await httpsPost(
       `${supabaseUrl}/rest/v1/rsvps`,
       JSON.stringify({ name: name.trim(), plus_ones: plusOnesNum, message: message?.trim() || null }),
       { ...authHeaders, Prefer: 'return=representation' }
     )
+
+    if (insertRes.status === 409) {
+      return NextResponse.json(
+        { message: "You've already RSVP'd! Contact us if you need to make changes." },
+        { status: 409 }
+      )
+    }
 
     if (insertRes.status !== 200 && insertRes.status !== 201) {
       console.error('RSVP insert failed', insertRes.status, insertRes.body)

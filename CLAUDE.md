@@ -32,7 +32,6 @@ app/
     JabWeMet.tsx          — "Jab We Met" — first meeting at Runwal Greens, wallet story, live counter from 23 Dec 2022
     InviteDetails.tsx     — Wedding & reception times, venue with glass-gold cards
     Gallery.tsx           — Editorial asymmetric photo grid with hover captions + lightbox
-    Poll.tsx              — (REMOVED from main page — now only on /games)
     Timeline.tsx          — Vertical event schedule with coloured dots
     RSVPForm.tsx          — Casual RSVP form, 100-word message limit, auto-redirect to /games after submit
     GuestBook.tsx         — Fixed-height scrollable guest messages with coloured avatars per person
@@ -45,18 +44,19 @@ app/
     SectionOrnament.tsx   — Reusable gold lotus diamond divider between sections
   api/
     rsvp/route.ts         — POST RSVP (uses Node.js https, NOT fetch — Supabase connectivity fix)
-                            GET returns 405 (not a debug endpoint)
-    admin/verify/route.ts — POST admin password check
-    poll/route.ts         — GET/POST poll votes (Supabase poll_votes table)
+                            GET returns 405 (not a debug endpoint). Rate-limited via lib/rate-limit.
+    admin/verify/route.ts — POST admin password check (timing-safe, rate-limited lockout)
+    guestbook/route.ts    — GET public guest messages (service client, message-only fields)
+    admin/rsvps/route.ts  — GET full RSVP list (requires x-admin-token header)
   admin/page.tsx          — Password-protected dashboard (RSVP table, stats, CSV export)
-  games/page.tsx          — Games page: Poll (Team Nidhi vs Team Parag) + Quiz (5 questions, Ginny cat)
+  games/page.tsx          — Games page: Quiz (5 questions, Ginny cat)
   page.tsx                — Main page with IntroScreen overlay logic + section ordering
   layout.tsx              — Root layout with Leaflet CSS + Toaster
   globals.css             — Indian jali background pattern, warm ivory palette, glass-gold class
 lib/
   constants.ts            — All wedding data (names, addresses, hotels)
-  supabase.ts             — Public client (NEXT_PUBLIC_ keys only — client-safe)
   supabase-admin.ts       — Admin client (service role key — server-side only, NEVER import in client components)
+  rate-limit.ts           — Durable rate limiting (Supabase rate_limits table + in-memory fallback)
   types.ts                — TypeScript interfaces
 public/images/
   hero-cover.jpg          — Silhouette sunset cover photo (hero background)
@@ -90,25 +90,28 @@ public/images/
 12. Questions? (Contact: Parag 9819048377, Raksha 9137540056)
 
 ## Games Page (/games)
-- **Poll:** Team Nidhi vs Team Parag live voting — auto-advances to quiz after 3s countdown
 - **Quiz:** 5 questions about the couple, Ginny cat reveals result
   - Win (60%+): Ginny wide-eyed + caricature CTA ("show Abhishek at reception")
   - Lose: Ginny judgy + "participation trophy" message
   - Artist: @joyofcaricaturestudio (https://www.instagram.com/joyofcaricaturestudio)
-- **Flow:** RSVP submit → auto-redirect to /games (2.5s) → Poll → Quiz (auto-advance after 3s)
-- **Change vote:** "Change vote" button lets guests re-vote
-- Poll key: `nk_poll_vote_v3` in localStorage
+- **Flow:** RSVP submit → auto-redirect to /games (2.5s) → Quiz
+- **Note:** The Team Nidhi vs Team Parag poll was fully removed (component, `/api/poll`
+  route, and `poll_votes` table all deleted).
 
 ## Supabase Database
 ### Table: `rsvps`
 - `id` UUID, `name` TEXT, `email` TEXT (nullable, default ''), `plus_ones` INTEGER (0-5)
 - `message` TEXT (nullable, max 100 words), `created_at`, `updated_at` TIMESTAMP
-- Unique constraint on `name` only (email removed from form)
+- Unique constraint on `name`; migration `0001` adds a case-insensitive
+  `lower(btrim(name))` unique index so "Parag"/"parag "/"PARAG" can't double-register
+- RLS blocks anon read/write — only the server (service key) touches this table
 
-### Table: `poll_votes`
-- `id` UUID, `side` TEXT ('bride' | 'groom'), `created_at` TIMESTAMP
-- RLS enabled with anon INSERT + SELECT policies
-- Run `ALTER TABLE poll_votes REPLICA IDENTITY FULL;` to enable realtime
+### Table: `rate_limits`
+- `key` TEXT PK, `count` INTEGER, `window_start` TIMESTAMP
+- Backs durable rate limiting for RSVP + admin login (see `lib/rate-limit.ts`)
+- Created by `supabase/migrations/0001_rate_limit.sql` (run it in the SQL editor).
+  Until run, the app falls back to per-instance in-memory limiting.
+- RLS on, no policies; `rl_hit()` RPC is `execute`-granted to `service_role` only
 
 ### CRITICAL: RSVP API uses Node.js `https` module
 The `/api/rsvp/route.ts` uses Node.js built-in `https` (NOT `fetch`) because Vercel's Node 18 undici/fetch has TLS issues reaching Supabase. Do NOT switch back to fetch.

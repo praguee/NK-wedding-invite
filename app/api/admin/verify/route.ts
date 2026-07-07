@@ -1,19 +1,23 @@
 import { NextRequest, NextResponse } from 'next/server'
 import crypto from 'crypto'
+import { getLimit, recordHit, resetKey } from '@/lib/rate-limit'
 
-// Track failed attempts per IP in-process (resets on cold start — good enough for this use case)
-const attempts = new Map<string, { count: number; blockedUntil: number }>()
+// Lock out after 5 failed attempts per IP for 15 minutes.
+// Durable across serverless instances (see lib/rate-limit.ts).
 const MAX_ATTEMPTS = 5
-const BLOCK_MS = 15 * 60 * 1000 // 15 minutes
+const WINDOW_SECONDS = 15 * 60
 
 export async function POST(request: NextRequest) {
   const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown'
-  const now = Date.now()
+  const key = `admin_verify:${ip}`
 
-  const record = attempts.get(ip)
-  if (record && now < record.blockedUntil) {
-    const mins = Math.ceil((record.blockedUntil - now) / 60000)
-    return NextResponse.json({ message: `Too many attempts. Try again in ${mins} minute${mins > 1 ? 's' : ''}.` }, { status: 429 })
+  const { count, resetAtMs } = await getLimit(key, WINDOW_SECONDS)
+  if (count >= MAX_ATTEMPTS) {
+    const mins = Math.max(1, Math.ceil((resetAtMs - Date.now()) / 60000))
+    return NextResponse.json(
+      { message: `Too many attempts. Try again in ${mins} minute${mins > 1 ? 's' : ''}.` },
+      { status: 429 },
+    )
   }
 
   try {
@@ -31,18 +35,12 @@ export async function POST(request: NextRequest) {
       crypto.timingSafeEqual(inputHash, correctHash)
 
     if (match) {
-      attempts.delete(ip)
+      await resetKey(key)
       return NextResponse.json({ message: 'OK' }, { status: 200 })
     }
 
-    // Increment failure count
-    const cur = attempts.get(ip) ?? { count: 0, blockedUntil: 0 }
-    cur.count += 1
-    if (cur.count >= MAX_ATTEMPTS) {
-      cur.blockedUntil = now + BLOCK_MS
-    }
-    attempts.set(ip, cur)
-
+    // Record the failed attempt.
+    await recordHit(key, WINDOW_SECONDS)
     return NextResponse.json({ message: 'Incorrect password' }, { status: 401 })
   } catch {
     return NextResponse.json({ message: 'Internal server error' }, { status: 500 })
